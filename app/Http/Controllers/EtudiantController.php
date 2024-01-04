@@ -12,11 +12,26 @@ class EtudiantController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('etudiant.index');
-    }
+        $codeApogee = $request->input('CodeApogee');
 
+        $student = Etudiant::with(['filieres', 'detailModules', 'groupe_etudiant', 'infoExames'])
+            ->where('CodeApogee', $codeApogee)
+            ->first();
+
+        return view('etudiant.index', compact('student'));
+    }
+    public function search(Request $request)
+    {
+        $codeApogee = $request->input('CodeApogee');
+
+        $student = Etudiant::with(['filieres', 'detailModules', 'groupeEtudiants', 'infoExames'])
+            ->where('CodeApogee', $codeApogee)
+            ->first();
+
+        return view('students.search', compact('student'));
+    }
     /**
      * Show the form for creating a new resource.
      *

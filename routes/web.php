@@ -67,3 +67,5 @@ Route::resource('calendrier-modules', CalendrierModuleController::class);
 
 // Routes for Calendrier_module_Groupes
 Route::resource('calendrier-module-groupes', CalendrierModuleGroupeController::class);
+
+// Route::get('/', [EtudiantController::class, 'index'])->name('search.etudiant');
