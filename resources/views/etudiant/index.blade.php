@@ -5,12 +5,7 @@
 @section('content')
 <h1>Search Student Details</h1>
 
-    <form action="{{ route('index') }}" method="GET">
-        @csrf
-        <label for="CodeApogee">Enter Code Apogee:</label>
-        <input type="text" name="CodeApogee" required>
-        <button type="submit">Search</button>
-    </form>
+ 
 
     @if(isset($student))
         <h2>Student Details:</h2>
@@ -26,10 +21,13 @@
 
         <h3>Modules:</h3>
         <ul>
-            @foreach($student->detailModules as $detailModule)
-                <li>{{ $detailModule->module->NomModule }} - {{ $detailModule->SESSION }}</li>
-            @endforeach
-        </ul>
+    @foreach($student->detailModules as $detailModule)
+        @if ($detailModule->etat == 'I' && $detailModule->AnneeUniversitaire == '2022-2023' && $detailModule->SESSION == 'ORD')
+            <li>{{ $detailModule->module->NomModule }} - {{ $detailModule->SESSION }} - {{ $detailModule->AnneeUniversitaire }}</li>
+        @endif
+    @endforeach
+</ul>
+
 
         <h3>Groupes:</h3>
         <ul>

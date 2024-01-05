@@ -43,6 +43,7 @@ Route::resource('filieres', FiliereController::class);
 
 // Routes for Etudiant
 Route::resource('/', EtudiantController::class);
+Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('search');
 
 // Routes for Etudiants_Filieres
 Route::resource('etudiants-filieres', EtudiantFiliereController::class);
