@@ -27,7 +27,7 @@ CREATE TABLE Etudiants (
     Nom VARCHAR(255) NOT null,
     Prenom VARCHAR(255) NOT null,
     DateNaiss DATE NOT null,
-    UNIQUE (CodeApogee)
+    UNIQUE (CodeApogee,Nom,Prenom)
 );
 
 

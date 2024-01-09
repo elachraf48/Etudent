@@ -70,3 +70,26 @@ Route::resource('calendrier-modules', CalendrierModuleController::class);
 Route::resource('calendrier-module-groupes', CalendrierModuleGroupeController::class);
 
 // Route::get('/', [EtudiantController::class, 'index'])->name('search.etudiant');
+// routes/web.php
+
+use App\Http\Controllers\AdminController;
+
+Route::get('/admin/bulk-insert', [AdminController::class, 'showBulkInsertForm'])->name('bulk_insert_form');
+Route::post('/admin/bulk-insert', [AdminController::class, 'processBulkInsert'])->name('bulk_insert_process');
+// routes/web.php or routes/web.php
+
+Route::get('/bulk-insert', 'BulkInsertController@index')->name('bulk_insert');
+// routes/web.php
+
+Route::middleware(['auth'])->group(function () {
+    // Your authenticated routes here
+
+    Route::get('/admin', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+});
+
+// Route for the login page
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
