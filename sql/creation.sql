@@ -52,7 +52,7 @@ CREATE TABLE modules (
 );
 
 
-CREATE TABLE Detail_module (
+CREATE TABLE Detail_modules (
     id INT AUTO_INCREMENT PRIMARY KEY,
     
     idModule INT,
@@ -95,7 +95,7 @@ CREATE TABLE Info_Exames (
 );
 
 
-CREATE TABLE Calendrier_module (
+CREATE TABLE Calendrier_modules (
     id int AUTO_INCREMENT PRIMARY KEY,
     DateExamen Date NOT NULL,
     Houre varchar(20) NOT NULL,
