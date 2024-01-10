@@ -37,13 +37,15 @@ use App\Http\Controllers\GroupeEtudiantController;
 use App\Http\Controllers\InfoExameController;
 use App\Http\Controllers\CalendrierModuleController;
 use App\Http\Controllers\CalendrierModuleGroupeController;
-
+use App\Http\Controllers\AdminController;
 // Routes for Filiere
 Route::resource('filieres', FiliereController::class);
 
 // Routes for Etudiant
 Route::resource('/', EtudiantController::class);
 Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('search');
+Route::resource('/reqlamation', InfoExameController::class);
+Route::get('/reqlamation/next', [InfoExameController::class, 'next'])->name('next');
 
 // Routes for Etudiants_Filieres
 Route::resource('etudiants-filieres', EtudiantFiliereController::class);
@@ -74,7 +76,6 @@ Route::resource('calendrier-module-groupes', CalendrierModuleGroupeController::c
 
 // routes/web.php
 
-use App\Http\Controllers\AdminController;
 
 
 Route::get('/admin/bulk-insert', [AdminController::class, 'showBulkInsertForm'])->name('bulk_insert_form');
