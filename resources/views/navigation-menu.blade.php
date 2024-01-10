@@ -15,6 +15,14 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('bulk_insert_form') }}" :active="request()->routeIs('dashboard')">
+                        {{ __('Bulk Insert moudel&filier') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('insert_student_form') }}" :active="request()->routeIs('dashboard')">
+                        {{ __('Bulk insert student & group & infoExam') }}
+                    </x-nav-link>
+
+                   
                 </div>
             </div>
 

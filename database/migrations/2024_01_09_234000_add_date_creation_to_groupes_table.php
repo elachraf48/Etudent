@@ -13,16 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('groupes', function (Blueprint $table) {
-            $table->id();
-            $table->string('nomGroupe', 10);
-            $table->string('Semester', 5);
-            $table->date('Date_creation');
-            $table->unique(['nomGroupe', 'Semester', 'Date_creation']);
-            $table->timestamps();
+        Schema::table('groupes', function (Blueprint $table) {
+            //
         });
     }
-    
 
     /**
      * Reverse the migrations.
@@ -31,10 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('groupes');
+        Schema::table('groupes', function (Blueprint $table) {
+            //
+        });
     }
 };
-
-
-
-

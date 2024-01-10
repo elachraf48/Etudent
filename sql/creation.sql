@@ -69,7 +69,9 @@ CREATE TABLE Detail_modules (
 CREATE TABLE Groupes (
     id int AUTO_INCREMENT PRIMARY KEY,
     nomGroupe INT NOT null,
-	 Semester VARCHAR(5) NOT NULL        
+	Semester VARCHAR(5) NOT NULL  ,
+    Date_creation VARCHAR(10),
+    UNIQUE (nomGroupe,Semester,Date_creation),     
 );
 
 CREATE TABLE Groupe_etudiant (
