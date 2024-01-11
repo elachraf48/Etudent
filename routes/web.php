@@ -26,6 +26,8 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\EtudiantController;
@@ -44,8 +46,78 @@ Route::resource('filieres', FiliereController::class);
 // Routes for Etudiant
 Route::resource('/', EtudiantController::class);
 Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('search');
+// routes/web.php
+
+// Define the resource routes
 Route::resource('/reqlamation', InfoExameController::class);
+
+// Add a custom route for the 'next' method
 Route::get('/reqlamation/next', [InfoExameController::class, 'next'])->name('next');
+Route::get('/get-modules', [InfoExameController::class, 'getModules'])->name('get-modules');
+
+Route::post('/get-modules', function(Request $request) {
+    // Validate the request
+    $request->validate([
+        'nomFiliere' => 'required|string',
+        'semester' => 'required|string',
+        'parcours' => 'required|string',
+    ]);
+
+    // Get the selected values from the request
+    $nomFiliere = $request->input('nomFiliere');
+    $semester = $request->input('semester');
+    $parcours = $request->input('parcours');
+
+    // Construct the query to fetch modules based on selected values
+    $modules = DB::table('modules')
+        ->where('idFiliere', function($query) use ($nomFiliere, $semester, $parcours) {
+            $query->select('id')
+                ->from('filieres')
+                ->where('NomFiliere', $nomFiliere)
+                ->where('CodeFiliere', 'LIKE', '%' . $semester)
+                ->where('Parcours', $parcours);
+        })
+        ->pluck('NomModule');
+
+    // Check if any modules were found 
+    if ($modules->isEmpty()) {
+        // If no modules found, you may return an empty array or handle it as needed
+        return response()->json([]);
+    }
+
+    // Return the fetched modules as a JSON response
+    return response()->json($modules);
+})->name('get-modules');
+
+// Add a custom route for the 'getParcours' method
+Route::get('/get-parcours', [InfoExameController::class, 'getParcours'])->name('get-parcours');
+Route::post('/get-nom-filiere', [InfoExameController::class, 'getNomFiliere'])->name('get-nom-filiere');
+Route::post('/get-parcours', function(Request $request) {
+    // Validate the request
+    $request->validate([
+        'nomFiliere' => 'required|string',
+        'semester' => 'required|string',
+    ]);
+
+    // Get the selected values from the request
+    $nomFiliere = $request->input('nomFiliere');
+    $semester = $request->input('semester');
+
+    // Construct the query to fetch Parcours based on selected values
+    $parcours = DB::table('Filieres')
+        ->where('NomFiliere', $nomFiliere)
+        ->where('CodeFiliere', 'LIKE', '%' . $semester)
+        ->pluck('Parcours');
+
+    // Check if any parcours were found 
+    if ($parcours->isEmpty()) {
+        // If no parcours found, you may return an empty array or handle it as needed
+        return response()->json([]);
+    }
+
+    // Return the fetched parcours as a JSON response
+    return response()->json($parcours);
+});
 
 // Routes for Etudiants_Filieres
 Route::resource('etudiants-filieres', EtudiantFiliereController::class);

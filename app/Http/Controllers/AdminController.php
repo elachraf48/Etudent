@@ -28,7 +28,7 @@ class AdminController extends Controller
             // Insert data into your tables
             $filiere = DB::table('Filieres')->updateOrInsert(
                 ['CodeFiliere' => $columns[5]],
-                ['NomFiliere' => $columns[4], 'Parcours' => $columns[3],'created_at' => now(),'updated_at' => now()],
+                ['NomFiliere' => $columns[3], 'Parcours' => $columns[4],'created_at' => now(),'updated_at' => now()],
                 
                 
             );
