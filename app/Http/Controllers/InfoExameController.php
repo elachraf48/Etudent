@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\InfoExame;
 use App\Models\Etudiant;
 use App\Models\Filiere;
+use App\Models\Module;
 
 use Illuminate\Http\Request;
 
@@ -18,23 +19,40 @@ class InfoExameController extends Controller
      */
     public function index(Request $request)
     {
-        $semester = $request->input('semester', 'S1'); // Default to 'S1' if not provided
+        $semester = $request->input('semester', 'S1');
+        $nomFiliere = $request->input('nomFiliere','DROIT EN FRACAIS');
+        $parcours = $request->input('parcours', 'NULL');
 
-        $filiereOptions = Filiere::where('CodeFiliere', 'LIKE', '%' . $semester )->distinct()->pluck('NomFiliere');
+        $filiereOptions = Filiere::where('CodeFiliere', 'LIKE', '%S1')->distinct()->pluck('NomFiliere');
+        $defaultModules = Module::select('NomModule', 'CodeModule')
+        ->where('idFiliere', function ($subquery) use ($semester,$nomFiliere,$parcours)  {
+            $subquery->select('id')
+                ->from('filieres')
+                ->where('CodeFiliere', 'like' ,'%' .$semester)
+                ->where('NomFiliere', $nomFiliere)
+                ->where('Parcours', $parcours);
+
+
+        })
+        ->distinct()
+        ->pluck('NomModule', 'CodeModule');
+            
 
         // Pass the data to the view
         return view('reqlamation.next', [
+            'defaultModules' => $defaultModules,
             'filiereOptions' => $filiereOptions,
         ]);
     }
-    public function getNomFiliere(Request $request)
+
+    public function getNomFiliere()
     {
         $filiereOptions = Filiere::distinct()->pluck('NomFiliere');
 
         return response()->json($filiereOptions);
     }
+   
     
-
     public function getModules(Request $request)
     {
         // Validate the request
@@ -43,45 +61,35 @@ class InfoExameController extends Controller
             'semester' => 'required|string',
             'parcours' => 'required|string',
         ]);
-    
+
         // Get the selected values from the request
         $nomFiliere = $request->input('nomFiliere');
         $semester = $request->input('semester');
         $parcours = $request->input('parcours');
-    
-        // Log request parameters
-        logger('NomFiliere:', $nomFiliere);
-        logger('Semester:', $semester);
-        logger('Parcours:', $parcours);
-    
+
         // Construct the query to fetch modules based on selected values
-        $modules = DB::table('modules')
-            ->when($nomFiliere && $semester && $parcours, function ($query) use ($nomFiliere, $semester, $parcours) {
-                $query->where('idFiliere', function ($subquery) use ($nomFiliere, $semester, $parcours) {
-                    $subquery->select('id')
-                        ->from('filieres')
-                        ->where('NomFiliere', $nomFiliere)
-                        ->where('CodeFiliere', 'LIKE', '%' . $semester)
-                        ->where('Parcours', $parcours);
-                });
+        $modules = Module::select('NomModule', 'CodeModule')
+            ->where('idFiliere', function ($subquery) use ($semester, $nomFiliere, $parcours) {
+                $subquery->select('id')
+                    ->from('Filieres')
+                    ->where('CodeFiliere', 'like', '%' . $semester)
+                    ->where('NomFiliere', $nomFiliere)
+                    ->where('Parcours', $parcours);
             })
-            ->pluck('NomModule')
-            ->toArray();
-    
-        // Log the SQL query
-        logger('SQL Query:', DB::getQueryLog());
-    
+            ->distinct()
+            ->pluck('NomModule', 'CodeModule');
+
         // Check if any modules were found
-        if (empty($modules)) {
+        if ($modules->isEmpty()) {
             // If no modules found, you may return an empty array or handle it as needed
             return response()->json([]);
         }
-    
+
         // Return the fetched modules as a JSON response
         return response()->json($modules);
     }
     
-
+    
 
        
 

@@ -28,6 +28,7 @@ Route::middleware([
 });
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\EtudiantController;
@@ -53,10 +54,8 @@ Route::resource('/reqlamation', InfoExameController::class);
 
 // Add a custom route for the 'next' method
 Route::get('/reqlamation/next', [InfoExameController::class, 'next'])->name('next');
-Route::get('/get-modules', [InfoExameController::class, 'getModules'])->name('get-modules');
 
-Route::post('/get-modules', function(Request $request) {
-    // Validate the request
+Route::post('/get-modules', function (Request $request) {
     $request->validate([
         'nomFiliere' => 'required|string',
         'semester' => 'required|string',
@@ -69,15 +68,15 @@ Route::post('/get-modules', function(Request $request) {
     $parcours = $request->input('parcours');
 
     // Construct the query to fetch modules based on selected values
-    $modules = DB::table('modules')
-        ->where('idFiliere', function($query) use ($nomFiliere, $semester, $parcours) {
-            $query->select('id')
-                ->from('filieres')
-                ->where('NomFiliere', $nomFiliere)
+    $modules = DB::table('Module')
+        ->where('idFiliere', function ($subquery) use ($semester, $nomFiliere, $parcours) {
+            $subquery->select('id')
+                ->from('Filiere')
                 ->where('CodeFiliere', 'LIKE', '%' . $semester)
+                ->where('NomFiliere', $nomFiliere)
                 ->where('Parcours', $parcours);
         })
-        ->pluck('NomModule');
+        ->pluck('NomModule', 'CodeModule');
 
     // Check if any modules were found 
     if ($modules->isEmpty()) {
@@ -87,11 +86,12 @@ Route::post('/get-modules', function(Request $request) {
 
     // Return the fetched modules as a JSON response
     return response()->json($modules);
-})->name('get-modules');
+});
+
 
 // Add a custom route for the 'getParcours' method
-Route::get('/get-parcours', [InfoExameController::class, 'getParcours'])->name('get-parcours');
 Route::post('/get-nom-filiere', [InfoExameController::class, 'getNomFiliere'])->name('get-nom-filiere');
+
 Route::post('/get-parcours', function(Request $request) {
     // Validate the request
     $request->validate([
@@ -118,6 +118,9 @@ Route::post('/get-parcours', function(Request $request) {
     // Return the fetched parcours as a JSON response
     return response()->json($parcours);
 });
+// In web.php
+Route::get('/fetch-filieres/{semester}', [CalendrierModuleController::class, 'fetchFilieresBySemester']);
+
 
 // Routes for Etudiants_Filieres
 Route::resource('etudiants-filieres', EtudiantFiliereController::class);
@@ -149,9 +152,14 @@ Route::resource('calendrier-module-groupes', CalendrierModuleGroupeController::c
 // routes/web.php
 
 
+// admin/Filier_modules
 
-Route::get('/admin/bulk-insert', [AdminController::class, 'showBulkInsertForm'])->name('bulk_insert_form');
-Route::post('/admin/bulk-insert', [AdminController::class, 'processBulkInsert'])->name('bulk_insert_process');
+Route::get('/admin/Filier_modules', [AdminController::class, 'showFiliermodules'])->name('Filier_modules_form');
+Route::post('/admin/Filier_modules', [AdminController::class, 'processFiliermodules'])->name('Filier_modules_process');
+// admin/Filier_modules
+
+Route::get('/admin/Calendrier_modules', [CalendrierModuleController::class, 'showCalendriermodules'])->name('Calendrier_modules_form');
+Route::post('/admin/Calendrier_modules', [CalendrierModuleController::class, 'processBulkInsert'])->name('Calendrier_modules_process');
 
 // routes/web.php
 

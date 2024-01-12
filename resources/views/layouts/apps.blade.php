@@ -12,8 +12,7 @@
     <div id="app">
         @yield('content')
     </div>
-    <!-- Add your scripts or other elements before closing body tag -->
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
 <!-- Remove the slim version -->
 <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>-->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -23,6 +22,8 @@
     <script>
          
     $(document).ready(function() {
+
+   
         // Initial setup
         updateNomFiliereDropdown();
 
@@ -34,13 +35,15 @@
         // Handle change event of the NomFiliere dropdown
         $('#nomFiliereDropdown').on('change', function() {
             updateParcoursDropdown();
+
         });
 
         // Update the Module dropdown when Parcours changes
         $('#parcoursDropdown').on('change', function() {
             updateModuleDropdown();
-        });
 
+        });
+         
 
         // Function to update the NomFiliere dropdown
         function updateNomFiliereDropdown() {
@@ -66,7 +69,9 @@
                 error: function(xhr, textStatus, errorThrown) {
                     console.error('Error:', errorThrown);
                 }
+                
             });
+            
         }
 
         // Function to update the Parcours dropdown
@@ -105,49 +110,43 @@
             });
         }
 
+        //-----------------------------
+  
+
         // Function to update the Module dropdown
-function updateModuleDropdown() {
-    // Get selected values
-    var selectedNomFiliere = $('#nomFiliereDropdown').val();
-    var selectedSemester = $('#semesterDropdown').val();
-    var selectedParcours = $('#parcoursDropdown').val();
+        function updateModuleDropdown() {
+            // Get selected values
+            var selectedSemester = $('#semesterDropdown').val();
+            var selectedNomFiliere = $('#nomFiliereDropdown').val();
+            var selectedParcours = $('#parcoursDropdown').val();
+            var query = {
+                _token: '{{ csrf_token() }}',
+                semester: selectedSemester,
+                nomFiliere: selectedNomFiliere,
+                parcours: selectedParcours,
+            };
 
-    // Construct the query dynamically
-    var query = {
-        _token: '{{ csrf_token() }}',
-        nomFiliere: selectedNomFiliere,
-        semester: selectedSemester,
-        parcours: selectedParcours,
-    };
+            // Make an AJAX request to get the modules based on the selected values
+            $.ajax({
+                url: '/get-modules', // Adjust the route URL accordingly
+                type: 'POST',
+                data: query,
+                dataType: 'json',
+                success: function (response) {
+                    // Update the Module dropdown list with the new options
+                    var moduleDropdown = $('#moduleDropdown');
+                    moduleDropdown.empty();
+                    $.each(response, function (index, value) {
+                        moduleDropdown.append('<option value="' + value.CodeModule + '">' + value.NomModule + '</option>');
+                    });
+                    moduleDropdown.trigger('change');
 
-    // Send an AJAX request to the Laravel route
-    $.ajax({
-        url: '/get-modules',
-        type: 'POST',
-        data: query,
-        dataType: 'json',
-        success: function(response) {
-            console.log('Response from /get-modules:', response); // Log the response
-
-            // Check if the response is an empty array
-            if (response.length === 0) {
-                console.log('No modules found.');
-                // Optionally, you can display a message or handle this case as needed
-                return;
-            }
-
-            // Update the module dropdown list with the new options
-            var moduleDropdown = $('#moduleDropdown');
-            moduleDropdown.empty();
-            $.each(response, function(index, value) {
-                moduleDropdown.append('<option value="' + value + '">' + value + '</option>');
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error('Error:', errorThrown);
+                }
             });
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            console.error('Error:', errorThrown);
         }
-    });
-}
 
     });
     </script>
