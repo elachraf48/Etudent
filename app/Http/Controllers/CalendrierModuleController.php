@@ -1,10 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 use App\Models\CalendrierModule;
 use App\Models\Filiere;
-
+use App\Models\CalendrierModuleGroupe;
+use App\Models\Module;
+use App\Models\Groupe;
 use Illuminate\Http\Request;
 
 class CalendrierModuleController extends Controller
@@ -89,9 +93,9 @@ class CalendrierModuleController extends Controller
     {
         // Fetch filieres and parcours to pass to the view
 
-        $semester = $request->input('semester','s1');
+        $semester = $request->input('semester', 's1');
 
-        $filieres = Filiere::where('CodeFiliere', 'LIKE', '%'.$semester)->get(['id', 'NomFiliere', 'Parcours']);
+        $filieres = Filiere::where('CodeFiliere', 'LIKE', '%' . $semester)->get(['id', 'NomFiliere', 'Parcours']);
 
         return view('admin.Calendrier_modules', compact('filieres'));
     }
@@ -102,39 +106,92 @@ class CalendrierModuleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function processBulkInsert(Request $request)
+    public function insertCalendrierModules(Request $request)
     {
-        // Your processing logic here
-
+        $request->validate([
+            'cld_mod_data' => 'required_without:file',
+        ]);
+    
         // For example, you can access form data like this:
         $semester = $request->input('semester');
         $filiere = $request->input('filiere');
-        $parcours = $request->input('parcours');
-        $examData = $request->input('exam_data');
-
-        // ... your processing logic ...
-
-        // Redirect or return a response
-        return redirect()->route('Calendrier_modules_form')->with('success', 'Data inserted successfully');
+        $anneeUniversitaire = $request->input('AnneeUniversitaire');
+    
+        // Create a CalendrierModule record
+    
+        if ($request->has('cld_mod_data')) {
+            $data = $request->input('cld_mod_data');
+    
+            // Process the pasted data and insert into the database
+            $rows = explode("\n", $data);
+    
+            foreach ($rows as $row) {
+                $columns = str_getcsv($row);
+    
+                // Fetch idModule based on CodeFiliere and Namemodel
+                $idmodule = Module::where('idFiliere', $filiere)
+                    ->where('NomModule', $columns[0])
+                    ->where('semester', $semester)
+                    ->value('id');
+    
+                // Check if the module is found
+                if (!$idmodule) {
+                    return redirect()->route('Calendrier_modules_form')->with('error', 'Module not found for the specified conditions');
+                }
+    
+                $formattedDate = Carbon::createFromFormat('d/m/Y', $columns[1])->format('Y-m-d');
+    
+                // Insert the record in calendrier_modules table
+                $calendrierModule = DB::table('calendrier_modules')->insertGetId([
+                    'DateExamen' => $formattedDate,
+                    'Houre' => $columns[2],
+                    'idModule' => $idmodule,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'AnneeUniversitaire' => $anneeUniversitaire,
+                ]);
+    
+                // Explode the group names separated by '+'
+                $groupNames = explode('+', $columns[3]);
+    
+                // Loop through each group and insert into calender_module_groupes
+                foreach ($groupNames as $groupName) {
+                    // Insert into the groupes table if it doesn't exist and get the ID
+                    $groupeId = DB::table('groupes')->updateOrInsert(
+                        ['nomGroupe' => $groupName, 'Semester' => $semester],
+                        ['Date_creation' => now()->format('Y/m/d'), 'created_at' => now(), 'updated_at' => now()]
+                    );
+    
+                    // Insert into calender_module_groupes table
+                    DB::table('calendrier_module_groupes')->updateOrInsert(
+                        ['idCmodule' => $calendrierModule],
+                        ['idGroupe' => $groupeId]
+                    );
+                }
+            }
+    
+            // Redirect or return a response
+            return redirect()->route('Calendrier_modules_form')->with('success', 'Data inserted successfully');
+        } else {
+            // Handle the case where the module is not found
+            return redirect()->route('Calendrier_modules_form')->with('error', 'Module not found for the specified conditions');
+        }
     }
+    
+    
+
 
     public function fetchFilieresBySemester($semester)
-{
-    // Fetch filieres based on the selected semester
-    $filieres = Filiere::where('CodeFiliere', 'LIKE', '%' . $semester)->get(['id', 'NomFiliere', 'Parcours']);
+    {
+        // Fetch filieres based on the selected semester
+        $filieres = Filiere::where('CodeFiliere', 'LIKE', '%' . $semester)->get(['id', 'NomFiliere', 'Parcours']);
 
-    // Check if filieres are empty
-    if ($filieres->isEmpty()) {
-        return response()->json(['message' => 'No filieres found for the selected semester'], 404);
+        // Check if filieres are empty
+        if ($filieres->isEmpty()) {
+            return response()->json(['message' => 'No filieres found for the selected semester'], 404);
+        }
+
+        // Return filieres as JSON
+        return response()->json(['filieres' => $filieres]);
     }
-
-    // Return filieres as JSON
-    return response()->json(['filieres' => $filieres]);
-}
-
-    
-    
-    
-
-
 }

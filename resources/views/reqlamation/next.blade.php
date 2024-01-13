@@ -33,7 +33,7 @@
         <div class="row g-2 mt-1">
             <div class="col-md" alt="madirch 0">
                 <div class="form-floating">
-                    <input type="number" placeholder="" name="napogee" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="7" class="form-control" required>
+                <input type="number" placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
                     <label for="floatingSelectGrid">N apogee</label>
                 </div>
             </div>
@@ -56,27 +56,32 @@
         <div class="row g-2 mt-1">
             <div class="col-md">
                 <div class="form-floating">
-                    <select name="nomFiliere" id="nomFiliereDropdown" class="form-control" required>
-                        @foreach($filiereOptions as $nomFiliere)
-                        <option value="{{ $nomFiliere }}">{{ $nomFiliere }}</option>
+                    <select name="filiere" id="filiereDropdown" class="form-control" required>
+                        @foreach($filieres as $filiere)
+                        <option value="{{ $filiere->id }}">{{ $filiere->NomFiliere }}
+                            @if($filiere->Parcours!='NULL')
+                            {({{ $filiere->Parcours }})}
+                            @endif
+                        </option>
                         @endforeach
                     </select>
-                    <label for="nomFiliereDropdown">Nom Filiere</label>
+                    <label for="floatingSelectGrid">Filiere</label>
                 </div>
             </div>
-
-
-            <div class="form-floating parcours-dropdown ">
-                <select name="parcours" id="parcoursDropdown" class="form-control" required>
-                    <!-- Options will be dynamically populated using JavaScript -->
-                </select>
-                <label for="parcoursDropdown">Parcours</label>
-            </div>
         </div>
-
         <div class="col-md mt-1">
             <div class="form-floating">
-                <input type="text" name="ndexamen" class="form-control" placeholder="">
+                <select name="module" id="moduleDropdown" class="form-control" required>
+                    @foreach($Modules as $Module)
+                    <option value="{{ $Module->id }}">{{ $Module->NomModule }}</option>
+                    @endforeach
+                </select>
+                <label for="floatingSelectGrid">Module</label>
+            </div>
+        </div>
+        <div class="col-md mt-1">
+            <div class="form-floating">
+            <input type="number" placeholder="" name="ndexamen" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
                 <label for="floatingSelectGrid">N d'examen</label>
             </div>
         </div>
@@ -98,13 +103,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md mt-1">
-            <div class="form-floating">
-                <select name="module" id="moduleDropdown" class="form-control" required>
-                </select>
-                <label for="floatingSelectGrid">Module</label>
-            </div>
-        </div>
+     
 
 
 
@@ -148,5 +147,73 @@
     </form>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Event listener for changes in the semester dropdown
+        $('#semesterDropdown, #filiereDropdown').change(function() {
+        var selectedSemester = $('#semesterDropdown').val();
+        var selectedFiliere = $('#filiereDropdown').val();
+
+        // Make an Ajax request to fetch modules based on the selected semester and filiere
+        $.ajax({
+            url: '/fetch-modules/'+ selectedFiliere,
+            type: 'GET',
+            success: function(data) {
+                // Assuming the data structure is { "modules": [...] }
+                var modules = data.modules;
+
+                // Update the dropdown options
+                var optionsHtml = '';
+                $.each(modules, function(index, module) {
+                    optionsHtml += '<option value="' + module.id + '">' + module.NomModule + '</option>';
+                });
+
+                // Set the updated options HTML to the dropdown
+                $('#moduleDropdown').html(optionsHtml);
+            }
+        });
+    });
+    $('#semesterDropdown').change(function() {
+            var selectedSemester = $(this).val();
+
+            // Make an Ajax request to fetch filieres based on the selected semester
+            $.ajax({
+                url: '/fetch-filieres/' + selectedSemester,
+                type: 'GET',
+                success: function(data) {
+                    // Assuming the data structure is { "filieres": [...] }
+                    var filieres = data.filieres;
+
+                    // Update the dropdown options
+                    var optionsHtml = '';
+                    $.each(filieres, function(index, filiere) {
+                        optionsHtml += '<option value="' + filiere.id + '">' + filiere.NomFiliere;
+
+                        // Include Parcours in parentheses if it's not 'NULL'
+                        if (filiere.Parcours !== 'NULL') {
+                            optionsHtml += ' (' + filiere.Parcours + ')';
+                        }
+
+                        optionsHtml += '</option>';
+                    });
+
+                    // Set the updated options HTML to the dropdown
+                    $('#filiereDropdown').html(optionsHtml);
+                }
+            });
+
+        });
+    });
+    function removeLeadingZeros(input) {
+        // Remove leading zeros using a regular expression
+        input.value = input.value.replace(/^0+/, '');
+        
+        // Trim the value to the specified maxlength
+        if (input.value.length > input.maxLength) {
+            input.value = input.value.slice(0, input.maxLength);
+        }
+    }
+</script>
 
 @endsection

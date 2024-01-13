@@ -50,76 +50,18 @@ Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('sea
 // routes/web.php
 
 // Define the resource routes
-Route::resource('/reqlamation', InfoExameController::class);
+Route::get('/reqlamation', [InfoExameController::class, 'index']);
+Route::post('/reclamation/next', [InfoExameController::class, 'nextReclamation'])->name('reclamation.next');
 
 // Add a custom route for the 'next' method
-Route::get('/reqlamation/next', [InfoExameController::class, 'next'])->name('next');
-
-Route::post('/get-modules', function (Request $request) {
-    $request->validate([
-        'nomFiliere' => 'required|string',
-        'semester' => 'required|string',
-        'parcours' => 'required|string',
-    ]);
-
-    // Get the selected values from the request
-    $nomFiliere = $request->input('nomFiliere');
-    $semester = $request->input('semester');
-    $parcours = $request->input('parcours');
-
-    // Construct the query to fetch modules based on selected values
-    $modules = DB::table('Module')
-        ->where('idFiliere', function ($subquery) use ($semester, $nomFiliere, $parcours) {
-            $subquery->select('id')
-                ->from('Filiere')
-                ->where('CodeFiliere', 'LIKE', '%' . $semester)
-                ->where('NomFiliere', $nomFiliere)
-                ->where('Parcours', $parcours);
-        })
-        ->pluck('NomModule', 'CodeModule');
-
-    // Check if any modules were found 
-    if ($modules->isEmpty()) {
-        // If no modules found, you may return an empty array or handle it as needed
-        return response()->json([]);
-    }
-
-    // Return the fetched modules as a JSON response
-    return response()->json($modules);
-});
-
 
 // Add a custom route for the 'getParcours' method
-Route::post('/get-nom-filiere', [InfoExameController::class, 'getNomFiliere'])->name('get-nom-filiere');
 
-Route::post('/get-parcours', function(Request $request) {
-    // Validate the request
-    $request->validate([
-        'nomFiliere' => 'required|string',
-        'semester' => 'required|string',
-    ]);
 
-    // Get the selected values from the request
-    $nomFiliere = $request->input('nomFiliere');
-    $semester = $request->input('semester');
-
-    // Construct the query to fetch Parcours based on selected values
-    $parcours = DB::table('Filieres')
-        ->where('NomFiliere', $nomFiliere)
-        ->where('CodeFiliere', 'LIKE', '%' . $semester)
-        ->pluck('Parcours');
-
-    // Check if any parcours were found 
-    if ($parcours->isEmpty()) {
-        // If no parcours found, you may return an empty array or handle it as needed
-        return response()->json([]);
-    }
-
-    // Return the fetched parcours as a JSON response
-    return response()->json($parcours);
-});
 // In web.php
 Route::get('/fetch-filieres/{semester}', [CalendrierModuleController::class, 'fetchFilieresBySemester']);
+Route::get('/fetch-filieres/{semester}', [InfoExameController::class, 'fetchFilieresBySemester']);
+Route::get('/fetch-modules/{filiere}', [InfoExameController::class, 'fetchModules']);
 
 
 // Routes for Etudiants_Filieres
@@ -159,7 +101,7 @@ Route::post('/admin/Filier_modules', [AdminController::class, 'processFiliermodu
 // admin/Filier_modules
 
 Route::get('/admin/Calendrier_modules', [CalendrierModuleController::class, 'showCalendriermodules'])->name('Calendrier_modules_form');
-Route::post('/admin/Calendrier_modules', [CalendrierModuleController::class, 'processBulkInsert'])->name('Calendrier_modules_process');
+Route::post('/admin/Calendrier_modules', [CalendrierModuleController::class, 'insertCalendrierModules'])->name('Calendrier_modules_process');
 
 // routes/web.php
 

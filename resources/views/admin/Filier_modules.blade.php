@@ -1,7 +1,7 @@
 @extends('dashboard')
 
 @section('content')
-    <div class="container">
+    <div class="container p-3">
         <h2 class="mt-5">Bulk Insert Data</h2>
         @if(session('success'))
             <div class="alert alert-success">
@@ -23,7 +23,7 @@
                 <input class="form-control" type="file" name="file" accept=".csv, .txt">
             </div>
 
-            <button type="submit" class="btn btn-primary">Insert Data</button>
+            <button style=" background: gray;" type="submit" class="btn btn-primary">Insert Data</button>
         </form>
     </div>
 @endsection

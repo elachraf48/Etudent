@@ -20,29 +20,15 @@ class InfoExameController extends Controller
     public function index(Request $request)
     {
         $semester = $request->input('semester', 'S1');
-        $nomFiliere = $request->input('nomFiliere','DROIT EN FRACAIS');
-        $parcours = $request->input('parcours', 'NULL');
 
-        $filiereOptions = Filiere::where('CodeFiliere', 'LIKE', '%S1')->distinct()->pluck('NomFiliere');
-        $defaultModules = Module::select('NomModule', 'CodeModule')
-        ->where('idFiliere', function ($subquery) use ($semester,$nomFiliere,$parcours)  {
-            $subquery->select('id')
-                ->from('filieres')
-                ->where('CodeFiliere', 'like' ,'%' .$semester)
-                ->where('NomFiliere', $nomFiliere)
-                ->where('Parcours', $parcours);
+        $filieres = Filiere::where('CodeFiliere', 'LIKE', '%'.$semester)->get(['id', 'NomFiliere', 'Parcours']);
 
-
-        })
-        ->distinct()
-        ->pluck('NomModule', 'CodeModule');
+        
+        $Modules = Module::where('idFiliere', '1')->get(['id','NomModule', 'CodeModule']);
             
-
+        return view('reqlamation.index', compact('filieres','Modules'));
         // Pass the data to the view
-        return view('reqlamation.next', [
-            'defaultModules' => $defaultModules,
-            'filiereOptions' => $filiereOptions,
-        ]);
+        
     }
 
     public function getNomFiliere()
@@ -53,6 +39,17 @@ class InfoExameController extends Controller
     }
    
     
+    public function nextReclamation(Request $request)
+    {
+        $semester = $request->input('semester', 'S1');
+
+        $filieres = Filiere::where('CodeFiliere', 'LIKE', '%'.$semester)->get(['id', 'NomFiliere', 'Parcours']);
+
+        
+        $Modules = Module::where('idFiliere', '1')->get(['id','NomModule', 'CodeModule']);
+            
+        return view('reqlamation.next', compact('filieres','Modules'));
+    }
     public function getModules(Request $request)
     {
         // Validate the request
@@ -130,6 +127,7 @@ class InfoExameController extends Controller
     public function store(Request $request)
     {
         //
+        return view('reqlamation.next');
     }
 
     /**
@@ -176,4 +174,30 @@ class InfoExameController extends Controller
     {
         //
     }
+    public function fetchFilieresBySemester($semester)
+    {
+        // Fetch filieres based on the selected semester
+        $filieres = Filiere::where('CodeFiliere', 'LIKE', '%' . $semester)->get(['id', 'NomFiliere', 'Parcours']);
+    
+        // Check if filieres are empty
+        if ($filieres->isEmpty()) {
+            return response()->json(['message' => 'No filieres found for the selected semester'], 404);
+        }
+    
+        // Return filieres as JSON
+        return response()->json(['filieres' => $filieres]);
+    }
+    public function fetchModules( $filiere)
+{
+    // Fetch modules based on the selected semester and filiere
+    $modules = Module::where('idFiliere', $filiere)->get(['id', 'NomModule', 'CodeModule']);
+
+    // Check if modules are empty
+    if ($modules->isEmpty()) {
+        return response()->json(['message' => 'No modules found for the selected semester and filiere'], 404);
+    }
+
+    // Return modules as JSON
+    return response()->json(['modules' => $modules]);
+}
 }

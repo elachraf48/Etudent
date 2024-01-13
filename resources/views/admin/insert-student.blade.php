@@ -3,7 +3,7 @@
 @extends('dashboard')
 
 @section('content')
-    <div class="container">
+    <div class="container p-3">
         <h2>Insert Student Data</h2>
 
         @if(session('success'))
@@ -32,7 +32,7 @@
                 <input disabled type="file" name="file" class="form-control" accept=".csv, .txt">
             </div>
 
-            <button style="color: red;  " type="submit" class="btn btn-primary">Insert Data</button>
+            <button style="background: gray;" type="submit" class="btn btn-primary">Insert Data</button>
         </form>
 
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
