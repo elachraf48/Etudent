@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 
@@ -10,6 +11,7 @@ use App\Models\CalendrierModuleGroupe;
 use App\Models\Module;
 use App\Models\Groupe;
 use Illuminate\Http\Request;
+use App\Models\CalendrierSession;
 
 class CalendrierModuleController extends Controller
 {
@@ -20,6 +22,8 @@ class CalendrierModuleController extends Controller
      */
     public function index()
     {
+        $sessions = CalendrierSession::all();
+        return view('admin.Calendrier_modules', compact('sessions'));
     }
 
     /**
@@ -94,10 +98,10 @@ class CalendrierModuleController extends Controller
         // Fetch filieres and parcours to pass to the view
 
         $semester = $request->input('semester', 's1');
-
+        $sessions = CalendrierSession::all();
         $filieres = Filiere::where('CodeFiliere', 'LIKE', '%' . $semester)->get(['id', 'NomFiliere', 'Parcours']);
 
-        return view('admin.Calendrier_modules', compact('filieres'));
+        return view('admin.Calendrier_modules', compact('filieres', 'sessions'));
     }
 
     /**
@@ -111,57 +115,73 @@ class CalendrierModuleController extends Controller
         $request->validate([
             'cld_mod_data' => 'required_without:file',
         ]);
-    
+
         // For example, you can access form data like this:
         $semester = $request->input('semester');
         $filiere = $request->input('filiere');
         $anneeUniversitaire = $request->input('AnneeUniversitaire');
-    
+        $sessions = $request->input('sessions');
+
         // Create a CalendrierModule record
-    
+
         if ($request->has('cld_mod_data')) {
             $data = $request->input('cld_mod_data');
-    
+
             // Process the pasted data and insert into the database
             $rows = explode("\n", $data);
-    
+
             foreach ($rows as $row) {
                 $columns = str_getcsv($row);
-    
+
                 // Fetch idModule based on CodeFiliere and Namemodel
                 $idmodule = Module::where('idFiliere', $filiere)
                     ->where('NomModule', $columns[0])
                     ->where('semester', $semester)
                     ->value('id');
-    
+
                 // Check if the module is found
                 if (!$idmodule) {
                     return redirect()->route('Calendrier_modules_form')->with('error', 'Module not found for the specified conditions');
                 }
-    
+
                 $formattedDate = Carbon::createFromFormat('d/m/Y', $columns[1])->format('Y-m-d');
-    
+
                 // Insert the record in calendrier_modules table
                 $calendrierModule = DB::table('calendrier_modules')->insertGetId([
                     'DateExamen' => $formattedDate,
                     'Houre' => $columns[2],
                     'idModule' => $idmodule,
+                    'idSESSION' => $sessions,
                     'created_at' => now(),
                     'updated_at' => now(),
                     'AnneeUniversitaire' => $anneeUniversitaire,
                 ]);
-    
+
                 // Explode the group names separated by '+'
                 $groupNames = explode('+', $columns[3]);
-    
-                // Loop through each group and insert into calender_module_groupes
+
+                // Loop through each group and insert into calendrier_module_groupes
                 foreach ($groupNames as $groupName) {
-                    // Insert into the groupes table if it doesn't exist and get the ID
-                    $groupeId = DB::table('groupes')->updateOrInsert(
-                        ['nomGroupe' => $groupName, 'Semester' => $semester],
-                        ['Date_creation' => now()->format('Y/m/d'), 'created_at' => now(), 'updated_at' => now()]
-                    );
-    
+                    // Check if the group exists
+                    $existingGroup = DB::table('groupes')
+                        ->where('nomGroupe', $groupName)
+                        ->where('Semester', $semester)
+                        ->first();
+
+                    if ($existingGroup) {
+                        // Group already exists, no need to insert again
+                        $groupeId = $existingGroup->id;
+                    } else {
+                        // Insert into the groupes table if it doesn't exist and get the ID
+                        $groupeId = DB::table('groupes')->insertGetId([
+                            'nomGroupe' => $groupName,
+                            'Semester' => $semester,
+                            'Date_creation' => now()->format('Y/m/d'),
+                            'created_at' => now(),
+                            'updated_at' => now()
+                        ]);
+                    }
+
                     // Insert into calender_module_groupes table
                     DB::table('calendrier_module_groupes')->updateOrInsert(
                         ['idCmodule' => $calendrierModule],
@@ -169,7 +189,7 @@ class CalendrierModuleController extends Controller
                     );
                 }
             }
-    
+
             // Redirect or return a response
             return redirect()->route('Calendrier_modules_form')->with('success', 'Data inserted successfully');
         } else {
@@ -177,8 +197,8 @@ class CalendrierModuleController extends Controller
             return redirect()->route('Calendrier_modules_form')->with('error', 'Module not found for the specified conditions');
         }
     }
-    
-    
+
+
 
 
     public function fetchFilieresBySemester($semester)

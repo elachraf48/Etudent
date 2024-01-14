@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
 use Illuminate\Database\Eloquent\Model;
 
 class DetailModule extends Model
 {
-    protected $fillable = ['idModule', 'idEtudiant', 'etat', 'SESSION', 'part_Semester', 'AnneeUniversitaire'];
+    use HasFactory;
+
+    protected $fillable = ['idSESSION', 'idModule', 'idEtudiant', 'etat', 'AnneeUniversitaire'];
 
     public function module()
     {
@@ -18,5 +19,10 @@ class DetailModule extends Model
     public function etudiant()
     {
         return $this->belongsTo(Etudiant::class, 'idEtudiant');
+    }
+
+    public function calendrierSession()
+    {
+        return $this->belongsTo(CalendrierSession::class, 'idSESSION');
     }
 }

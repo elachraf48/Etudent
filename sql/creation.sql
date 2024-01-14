@@ -46,25 +46,13 @@ CREATE TABLE modules (
     NomModule VARCHAR(255) NOT NULL, 
     Semester  VARCHAR(2) NOT NULL, 
     idFiliere INT,
-   
     UNIQUE (CodeModule,NomModule),
-    FOREIGN KEY (idFiliere) REFERENCES filieres(id)
+    FOREIGN KEY (idFiliere) REFERENCES filieres(id),
+    FOREIGN KEY (idSESSION) REFERENCES Calendrier_SESSION(id)
+
 );
 
 
-CREATE TABLE Detail_modules (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    
-    idModule INT,
-    idEtudiant INT,
-    etat ENUM('I', 'NI'),
-    SESSION ENUM('ORD', 'RAT'),
-    part_Semester INT,
-    AnneeUniversitaire VARCHAR(10),
-   
-    FOREIGN KEY (idModule)   REFERENCES modules(id),
-    FOREIGN KEY (idEtudiant) REFERENCES Etudiants(id)
-);
 
 CREATE TABLE Groupes (
     id int AUTO_INCREMENT PRIMARY KEY,
@@ -97,15 +85,7 @@ CREATE TABLE Info_Exames (
 );
 
 
-CREATE TABLE Calendrier_modules (
-    id int AUTO_INCREMENT PRIMARY KEY,
-    DateExamen Date NOT NULL,
-    Houre varchar(20) NOT NULL,
-    idModule INT,
-    FOREIGN KEY (idModule)   REFERENCES modules(id),
-    AnneeUniversitaire VARCHAR(10) NOT NULL
-);
- 
+
 
 CREATE TABLE Calendrier_module_Groupes (
     idCmodule INT,
@@ -115,12 +95,32 @@ CREATE TABLE Calendrier_module_Groupes (
     PRIMARY KEY (idCmodule, idGroupe)
 );
 
+CREATE TABLE Detail_modules (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idSESSION INT,
+    idModule INT,
+    idEtudiant INT,
+    etat ENUM('I', 'NI'),
+    AnneeUniversitaire VARCHAR(10),
+    FOREIGN KEY (idSESSION)   REFERENCES Calendrier_SESSION(id)
+    FOREIGN KEY (idModule)   REFERENCES modules(id),
+    FOREIGN KEY (idEtudiant) REFERENCES Etudiants(id)
+);
+
+CREATE TABLE Calendrier_modules (
+    id int AUTO_INCREMENT PRIMARY KEY,
+    DateExamen Date NOT NULL,
+    Houre varchar(20) NOT NULL,
+    idModule INT,
+    idSESSION INT,
+    AnneeUniversitaire VARCHAR(10) NOT NULL,
+    FOREIGN KEY (idModule)   REFERENCES modules(id),
+    FOREIGN KEY (idSESSION)   REFERENCES Calendrier_SESSION(id)
+
+);
  
- 
-
-
-
-
- 
-	 
-	  
+Table Calendrier_SESSION {
+    id int AUTO_INCREMENT PRIMARY KEY,
+    SESSION ENUM('ORD', 'RAT'),
+    part_Semester INT,
+}

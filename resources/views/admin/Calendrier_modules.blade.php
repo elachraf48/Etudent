@@ -60,6 +60,18 @@
                     <label for="floatingSelectGrid">Annee Universitaire</label>
                 </div>
             </div>
+            <div class="col-md">
+                <div class="form-floating">
+                    <select name="sessions" id="sessionDropdown" class="form-control" required>
+                        <option value="" disabled selected>Select Session</option>
+                        @foreach($sessions as $session)
+                        <option value="{{ $session->id }}">Part Semester: {{ $session->part_semester }} - {{ $session->SESSION }} </option>
+                        @endforeach
+                    </select>
+                    <label for="floatingSelectGrid">Session Universitaire</label>
+                </div>
+            </div>
+
 
 
         </div>
@@ -129,49 +141,51 @@
 
         });
 
-        
+
     });
+
     function openModal() {
-            var selectedSemester = $('#semesterDropdown').val();
-            var selectedFiliere = $('#filiereDropdown').val();
-            var selectedFiliereName = $('#filiereDropdown :selected').text();
-            // Make an Ajax request to fetch module data based on the selected semester and filiere
-            $.ajax({
-                url: '/fetch-modules/' + selectedFiliere,
-                type: 'GET',
-                success: function(data) {
-                    // Assuming the data structure is { "modules": [...] }
-                    var modules = data.modules;
+        var selectedSemester = $('#semesterDropdown').val();
+        var selectedFiliere = $('#filiereDropdown').val();
+        var selectedFiliereName = $('#filiereDropdown :selected').text();
+        // Make an Ajax request to fetch module data based on the selected semester and filiere
+        $.ajax({
+            url: '/fetch-modules/' + selectedFiliere,
+            type: 'GET',
+            success: function(data) {
+                // Assuming the data structure is { "modules": [...] }
+                var modules = data.modules;
 
-                    // Generate HTML for the table
-                    var tableHtml = '<table class="table">';
-                      tableHtml += '<thead><tr><th>Code Module</th><th>Module Name</th></tr></thead>';
+                // Generate HTML for the table
+                var tableHtml = '<table class="table">';
+                tableHtml += '<thead><tr><th>Code Module</th><th>Module Name</th></tr></thead>';
 
-                    tableHtml += '<tbody>';
+                tableHtml += '<tbody>';
 
-                    // Loop through the modules and add rows to the table
-                    $.each(modules, function(index, module) {
-                        tableHtml += '<tr>';
-                        tableHtml += '<td>' + module.CodeModule + '</td>';
-                        tableHtml += '<td>' + module.NomModule + '</td>';
-                        tableHtml += '</tr>';
-                    });
+                // Loop through the modules and add rows to the table
+                $.each(modules, function(index, module) {
+                    tableHtml += '<tr>';
+                    tableHtml += '<td>' + module.CodeModule + '</td>';
+                    tableHtml += '<td>' + module.NomModule + '</td>';
+                    tableHtml += '</tr>';
+                });
 
-                    tableHtml += '</tbody></table>';
+                tableHtml += '</tbody></table>';
 
-                    // Set the updated table HTML to the modal body
-                    $('.modal-body').html(tableHtml);
-                    $('#exampleModalLabel').text('Filiere :'+selectedFiliereName+' | Semester :'+selectedSemester);
+                // Set the updated table HTML to the modal body
+                $('.modal-body').html(tableHtml);
+                $('#exampleModalLabel').text('Filiere :' + selectedFiliereName + ' | Semester :' + selectedSemester);
 
-                    // Show the modal
-                    $('#exampleModal').modal('show');
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    console.error('Error fetching modules:', errorThrown);
-                }
-            });
-        }
-        function tableToCsv() {
+                // Show the modal
+                $('#exampleModal').modal('show');
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.error('Error fetching modules:', errorThrown);
+            }
+        });
+    }
+
+    function tableToCsv() {
         // Select the table
         var table = document.querySelector('.table');
 
@@ -188,9 +202,9 @@
         // Initialize the CSV content with UTF-8 BOM and additional information
 
         // Loop through rows and columns to populate the CSV array
-        table.querySelectorAll('tr').forEach(function (row) {
+        table.querySelectorAll('tr').forEach(function(row) {
             var rowData = [];
-            row.querySelectorAll('td').forEach(function (cell) {
+            row.querySelectorAll('td').forEach(function(cell) {
                 rowData.push('"' + cell.innerText.replace(/"/g, '""') + '"');
             });
             csvContent.push(rowData.join(','));
@@ -200,7 +214,9 @@
         var csvString = csvContent.join('\n');
 
         // Create a Blob containing the CSV data
-        var blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        var blob = new Blob([csvString], {
+            type: 'text/csv;charset=utf-8;'
+        });
 
         // Create a download link and trigger a click to download the file
         var link = document.createElement('a');
@@ -211,7 +227,6 @@
 
     // Attach the tableToCsv function to the "Save csv" button click event
     document.getElementById('saveCsvButton').addEventListener('click', tableToCsv);
-
 </script>
 
 

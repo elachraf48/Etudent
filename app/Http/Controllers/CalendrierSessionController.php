@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CalendrierModuleGroupe;
+use App\Models\CalendrierSession;
 use Illuminate\Http\Request;
 
-class CalendrierModuleGroupeController extends Controller
+class CalendrierSessionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,14 @@ class CalendrierModuleGroupeController extends Controller
     {
         //
     }
-   
+    public function showAllSessionsDropdown()
+    {
+        $sessions = CalendrierSession::all();
+    
+        return view('admin.Calendrier_modules')
+        ->with('sessions', $sessions);
+        // ->with('dropdownView', view('calendrier_sessions.dropdown')->with('sessions', $sessions));
+        }
     /**
      * Show the form for creating a new resource.
      *
@@ -41,10 +48,10 @@ class CalendrierModuleGroupeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CalendrierModuleGroupe  $calendrierModuleGroupe
+     * @param  \App\Models\CalendrierSession  $calendrier_session
      * @return \Illuminate\Http\Response
      */
-    public function show(CalendrierModuleGroupe $calendrierModuleGroupe)
+    public function show(CalendrierSession $calendrier_session)
     {
         //
     }
@@ -52,10 +59,10 @@ class CalendrierModuleGroupeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\CalendrierModuleGroupe  $calendrierModuleGroupe
+     * @param  \App\Models\CalendrierSession  $calendrier_session
      * @return \Illuminate\Http\Response
      */
-    public function edit(CalendrierModuleGroupe $calendrierModuleGroupe)
+    public function edit(CalendrierSession $calendrier_session)
     {
         //
     }
@@ -64,10 +71,10 @@ class CalendrierModuleGroupeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CalendrierModuleGroupe  $calendrierModuleGroupe
+     * @param  \App\Models\CalendrierSession  $calendrier_session
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CalendrierModuleGroupe $calendrierModuleGroupe)
+    public function update(Request $request, CalendrierSession $calendrier_session)
     {
         //
     }
@@ -75,10 +82,10 @@ class CalendrierModuleGroupeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CalendrierModuleGroupe  $calendrierModuleGroupe
+     * @param  \App\Models\CalendrierSession  $calendrier_session
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CalendrierModuleGroupe $calendrierModuleGroupe)
+    public function destroy(CalendrierSession $calendrier_session)
     {
         //
     }

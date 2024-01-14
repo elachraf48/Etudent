@@ -18,10 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('idModule');
             $table->unsignedBigInteger('idEtudiant');
             $table->enum('etat', ['I', 'NI']);
-            $table->enum('SESSION', ['ORD', 'RAT']);
-            $table->integer('part_Semester');
             $table->string('AnneeUniversitaire', 10);
+            $table->unsignedBigInteger('idSESSION');
             $table->foreign('idModule')->references('id')->on('modules');
+            $table->foreign('idSESSION')->references('id')->on('calendrier_sessions');
             $table->foreign('idEtudiant')->references('id')->on('etudiants');
             $table->timestamps();
         });

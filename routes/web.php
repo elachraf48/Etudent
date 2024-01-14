@@ -29,6 +29,7 @@ Route::middleware([
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\CalendrierSessionController;
 
 use App\Http\Controllers\FiliereController;
 use App\Http\Controllers\EtudiantController;
@@ -100,8 +101,8 @@ Route::get('/admin/Filier_modules', [AdminController::class, 'showFiliermodules'
 Route::post('/admin/Filier_modules', [AdminController::class, 'processFiliermodules'])->name('Filier_modules_process');
 // admin/Filier_modules
 
-Route::get('/admin/Calendrier_modules', [CalendrierModuleController::class, 'showCalendriermodules'])->name('Calendrier_modules_form');
 Route::post('/admin/Calendrier_modules', [CalendrierModuleController::class, 'insertCalendrierModules'])->name('Calendrier_modules_process');
+Route::get('/admin/Calendrier_modules', [CalendrierModuleController::class, 'showCalendriermodules'])->name('Calendrier_modules_form');
 
 // routes/web.php
 

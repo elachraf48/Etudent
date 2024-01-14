@@ -2,14 +2,29 @@
 
 namespace App\Http\Controllers;
 use App\Models\Filiere;
+use App\Models\CalendrierSession;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 
+
+
 class AdminController extends Controller
 {
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $sessions = CalendrierSession::all();
+        return view('admin.Calendrier_modules', compact('sessions'));
+
+
+    }
     public function processFiliermodules(Request $request)
     {
         $request->validate([
@@ -70,14 +85,13 @@ class AdminController extends Controller
                 }
             } else {
                 // Handle the case where the file is not valid
-                return redirect()->route('dashboard')->with('error', 'Invalid file');
+                return redirect()->route('Filier_modules_form')->with('success', 'Data inserted successfully');
             }
         }
 
         // Redirect to the dashboard route after successful data insertion
-        return redirect()->route('dashboard')->with('success', 'Data inserted successfully!');
+        return redirect()->route('Filier_modules_form')->with('error', 'Module not found for the specified conditions');
     }
-
 
 
 
@@ -100,6 +114,8 @@ class AdminController extends Controller
             'student_data' => 'required_without:file',
             'file' => 'required_without:student_data|file|mimes:csv,txt|max:2048',
         ]);
+        $sessions = $request->input('sessions');
+        $anneeUniversitaire = $request->input('AnneeUniversitaire');
 
         // Check the value of the switch
         $useFile = $request->has('method_switch');
@@ -188,7 +204,7 @@ class AdminController extends Controller
             DB::table('info_exames')->insert([
                 'NumeroExamen' => $columns[0],
                 'Semester' => $columns[7],
-                'AnneeUniversitaire' => $columns[9],
+                'AnneeUniversitaire' =>  $anneeUniversitaire,
                 'Lieu' => $columns[5],
                 'idEtudiant' => $etudiantId,
                 'idGroupe' => $groupeId,
@@ -200,13 +216,14 @@ class AdminController extends Controller
         }
 
         // Redirect to the dashboard route after successful data insertion
-        return redirect()->route('dashboard')->with('success', 'Data inserted successfully!');
+        return redirect()->route('insert_student_form')->with('success', 'Data inserted successfully!');
     }
 
 
 
     public function showInsertStudentForm()
     {
-        return view('admin.insert-student');
+        $sessions = CalendrierSession::all();
+        return view('admin.insert-student', compact('sessions'));
     }
 }

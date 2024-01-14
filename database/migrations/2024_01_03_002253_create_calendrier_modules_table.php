@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('Houre');
             $table->unsignedBigInteger('idModule');
             $table->string('AnneeUniversitaire', 10);
+            $table->unsignedBigInteger('idSESSION');
+            $table->foreign('idSESSION')->references('id')->on('calendrier_sessions');
             $table->foreign('idModule')->references('id')->on('modules');
             $table->timestamps();
         });
