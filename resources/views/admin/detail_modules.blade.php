@@ -10,7 +10,11 @@
     <div class="alert alert-success">
         {{ session('success') }}
     </div>
-    @endif
+@elseif(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 
     <form method="POST" action="{{ route('process_detail_modules_data') }}" enctype="multipart/form-data">
         @csrf
@@ -51,7 +55,7 @@
         </div>
         <!-- Add a textarea for pasting data -->
         <div class="mb-3">
-            <textarea name="student_data" class="form-control" rows="10" required placeholder="Numéro d'examen,Code Apogee,Nom,Prénom,Date Naiss,LIEU,code FILIERE,Semester,GROUPE"></textarea>
+            <textarea name="detail_modules_data" class="form-control" rows="10" required placeholder="Numéro d'examen,Code Apogee,Nom,Prénom,Date Naiss,LIEU,code FILIERE,Semester,GROUPE"></textarea>
         </div>
 
         <!-- Add a file input for uploading a CSV or TXT file -->
@@ -79,7 +83,7 @@
                 var isChecked = $('#methodSwitch').prop('checked');
 
                 // Enable or disable the textarea and file input based on the checkbox state
-                $('textarea[name="student_data"]').prop('disabled', isChecked);
+                $('textarea[name="detail_modules_data"]').prop('disabled', isChecked);
                 $('input[name="file"]').prop('disabled', !isChecked);
             }
         });

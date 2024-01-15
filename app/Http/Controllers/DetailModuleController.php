@@ -89,8 +89,8 @@ class DetailModuleController extends Controller
     public function processDetailModulesData(Request $request)
     {
         $request->validate([
-            'student_data' => 'required_without:file',
-            'file' => 'required_without:student_data|file|mimes:csv,txt|max:2048',
+            'detail_modules_data' => 'required_without:file',
+            'file' => 'required_without:detail_modules_data|file|mimes:csv,txt|max:2048',
         ]);
         $sessions = $request->input('sessions');
         $anneeUniversitaire = $request->input('AnneeUniversitaire');
@@ -102,13 +102,14 @@ class DetailModuleController extends Controller
             // File handling logic
             $fileContent = file_get_contents($request->file('file')->path());
             $rows = explode("\n", $fileContent);
+       
         } else {
             // Textarea handling logic
-            $studentData = $request->input('student_data');
+            $studentData = $request->input('detail_modules_data');
             $rows = explode("\n", $studentData);
         }
 
-        return redirect()->route('showInsertDetailModules')->with('success', 'Data inserted successfully!');
+        return redirect()->route('detail_modules_form')->with('success', 'Data inserted successfully!');
 
     }
     public function showInsertDetailModules()
