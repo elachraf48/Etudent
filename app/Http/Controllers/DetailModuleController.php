@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\CalendrierSession;
 
 use App\Models\DetailModule;
 use Illuminate\Http\Request;
@@ -14,7 +15,8 @@ class DetailModuleController extends Controller
      */
     public function index()
     {
-        //
+        $sessions = CalendrierSession::all();
+        return view('admin.detail_modules', compact('sessions'));
     }
 
     /**
@@ -82,4 +84,37 @@ class DetailModuleController extends Controller
     {
         //
     }
+    
+    
+    public function processDetailModulesData(Request $request)
+    {
+        $request->validate([
+            'student_data' => 'required_without:file',
+            'file' => 'required_without:student_data|file|mimes:csv,txt|max:2048',
+        ]);
+        $sessions = $request->input('sessions');
+        $anneeUniversitaire = $request->input('AnneeUniversitaire');
+
+        // Check the value of the switch
+        $useFile = $request->has('method_switch');
+
+        if ($useFile) {
+            // File handling logic
+            $fileContent = file_get_contents($request->file('file')->path());
+            $rows = explode("\n", $fileContent);
+        } else {
+            // Textarea handling logic
+            $studentData = $request->input('student_data');
+            $rows = explode("\n", $studentData);
+        }
+
+        return redirect()->route('showInsertDetailModules')->with('success', 'Data inserted successfully!');
+
+    }
+    public function showInsertDetailModules()
+    {
+        $sessions = CalendrierSession::all();
+        return view('admin.detail_modules', compact('sessions'));
+    }
+
 }

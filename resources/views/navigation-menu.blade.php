@@ -28,6 +28,9 @@
                         <x-nav-link href="{{ route('Calendrier_modules_form') }}" :active="request()->routeIs('dashboard')">
                             {{ __('Calendrier modules') }}
                         </x-nav-link>
+                        <x-nav-link href="{{ route('detail_modules_form') }}" :active="request()->routeIs('dashboard')">
+                            {{ __('Detail Modules') }}
+                        </x-nav-link>
                     </ul>
                 </li>
 

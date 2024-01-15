@@ -12,19 +12,21 @@ return new class extends Migration
      * @return void
      */
     public function up()
-    {
-        Schema::create('calendrier_modules', function (Blueprint $table) {
-            $table->id();
-            $table->date('DateExamen');
-            $table->string('Houre');
-            $table->unsignedBigInteger('idModule');
-            $table->string('AnneeUniversitaire', 10);
-            $table->unsignedBigInteger('idSESSION');
-            $table->foreign('idSESSION')->references('id')->on('calendrier_sessions');
-            $table->foreign('idModule')->references('id')->on('modules');
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('calendrier_modules', function (Blueprint $table) {
+        $table->id();
+        $table->date('DateExamen');
+        $table->string('Houre');
+        $table->unsignedBigInteger('idModule');
+        $table->string('AnneeUniversitaire', 10);
+        $table->unsignedBigInteger('idSESSION');
+        $table->foreign('idSESSION')->references('id')->on('calendrier_sessions');
+        $table->foreign('idModule')->references('id')->on('modules');
+        $table->unique(['idModule', 'idSESSION', 'AnneeUniversitaire', 'Houre'], 'calendrier_modules_unique_constraint');
+        $table->timestamps();
+    });
+}
+
 
     /**
      * Reverse the migrations.

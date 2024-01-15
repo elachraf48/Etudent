@@ -145,17 +145,25 @@ class CalendrierModuleController extends Controller
                 }
 
                 $formattedDate = Carbon::createFromFormat('d/m/Y', $columns[1])->format('Y-m-d');
-
+                $existingcalendrierModule = DB::table('calendrier_modules')
+                    ->where('idModule', $idmodule)
+                    ->where('idSESSION', $sessions)
+                    ->where('AnneeUniversitaire', $anneeUniversitaire)
+                    ->where('Houre', $columns[2])
+                    ->first();
+                if ($existingcalendrierModule) {
+                    // Group already exists, no need to insert again
+                    $mcId = $existingcalendrierModule->id;
+                } else {    
                 // Insert the record in calendrier_modules table
-                $calendrierModule = DB::table('calendrier_modules')->insertGetId([
-                    'DateExamen' => $formattedDate,
-                    'Houre' => $columns[2],
-                    'idModule' => $idmodule,
-                    'idSESSION' => $sessions,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                    'AnneeUniversitaire' => $anneeUniversitaire,
-                ]);
+                $mcId = DB::table('calendrier_modules')
+                    ->insertGetId(
+                        ['idModule' => $idmodule, 'idSESSION' => $sessions, 'AnneeUniversitaire' => $anneeUniversitaire,
+                        'DateExamen' => $formattedDate, 'Houre' => $columns[2], 'created_at' => now(), 'updated_at' => now()]
+                    );
+                }
+                // Retrieve the ID of the inserted record
+                
 
                 // Explode the group names separated by '+'
                 $groupNames = explode('+', $columns[3]);
@@ -163,6 +171,7 @@ class CalendrierModuleController extends Controller
                 // Loop through each group and insert into calendrier_module_groupes
                 foreach ($groupNames as $groupName) {
                     // Check if the group exists
+                    $idcm=$mcId;
                     $existingGroup = DB::table('groupes')
                         ->where('nomGroupe', $groupName)
                         ->where('Semester', $semester)
@@ -184,8 +193,7 @@ class CalendrierModuleController extends Controller
 
                     // Insert into calender_module_groupes table
                     DB::table('calendrier_module_groupes')->updateOrInsert(
-                        ['idCmodule' => $calendrierModule],
-                        ['idGroupe' => $groupeId]
+                        ['idCmodule' => $idcm, 'idGroupe' => $groupeId]
                     );
                 }
             }
@@ -194,7 +202,7 @@ class CalendrierModuleController extends Controller
             return redirect()->route('Calendrier_modules_form')->with('success', 'Data inserted successfully');
         } else {
             // Handle the case where the module is not found
-            return redirect()->route('Calendrier_modules_form')->with('error', 'Module not found for the specified conditions');
+            return redirect()->route('Calendrier_modules_form')->with('success', 'Module not found for the specified conditions');
         }
     }
 

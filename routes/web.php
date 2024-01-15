@@ -118,6 +118,14 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
-
+// Catch-all route for /admin/* when the user is not authenticated
+// Route::get('/admin/{any?}', function () {
+//     if (!auth()->check()) {
+//         return redirect()->route('login');
+//     }
+// })->where('any', '.*');
 Route::get('/admin/insert-student', [AdminController::class, 'showInsertStudentForm'])->name('insert_student_form');
 Route::post('/admin/process-student-data', [AdminController::class, 'processStudentData'])->name('process_student_data');
+//detail_modules
+Route::get('/admin/detail_modules', [DetailModuleController::class, 'index'])->name('detail_modules_form');
+Route::post('/admin/detail_modules', [DetailModuleController::class, 'processDetailModulesData'])->name('process_detail_modules_data');

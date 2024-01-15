@@ -114,6 +114,7 @@ CREATE TABLE Calendrier_modules (
     idModule INT,
     idSESSION INT,
     AnneeUniversitaire VARCHAR(10) NOT NULL,
+    UNIQUE (Houre,idSESSION,AnneeUniversitaire,idModule),     
     FOREIGN KEY (idModule)   REFERENCES modules(id),
     FOREIGN KEY (idSESSION)   REFERENCES Calendrier_SESSION(id)
 
