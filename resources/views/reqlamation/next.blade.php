@@ -16,12 +16,18 @@
         <!-- Input fields for nom and prenom -->
         <div class="row g-2 mt-1">
             <div class="col-md">
+            <label for="nom">Nom</label>
+
                 <div class="form-floating">
+
                     <input type="text" name="nom" placeholder="" class="form-control" required>
                     <label for="floatingSelectGrid">Nom</label>
+
                 </div>
             </div>
             <div class="col-md">
+            <label for="floatingSelectGrid">Prenom</label>
+
                 <div class="form-floating">
                     <input type="text" name="prenom" placeholder="" class="form-control" required>
                     <label for="floatingSelectGrid">Prenom</label>

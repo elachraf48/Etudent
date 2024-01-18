@@ -90,7 +90,7 @@
         <div name="tab" class="modal-body table-responsive" style="font-size: 80%;"></div>
         <div class="mb-3">
 
-
+            <input type="hidden" name="id_module">
             <textarea name="detail_modules_data" class="form-control" rows="10" required placeholder="Numéro d'examen,Code Apogee,Nom,Prénom,Date Naiss,LIEU,code FILIERE,Semester,GROUPE"></textarea>
         </div>
         <div class="form-check form-switch mb-3">
@@ -137,11 +137,13 @@
 
                         var codeApogee = "code apogee "; // Replace with the actual code apogee value
                         var moduleIds = modules.map(function(module) {
-                            return 'state ' + module.id;
+                            return module.id;
                         });
 
                         // Set the placeholder of the textarea
-                        $('textarea[name="detail_modules_data"]').attr('placeholder', codeApogee + ',' + moduleIds.join(','));
+                        $('textarea[name="detail_modules_data"]').attr('placeholder', codeApogee + ',module ' + moduleIds.join(',module '));
+                        $('input[name="id_module"]').val(moduleIds.join(','));
+
 
                     }
                 });
