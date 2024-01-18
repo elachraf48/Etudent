@@ -19,7 +19,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <x-nav-link href="{{ route('Filier_modules_form') }}" :active="request()->routeIs('dashboard')">
-                            {{ __('moudel & filier') }}
+                            {{ __('moudel and filier') }}
                         </x-nav-link>
 
                         <x-nav-link style="width: 200px;" href="{{ route('insert_student_form') }}" :active="request()->routeIs('dashboard')">

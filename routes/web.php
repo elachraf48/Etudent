@@ -62,6 +62,8 @@ Route::post('/reclamation/next', [InfoExameController::class, 'nextReclamation']
 // In web.php
 Route::get('/fetch-filieres/{semester}', [CalendrierModuleController::class, 'fetchFilieresBySemester']);
 Route::get('/fetch-filieres/{semester}', [InfoExameController::class, 'fetchFilieresBySemester']);
+Route::get('/fetch-filieres/{semester}', [DetailModuleController::class, 'fetchFilieresBySemester']);
+
 Route::get('/fetch-modules/{filiere}', [InfoExameController::class, 'fetchModules']);
 
 
@@ -129,3 +131,4 @@ Route::post('/admin/process-student-data', [AdminController::class, 'processStud
 //detail_modules
 Route::get('/admin/detail_modules', [DetailModuleController::class, 'index'])->name('detail_modules_form');
 Route::post('/admin/detail_modules', [DetailModuleController::class, 'processDetailModulesData'])->name('process_detail_modules_data');
+

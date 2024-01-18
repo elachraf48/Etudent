@@ -33,7 +33,7 @@
         <div class="row g-2 mt-1">
             <div class="col-md" alt="madirch 0">
                 <div class="form-floating">
-                <input type="number" placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                    <input type="number" placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
                     <label for="floatingSelectGrid">N apogee</label>
                 </div>
             </div>
@@ -81,7 +81,7 @@
         </div>
         <div class="col-md mt-1">
             <div class="form-floating">
-            <input type="number" placeholder="" name="ndexamen" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                <input type="number" placeholder="" name="ndexamen" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
                 <label for="floatingSelectGrid">N d'examen</label>
             </div>
         </div>
@@ -103,7 +103,7 @@
                 </div>
             </div>
         </div>
-     
+
 
 
 
@@ -149,32 +149,38 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
+    function change_module(selectedSemester,selectedFiliere){
+        $.ajax({
+                url: '/fetch-modules/' + selectedFiliere,
+                type: 'GET',
+                success: function(data) {
+                    // Assuming the data structure is { "modules": [...] }
+                    var modules = data.modules;
+                    optionsHtml += '<option value="' + selectedSemester + '">' + selectedFiliere + '</option>';
+
+                    // Update the dropdown options
+                    var optionsHtml = '';
+                    $.each(modules, function(index, module) {
+                        optionsHtml += '<option value="' + module.id + '">' + module.NomModule + '</option>';
+                    });
+
+                    // Set the updated options HTML to the dropdown
+                    $('#moduleDropdown').html(optionsHtml);
+                }
+            });
+    }
     $(document).ready(function() {
         // Event listener for changes in the semester dropdown
-        $('#semesterDropdown, #filiereDropdown').change(function() {
-        var selectedSemester = $('#semesterDropdown').val();
-        var selectedFiliere = $('#filiereDropdown').val();
+        $('#filiereDropdown').change(function() {
+            var selectedSemester = $('#semesterDropdown').val();
+            var selectedFiliere = $('#filiereDropdown').val();
+            change_module(selectedSemester,selectedFiliere);
+            // Make an Ajax request to fetch modules based on the selected semester and filiere
+           
 
-        // Make an Ajax request to fetch modules based on the selected semester and filiere
-        $.ajax({
-            url: '/fetch-modules/'+ selectedFiliere,
-            type: 'GET',
-            success: function(data) {
-                // Assuming the data structure is { "modules": [...] }
-                var modules = data.modules;
-
-                // Update the dropdown options
-                var optionsHtml = '';
-                $.each(modules, function(index, module) {
-                    optionsHtml += '<option value="' + module.id + '">' + module.NomModule + '</option>';
-                });
-
-                // Set the updated options HTML to the dropdown
-                $('#moduleDropdown').html(optionsHtml);
-            }
         });
-    });
-    $('#semesterDropdown').change(function() {
+
+        $('#semesterDropdown').change(function() {
             var selectedSemester = $(this).val();
 
             // Make an Ajax request to fetch filieres based on the selected semester
@@ -200,15 +206,21 @@
 
                     // Set the updated options HTML to the dropdown
                     $('#filiereDropdown').html(optionsHtml);
+
+                    // Fetch the selected filiere after updating the filiere dropdown
+                    var selectedFiliere = $('#filiereDropdown').val();
+
+                    // Make an Ajax request to fetch modules based on the selected filiere
+                    change_module(selectedSemester,selectedFiliere);
                 }
             });
-
         });
     });
+
     function removeLeadingZeros(input) {
         // Remove leading zeros using a regular expression
         input.value = input.value.replace(/^0+/, '');
-        
+
         // Trim the value to the specified maxlength
         if (input.value.length > input.maxLength) {
             input.value = input.value.slice(0, input.maxLength);
