@@ -31,7 +31,7 @@ class EtudiantController extends Controller
     $student = Etudiant::with(['filieres', 'detailModules.module', 'groupeEtudiant.groupe', 'infoExames', 'detailModules.calendrierModule'])
         ->where('CodeApogee', $codeApogee)
         ->first();
-
+    // dd($student);
     if ($student) {
         return view('etudiant.search', compact('student'));
     } else {

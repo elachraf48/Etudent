@@ -7,10 +7,10 @@
 
 @csrf
 <!-- CSRF token for Laravel security -->
-<section class="">
+<section class="text-center">
 <center>
 
-        <div class="continue bg-dark w-75 ">
+        <div class="continue  w-75 " >
         <div class="col-md-6 position-relative" >
                     <div id="idlogoump" class="text-center w-25">
                         <img src="../img/banner.png" class="img-fluid" alt="Logo">
@@ -24,6 +24,8 @@
 
     <div class="container-fluid d-flex align-items-center justify-content-center bg-cool-color   p-3">
         <form>
+        <div id="liveAlertPlaceholder"></div>
+
             <!-- Display the current date -->
             <input type="hidden" value="{{ now()->toDateString() }}">
             <!-- Input fields for nom and prenom -->
@@ -334,17 +336,50 @@
             input.value = input.value.slice(0, input.maxLength);
         }
     }
-    $(document).ready(function() {
-        $('#sub').click(function() {
+//    $(document).ready(function() {
+//         $('#sub').click(function() {
+//             if ($('#flexSwitchCheckDefault').is(':checked')) {
+//                 // Checkbox is checked, perform your actions here
+//                 // For example, submit the form or execute some other logic
+//             } else {
+//                 // Checkbox is not checked, show a Bootstrap alert
+//                 $('#bootstrapAlert').html(`
+//                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
+//                         Please check the checkbox before submitting.
+//                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+//                             <span aria-hidden="true">&times;</span>
+//                         </button>
+//                     </div>
+//                 `);
+//             }
+//         });
+//     });
+const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+
+    const alert = (message, type) => {
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+            `   <div>${message}</div>`,
+            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+        ].join('')
+
+        alertPlaceholder.innerHTML = ''; // Clear previous alerts
+        alertPlaceholder.append(wrapper)
+    }
+
+    const alertTrigger = document.getElementById('sub')
+    if (alertTrigger) {
+        alertTrigger.addEventListener('click', () => {
             if ($('#flexSwitchCheckDefault').is(':checked')) {
                 // Checkbox is checked, perform your actions here
                 // For example, submit the form or execute some other logic
             } else {
-                // Checkbox is not checked, show an alert
-                alert('Please check the checkbox before submitting.');
+                alert('Please check the checkbox before submitting.', 'danger')
             }
         });
-    });
+    }
 </script>
 
 @endsection

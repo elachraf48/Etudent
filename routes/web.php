@@ -51,7 +51,7 @@ Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('sea
 // routes/web.php
 
 // Define the resource routes
-Route::get('/reqlamation', [InfoExameController::class, 'index']);
+Route::get('/reclamation', [InfoExameController::class, 'index']);
 Route::post('/reclamation/next', [InfoExameController::class, 'nextReclamation'])->name('reclamation.next');
 
 // Add a custom route for the 'next' method
