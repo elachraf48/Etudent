@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class GroupeEtudiant extends Model
 {
-    public $timestamps = false;
+    protected $table = 'groupe_etudiant';
+
     protected $fillable = ['idEtudiant', 'idGroupe'];
 
     public function etudiant()
@@ -16,10 +17,6 @@ class GroupeEtudiant extends Model
     }
 
     public function groupe()
-    {
-        return $this->belongsTo(Groupe::class, 'idGroupe');
-    }
-    public function groupes()
     {
         return $this->belongsTo(Groupe::class, 'idGroupe');
     }

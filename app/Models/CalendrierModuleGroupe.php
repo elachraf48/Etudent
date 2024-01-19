@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class CalendrierModuleGroupe extends Model
 {
-    public $timestamps = false;
+    protected $table = 'calendrier_module_groupes';
+
     protected $fillable = ['idCmodule', 'idGroupe'];
 
     public function calendrierModule()

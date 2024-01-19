@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetailModule extends Model
 {
-    use HasFactory;
-
     protected $fillable = ['idSESSION', 'idModule', 'idEtudiant', 'etat', 'AnneeUniversitaire'];
+
+    public function session()
+    {
+        return $this->belongsTo(CalendrierSession::class, 'idSESSION');
+    }
 
     public function module()
     {
@@ -19,23 +22,5 @@ class DetailModule extends Model
     public function etudiant()
     {
         return $this->belongsTo(Etudiant::class, 'idEtudiant');
-    }
-
-    public function calendrierSession()
-    {
-        return $this->belongsTo(CalendrierSession::class, 'idSESSION');
-    }
-    public function infoExame()
-    {
-        return $this->belongsTo(InfoExame::class, 'idEtudiant', 'idEtudiant');
-    }
-  
-    public function calendrierModules()
-{
-    return $this->hasMany(CalendrierModule::class, 'idModule');
-}
-public function calendrierModule()
-    {
-        return $this->belongsTo(CalendrierModule::class, 'idCmodule');
     }
 }

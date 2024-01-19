@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class CalendrierModule extends Model
 {
-    use HasFactory;
-
     protected $fillable = ['DateExamen', 'Houre', 'idModule', 'idSESSION', 'AnneeUniversitaire'];
 
     public function module()
@@ -16,12 +14,8 @@ class CalendrierModule extends Model
         return $this->belongsTo(Module::class, 'idModule');
     }
 
-    public function calendrierSession()
+    public function session()
     {
         return $this->belongsTo(CalendrierSession::class, 'idSESSION');
-    }
-    public function detailModule()
-    {
-        return $this->hasOne(DetailModule::class, 'idCalendrierModule');
     }
 }

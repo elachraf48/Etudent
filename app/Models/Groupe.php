@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Groupe extends Model
 {
-    protected $fillable = ['nomGroupe', 'Semester'];
+    protected $fillable = ['nomGroupe', 'Semester', 'Date_creation'];
 
     public function etudiants()
     {

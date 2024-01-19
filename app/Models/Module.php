@@ -13,11 +13,6 @@ class Module extends Model
         return $this->belongsTo(Filiere::class, 'idFiliere');
     }
 
-    public function detailModules()
-    {
-        return $this->hasMany(DetailModule::class, 'idModule');
-    }
-
     public function calendrierModules()
     {
         return $this->hasMany(CalendrierModule::class, 'idModule');
