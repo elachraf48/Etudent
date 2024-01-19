@@ -3,120 +3,60 @@
 @extends('layouts.apps')
 
 @section('content')
-<div class="container" >
-    <div class="row">
-        <!-- Left Top Section -->   
-        <HEader>
-        
-
-        
-        </HEader>
-        @if(isset($student))
-        <div class="container-fluid ">
-            <div class="row">
-                <!-- Left Section with Logo -->
-                <div class="col-md-6 position-relative bg-light" >
-                    <div id="idlogoump" class="text-center w-25">
-                        <img src="../img/banner.png" class="img-fluid" alt="Logo">
-                    </div>
+<div class="container-fluid d-flex align-items-center justify-content-center bg-cool-color">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="section text-center shadow p-4 mb-4 ">
+                <div id="idlogoump" class="mb-4">
+                    <img src="./img/banner.png" class="w-50" alt="Logo">
                 </div>
-                @foreach($student->filieres as $filiere)
-                <!-- Right Top Section -->
-                <div class="col-md-6 position-relative bg-light " >
-                    <div class="mt-5 m-5">
-                        <h5>Année universitaire: <span class="text-primary">{{ $student->detailModules->max('AnneeUniversitaire') }}</span></h5>
-                        <h5>Filière: <span class="text-primary">{{ $filiere->NomFiliere }}</span></h5>
-                        @if($filiere->Parcours != "")
-                            <h5>Parcours: <span class="text-primary"> {{ $filiere->Parcours }}</span></h5>
-                        @endif
-                    </div>
+                <style>
+                    .hr-custom-color {
+                        border: 0;
+                        height: 2px;
+                        background: linear-gradient(to right, red, green, blue);
+                        opacity: 1;
+                    }
+                </style>
+                <hr class="hr-custom-color mb-4" />
+
+                <div>
+                    <h3><span class="text-danger">منصة الاطلاع على جدولة الامتحان الزمنية</span></h3>
+                    <h3><span class="text-danger">الخاصة بكل طالب</span></h3>
+                    <h3 class="text-secondary">Consultation du calendrier des examens</h3>
+                    <h3 class="text-secondary">propre à chaque étudiant</h3>
+                    <p class="text-secondary">Le calendrier des examens comporte la date, l’heure et le lieu de chaque épreuve.</p>
                 </div>
-                @endforeach
+                <hr class="hr-custom-color mb-4" />
+
+                <form action="{{ route('search') }}" method="GET" class="mb-4">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <input type="text" name="CodeApogee" required class="form-control shadow" placeholder="Enter Code Apogee">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary w-100 mt-2 shadow">Trouver</button>
+                        </div>
+                        <div class="col-md-12">
+                            <!-- Display the error message if no student is found -->
+                            @if(session('error'))
+                                <b class="text-danger">{{ session('error') }}</b>
+                               @endif
+                        </div>
+                    </div>
+                </form>
+                <hr class="hr-custom-color mb-4" />
+
+                <div class="text-secondary">
+                    &copy; 2023 <a style="text-decoration: none" href="http://droit.ump.ma/" class="text-secondary" target="_blank" title="Facult&eacute;des Sciences Juridiques, Économiques - Oujda">Facult&eacute;des Sciences Juridiques, Économiques - Oujda</a>
+                </div>
             </div>
         </div>
-        <!-- <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>       -->
-        <!-- Your existing HTML code with Bootstrap classes -->
-        <nav class="navbar navbar-expand-lg bg-dark  ">
-      <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto ">
-            
-            <li class="nav-item">
-              <a class="nav-link active text-white" aria-current="page" href="/">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
-                </svg>               
-                Accueil</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" >  
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
-                </svg> 
-                Espace étudiant</a>
-            </li>
-            
-          </ul>
-          <form class="d-flex" role="search">
-            <button class="btn btn-outline-danger" type="submit">Déconnexion</button>
-          </form>
-        </div>
-      </div>
-    </nav>
-            
-        <h2  class="text-center m-5">Bonjour <span class="text-danger">{{ $student->Nom }} {{ $student->Prenom }}</span></h2>
-       
-        <div class="printbt">
-            <div class="row">
-                <h5 class="col-md-6">Code Apogee: {{ $student->CodeApogee }}</h5>
-                
-            </div>
-        </div>
+    </div>
 
- 
+   
+</div>
 
-    @endif
-    @if(isset($student))
-    <h3>Modules:</h3>
-    <ul>
-    @foreach($student->detailModules as $detailModule)
-    @if ($detailModule->AnneeUniversitaire == '2022-2023' && $detailModule->etat == 'I')
-        @if ($detailModule->part_Semester == '2' && $detailModule->SESSION == 'RAT')
-            <li>{{ $detailModule->module->NomModule }} - {{ $detailModule->SESSION }} - {{ $detailModule->AnneeUniversitaire }} - RAT</li>
-            @break
-        @elseif ($detailModule->part_Semester == '2' && $detailModule->SESSION == 'ORD')
-            <li>{{ $detailModule->module->NomModule }} - {{ $detailModule->SESSION }} - {{ $detailModule->AnneeUniversitaire }} - ORD</li>
-            @break
-        @elseif ($detailModule->part_Semester == '1' && $detailModule->SESSION == 'RAT')
-            <li>{{ $detailModule->module->NomModule }} - {{ $detailModule->SESSION }} - {{ $detailModule->AnneeUniversitaire }} - RAT</li>
-            @break
-        @elseif ($detailModule->part_Semester == '1' && $detailModule->SESSION == 'ORD')
-            <li>{{ $detailModule->module->NomModule }} - {{ $detailModule->SESSION }} - {{ $detailModule->AnneeUniversitaire }} - ORD</li>
-            @break
-        @endif
-    @endif
-@endforeach
-
-
-
-    </ul>
-
-    <h3>Groupes:</h3>
-    <ul>
-        @foreach($student->groupeEtudiants as $groupeEtudiant)
-            <li>{{ $groupeEtudiant->groupe->nomGroupe }} - {{ $groupeEtudiant->groupe->AnneeUniversitaire }}</li>
-        @endforeach
-    </ul>
-
-    <h3>Exams:</h3>
-    <ul>
-        @foreach($student->infoExames as $infoExame)
-            <li>{{ $infoExame->NumeroExamen }} - {{ $infoExame->Semester }} - {{ $infoExame->Lieu }}</li>
-        @endforeach
-    </ul>
-@endif
-
+@endsection

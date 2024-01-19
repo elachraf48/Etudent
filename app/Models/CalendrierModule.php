@@ -20,4 +20,8 @@ class CalendrierModule extends Model
     {
         return $this->belongsTo(CalendrierSession::class, 'idSESSION');
     }
+    public function detailModule()
+    {
+        return $this->hasOne(DetailModule::class, 'idCalendrierModule');
+    }
 }

@@ -25,4 +25,17 @@ class DetailModule extends Model
     {
         return $this->belongsTo(CalendrierSession::class, 'idSESSION');
     }
+    public function infoExame()
+    {
+        return $this->belongsTo(InfoExame::class, 'idEtudiant', 'idEtudiant');
+    }
+  
+    public function calendrierModules()
+{
+    return $this->hasMany(CalendrierModule::class, 'idModule');
+}
+public function calendrierModule()
+    {
+        return $this->belongsTo(CalendrierModule::class, 'idCmodule');
+    }
 }

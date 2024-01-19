@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class EtudiantController extends Controller
 {
+
+
+
+
+    //----------------------------------------
     /**
      * Display a listing of the resource.
      *
@@ -16,20 +21,24 @@ class EtudiantController extends Controller
     {
         
 
-        return view('etudiant.results');
+        return view('etudiant.index');
     }
 
     public function search(Request $request)
-    {
-        $codeApogee = $request->input('CodeApogee');
+{
+    $codeApogee = $request->input('CodeApogee');
     
-        $student = Etudiant::with(['filieres', 'detailModules', 'groupeEtudiants', 'infoExames'])
-            ->where('CodeApogee', $codeApogee)
-           
-            ->first();
-    
-        return view('etudiant.index', compact('student'));
+    $student = Etudiant::with(['filieres', 'detailModules.module', 'groupeEtudiant.groupe', 'infoExames', 'detailModules.calendrierModule'])
+        ->where('CodeApogee', $codeApogee)
+        ->first();
+
+    if ($student) {
+        return view('etudiant.search', compact('student'));
+    } else {
+        return redirect()->route('index')->with('error', 'Aucun étudiant trouvé avec le Code Apogee fourni.');
     }
+}
+
     
     
     /**
