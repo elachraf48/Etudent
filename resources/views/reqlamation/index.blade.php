@@ -21,11 +21,9 @@
                 <hr class="hr-custom-color mb-4" />
 
                 <div>
-                    <h3><span class="text-danger">منصة الاطلاع على جدولة الامتحان الزمنية</span></h3>
-                    <h3><span class="text-danger">الخاصة بكل طالب</span></h3>
-                    <h3 class="text-secondary">Consultation du calendrier des examens</h3>
-                    <h3 class="text-secondary">propre à chaque étudiant</h3>
-                    <p class="text-secondary">Le calendrier des examens, comporte la date, l’heure et le lieu de chaque épreuve.</p>
+                    <h3 class="text-danger">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h4>
+                    <h4 class="text-secondary">Demande de correction de faute matérielle <br>concernant les résultats des examens.</h5>
+                    <!-- <p class="text-secondary">Le calendrier des examens, comporte la date, l’heure et le lieu de chaque épreuve.</p> -->
                 </div>
                 <hr class="hr-custom-color mb-4" /> <!-- Apply custom color to the hr element -->
 
@@ -40,7 +38,7 @@
                         </div>
                         <div class="row g-2 mt-1 p-1">
 
-                            <div class="col-md">
+                            <div class="col-md-3">
                                 <div class="form-floating">
                                     <select name="semester" id="semesterDropdown" class="form-control" required>
                                         <option value="S1">S1</option>
@@ -53,9 +51,7 @@
                                     <label for="floatingSelectGrid">Semester</label>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row g-2 mt-1 p-1">
-                            <div class="col-md">
+                            <div class="col-md-9">
                                 <div class="form-floating">
                                     <select name="filiere" id="filiereDropdown" class="form-control" required>
                                         @foreach($filieres as $filiere)
@@ -70,9 +66,12 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row g-2 mt-1 p-1">
+                            
+                        </div>
 
                         <div class="col-12"> <!-- Make the column full-width -->
-                            <button type="submit" class="btn btn-primary w-100 mt-2 shadow">Trouver</button>
+                            <button type="submit" class="btn btn-primary w-100 mt-2 shadow">Reclamation</button>
                         </div>
                         <div class="col-md-12">
                             <b id="noStudentError" class="text-danger" style="display: none;">Aucun étudiant trouvé avec le Code Apogee fourni.</b>

@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class EtudiantsFiliere extends Model
 {
-    public $timestamps = false;
-    protected $fillable = ['idEtudiant', 'idFiliere'];
+    protected $table = 'Etudiants_Filieres';
+    protected $primaryKey = 'id';
 
     public function etudiant()
     {

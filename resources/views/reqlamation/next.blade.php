@@ -8,23 +8,25 @@
 @csrf
 <!-- CSRF token for Laravel security -->
 <section class="text-center">
-<center>
-
-        <div class="continue  w-75 " >
-        <div class="col-md-6 position-relative" >
-                    <div id="idlogoump" class="text-center w-25">
-                        <img src="../img/banner.png" class="img-fluid" alt="Logo">
+    <div class="container text-center">
+        <div class="row">
+            <div class="continue  bg-light">
+                <div class="col-md-12 bg-light text-center">
+                    <!-- Centered Section with Logo for Mobile -->
+                    <div class="mx-auto w-25">
+                        <img src="{{ asset('img/banner.png') }}" class="img-fluid w-50" alt="Logo">
                     </div>
                 </div>
                 <h4 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h4>
                 <h4 class="link-danger p-2">Demande de correction de faute matérielle concernant les résultats des examens.</h4>
-            </center>
 
+            </div>
         </div>
+    </div>
 
-    <div class="container-fluid d-flex align-items-center justify-content-center bg-cool-color   p-3">
+    <div class="container-fluid d-flex align-items-center justify-content-center bg-cool   p-3">
         <form>
-        <div id="liveAlertPlaceholder"></div>
+            <div id="liveAlertPlaceholder"></div>
 
             <!-- Display the current date -->
             <input type="hidden" value="{{ now()->toDateString() }}">
@@ -244,8 +246,8 @@
                 </div>
             </div>
 
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+            <div class="form-check form-switch " id="formswitch">
+                <input class="form-check-input " type="checkbox" id="flexSwitchCheckDefault">
                 <label class="form-check-label clearfix" for="flexSwitchCheckDefault">
                     <span class="float-start">Recueillir des informations correctes ---</span>
                     <span class="float-end"> جمع المعلومات صحيحة </span>
@@ -336,50 +338,61 @@
             input.value = input.value.slice(0, input.maxLength);
         }
     }
-//    $(document).ready(function() {
-//         $('#sub').click(function() {
-//             if ($('#flexSwitchCheckDefault').is(':checked')) {
-//                 // Checkbox is checked, perform your actions here
-//                 // For example, submit the form or execute some other logic
-//             } else {
-//                 // Checkbox is not checked, show a Bootstrap alert
-//                 $('#bootstrapAlert').html(`
-//                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-//                         Please check the checkbox before submitting.
-//                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-//                             <span aria-hidden="true">&times;</span>
-//                         </button>
-//                     </div>
-//                 `);
-//             }
-//         });
-//     });
-const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+    //    $(document).ready(function() {
+    //         $('#sub').click(function() {
+    //             if ($('#flexSwitchCheckDefault').is(':checked')) {
+    //                 // Checkbox is checked, perform your actions here
+    //                 // For example, submit the form or execute some other logic
+    //             } else {
+    //                 // Checkbox is not checked, show a Bootstrap alert
+    //                 $('#bootstrapAlert').html(`
+    //                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    //                         Please check the checkbox before submitting.
+    //                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    //                             <span aria-hidden="true">&times;</span>
+    //                         </button>
+    //                     </div>
+    //                 `);
+    //             }
+    //         });
+    //     });
+    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+    const formswitch = document.getElementById('formswitch');
 
-    const alert = (message, type) => {
-        const wrapper = document.createElement('div')
-        wrapper.innerHTML = [
-            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-            `   <div>${message}</div>`,
-            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-            '</div>'
-        ].join('')
+const alert = (message, type) => {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+        `   <div>${message}</div>`,
+        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+    ].join('');
 
-        alertPlaceholder.innerHTML = ''; // Clear previous alerts
-        alertPlaceholder.append(wrapper)
-    }
+    alertPlaceholder.innerHTML = ''; // Clear previous alerts
+    alertPlaceholder.append(wrapper);
+    formswitch.classList.add('text-danger');
+    // Hide the alert after 6 seconds (6000 milliseconds)
+    setTimeout(() => {
+        alertPlaceholder.innerHTML = ''; // Clear the alert after 6 seconds
+    }, 10000);
+};
 
-    const alertTrigger = document.getElementById('sub')
-    if (alertTrigger) {
-        alertTrigger.addEventListener('click', () => {
-            if ($('#flexSwitchCheckDefault').is(':checked')) {
-                // Checkbox is checked, perform your actions here
-                // For example, submit the form or execute some other logic
-            } else {
-                alert('Please check the checkbox before submitting.', 'danger')
-            }
-        });
-    }
+const alertTrigger = document.getElementById('sub');
+
+if (alertTrigger) {
+    alertTrigger.addEventListener('click', () => {
+        if ($('#flexSwitchCheckDefault').is(':checked')) {
+            // Checkbox is checked, perform your actions here
+            // For example, submit the form or execute some other logic
+        } else {
+
+            alert(`Toutes les informations sont-elles correctes ? Cliquez sur le bouton en fin de page pour accepter<br>
+            هل كل المعلومات صحيحة؟ انقر على الزر الموجود في نهاية الصفحة للقبول 
+            `, 'danger');
+        }
+    });
+}
+
 </script>
 
 @endsection

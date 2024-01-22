@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Filiere extends Model
 {
-   
+    protected $table = 'Filieres';
     protected $fillable = ['CodeFiliere', 'NomFiliere', 'Parcours'];
 
     public function etudiants()
     {
-        return $this->belongsToMany(Etudiant::class, 'etudiants_filieres', 'idFiliere', 'idEtudiant');
+        return $this->belongsToMany(Etudiant::class, 'Etudiants_Filieres', 'idFiliere', 'idEtudiant');
     }
 
     public function modules()

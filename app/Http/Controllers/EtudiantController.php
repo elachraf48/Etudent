@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Etudiant;
+use App\Models\DetailModule;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class EtudiantController extends Controller
 {
@@ -19,28 +22,67 @@ class EtudiantController extends Controller
      */
     public function index()
     {
-        
+
 
         return view('etudiant.index');
     }
 
-    public function search(Request $request)
-{
-    $codeApogee = $request->input('CodeApogee');
-    
-    $student = Etudiant::with(['filieres', 'detailModules.module', 'groupeEtudiant.groupe', 'infoExames', 'detailModules.calendrierModule'])
-        ->where('CodeApogee', $codeApogee)
-        ->first();
-    // dd($student);
-    if ($student) {
-        return view('etudiant.search', compact('student'));
-    } else {
-        return redirect()->route('index')->with('error', 'Aucun étudiant trouvé avec le Code Apogee fourni.');
-    }
-}
+    public function searchs(Request $request)
+    {
+        $codeApogee = $request->input('CodeApogee');
 
-    
-    
+        $validator = Validator::make(['CodeApogee' => $codeApogee], [
+            'CodeApogee' => 'required|integer', // Add any additional validation rules
+        ]);
+        // Example query to get data
+
+
+
+        if ($validator->fails()) {
+            // Handle validation failure, e.g., return an error response
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $student = Etudiant::with(['filieres.modules', 'groupes', 'infoExames', 'detailsModules.calendrierModule'])
+            ->where('CodeApogee', $codeApogee)
+            ->first();
+        // dd($student);
+        if ($student) {
+            return view('etudiant.search', compact('student'));
+        } else {
+            return redirect()->route('index')->with('error', 'Aucun étudiant trouvé avec le Code Apogee fourni.');
+        }
+    }
+    public function search(Request $request)
+    {
+        $codeApogee = $request->input('CodeApogee');
+        $validator = Validator::make(['CodeApogee' => $codeApogee], [
+            'CodeApogee' => 'required|integer', // Add any additional validation rules
+        ]);
+        // Example query to get data
+
+
+
+        if ($validator->fails()) {
+            // Handle validation failure, e.g., return an error response
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $etudiant = Etudiant::with(['filieres.modules.calendrierModules.session', 'examens', 'groupes'])
+            ->where('CodeApogee', $codeApogee)
+            ->first();
+            if ($etudiant) {
+                return view('etudiant.search', compact('etudiant'));
+            } else {
+                return redirect()->route('index')->with('error', 'Aucun étudiant trouvé avec le Code Apogee fourni.');
+            }
+    }
+
+
+
+
+
+
     /**
      * Show the form for creating a new resource.
      *

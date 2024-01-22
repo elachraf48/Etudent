@@ -47,11 +47,12 @@ Route::resource('filieres', FiliereController::class);
 
 // Routes for Etudiant
 Route::resource('/', EtudiantController::class);
+
 Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('search');
 // routes/web.php
 
 // Define the resource routes
-Route::get('/reclamation', [InfoExameController::class, 'index']);
+Route::get('/reclamation', [InfoExameController::class, 'index'])->name('reclamation');
 Route::post('/reclamation/next', [InfoExameController::class, 'nextReclamation'])->name('reclamation.next');
 
 // Add a custom route for the 'next' method

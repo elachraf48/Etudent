@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class CalendrierModuleGroupe extends Model
 {
-    protected $table = 'calendrier_module_groupes';
-
+    protected $table = 'Calendrier_module_Groupes';
     protected $fillable = ['idCmodule', 'idGroupe'];
 
     public function calendrierModule()

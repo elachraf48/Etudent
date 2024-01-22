@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class GroupeEtudiant extends Model
 {
-    protected $table = 'groupe_etudiant';
-
-    protected $fillable = ['idEtudiant', 'idGroupe'];
+    protected $table = 'Groupe_etudiant';
+    protected $primaryKey = 'id';
 
     public function etudiant()
     {
@@ -20,4 +18,9 @@ class GroupeEtudiant extends Model
     {
         return $this->belongsTo(Groupe::class, 'idGroupe');
     }
+    public function groupes()
+{
+    return $this->belongsToMany(Groupe::class, 'Groupe_etudiant');
+}
+
 }

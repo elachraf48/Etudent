@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class InfoExame extends Model
 {
+    protected $table = 'Info_Exames';
     protected $fillable = ['NumeroExamen', 'Semester', 'AnneeUniversitaire', 'Lieu', 'idEtudiant', 'idGroupe'];
 
     public function etudiant()

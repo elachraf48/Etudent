@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DetailModule extends Model
 {
+    protected $table = 'Detail_modules';
     protected $fillable = ['idSESSION', 'idModule', 'idEtudiant', 'etat', 'AnneeUniversitaire'];
 
     public function session()

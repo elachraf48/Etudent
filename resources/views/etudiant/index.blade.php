@@ -3,7 +3,7 @@
 @extends('layouts.apps')
 
 @section('content')
-<div class="container-fluid d-flex align-items-center justify-content-center bg-cool-color">
+<div class="container-fluid d-flex align-items-center justify-content-center vh-100 bg-cool-color"> <!-- Center the container vertically and horizontally, and apply cool background color -->
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="section text-center shadow p-4 mb-4 ">
@@ -11,12 +11,7 @@
                     <img src="./img/banner.png" class="w-50" alt="Logo">
                 </div>
                 <style>
-                    .hr-custom-color {
-                        border: 0;
-                        height: 2px;
-                        background: linear-gradient(to right, red, green, blue);
-                        opacity: 1;
-                    }
+                    .hr-custom-color {border: 0;height: 2px;background: linear-gradient(to right, red, green, blue);opacity: 1;}
                 </style>
                 <hr class="hr-custom-color mb-4" />
 
@@ -32,9 +27,11 @@
                 <form action="{{ route('search') }}" method="GET" class="mb-4">
                     <div class="row justify-content-center">
                         <div class="col-12">
-                            <div class="form-group">
-                                <input type="text" name="CodeApogee" required class="form-control shadow" placeholder="Enter Code Apogee">
-                            </div>
+                        <div class="form-floating">
+                        <input type="number" placeholder="" name="CodeApogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                        <label for="floatingSelectGrid">Code Apogée</label>
+
+                    </div>
                         </div>
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary w-100 mt-2 shadow">Trouver</button>
@@ -58,5 +55,15 @@
 
    
 </div>
+<script>
+         function removeLeadingZeros(input) {
+        // Remove leading zeros using a regular expression
+        input.value = input.value.replace(/^0+/, '');
 
+        // Trim the value to the specified maxlength
+        if (input.value.length > input.maxLength) {
+            input.value = input.value.slice(0, input.maxLength);
+        }
+    }
+</script>
 @endsection

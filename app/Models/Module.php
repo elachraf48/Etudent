@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Module extends Model
 {
+    protected $table = 'modules';
     protected $fillable = ['CodeModule', 'NomModule', 'Semester', 'idFiliere'];
 
     public function filiere()

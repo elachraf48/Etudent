@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Groupe extends Model
 {
+    protected $table = 'Groupes';
     protected $fillable = ['nomGroupe', 'Semester', 'Date_creation'];
 
     public function etudiants()
     {
-        return $this->belongsToMany(Etudiant::class, 'groupe_etudiant', 'idGroupe', 'idEtudiant');
+        return $this->belongsToMany(Etudiant::class, 'Groupe_etudiant', 'idGroupe', 'idEtudiant');
     }
 
-    public function infoExames()
+    public function examens()
     {
         return $this->hasMany(InfoExame::class, 'idGroupe');
     }

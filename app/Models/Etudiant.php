@@ -6,25 +6,26 @@ use Illuminate\Database\Eloquent\Model;
 
 class Etudiant extends Model
 {
+    protected $table = 'Etudiants';
     protected $fillable = ['CodeApogee', 'Nom', 'Prenom', 'DateNaiss'];
 
     public function filieres()
     {
-        return $this->belongsToMany(Filiere::class, 'etudiants_filieres', 'idEtudiant', 'idFiliere');
+        return $this->belongsToMany(Filiere::class, 'Etudiants_Filieres', 'idEtudiant', 'idFiliere');
     }
 
     public function groupes()
     {
-        return $this->belongsToMany(Groupe::class, 'groupe_etudiant', 'idEtudiant', 'idGroupe');
+        return $this->belongsToMany(Groupe::class, 'Groupe_etudiant', 'idEtudiant', 'idGroupe');
     }
 
-    public function infoExames()
+    public function examens()
     {
         return $this->hasMany(InfoExame::class, 'idEtudiant');
     }
 
-    public function detailsModules()
+    public function modules()
     {
-        return $this->hasMany(DetailModule::class, 'idEtudiant');
+        return $this->belongsToMany(Module::class, 'Detail_modules', 'idEtudiant', 'idModule');
     }
 }
