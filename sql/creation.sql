@@ -52,14 +52,21 @@ CREATE TABLE modules (
 
 );
 
-
+Table Calendrier_SESSION {
+    id int AUTO_INCREMENT PRIMARY KEY,
+    SESSION ENUM('ORD', 'RAT'),
+    part_Semester INT,
+}
 
 CREATE TABLE Groupes (
     id int AUTO_INCREMENT PRIMARY KEY,
     nomGroupe INT NOT null,
 	Semester VARCHAR(5) NOT NULL  ,
-    Date_creation VARCHAR(10),
-    UNIQUE (nomGroupe,Semester,Date_creation),     
+    idSESSION INT,
+    AnneeUniversitaire VARCHAR(10),
+    FOREIGN KEY (idSESSION)   REFERENCES Calendrier_SESSION(id),
+    
+    UNIQUE (nomGroupe,Semester,AnneeUniversitaire,idSESSION)
 );
 
 CREATE TABLE Groupe_etudiant (
@@ -97,10 +104,10 @@ CREATE TABLE Calendrier_module_Groupes (
 
 CREATE TABLE Detail_modules (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    idSESSION INT,
     idModule INT,
     idEtudiant INT,
     etat ENUM('I', 'NI'),
+    idSESSION INT,
     AnneeUniversitaire VARCHAR(10),
     FOREIGN KEY (idSESSION)   REFERENCES Calendrier_SESSION(id)
     FOREIGN KEY (idModule)   REFERENCES modules(id),
@@ -120,8 +127,4 @@ CREATE TABLE Calendrier_modules (
 
 );
  
-Table Calendrier_SESSION {
-    id int AUTO_INCREMENT PRIMARY KEY,
-    SESSION ENUM('ORD', 'RAT'),
-    part_Semester INT,
-}
+

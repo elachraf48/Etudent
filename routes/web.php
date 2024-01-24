@@ -64,6 +64,7 @@ Route::post('/reclamation/next', [InfoExameController::class, 'nextReclamation']
 Route::get('/fetch-filieres/{semester}', [CalendrierModuleController::class, 'fetchFilieresBySemester']);
 Route::get('/fetch-filieres/{semester}', [InfoExameController::class, 'fetchFilieresBySemester']);
 Route::get('/fetch-filieres/{semester}', [DetailModuleController::class, 'fetchFilieresBySemester']);
+Route::get('/fetch-filieres/{semester}', [AdminController::class, 'fetchFilieresBySemester']);
 
 Route::get('/fetch-modules/{filiere}', [InfoExameController::class, 'fetchModules']);
 

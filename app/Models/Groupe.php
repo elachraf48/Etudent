@@ -7,11 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Groupe extends Model
 {
     protected $table = 'Groupes';
-    protected $fillable = ['nomGroupe', 'Semester', 'Date_creation'];
+    protected $fillable = ['idSESSION','nomGroupe', 'Semester', 'AnneeUniversitaire'];
 
     public function etudiants()
     {
         return $this->belongsToMany(Etudiant::class, 'Groupe_etudiant', 'idGroupe', 'idEtudiant');
+    }
+
+    public function session()
+    {
+        return $this->belongsTo(CalendrierSession::class, 'idSESSION');
     }
 
     public function examens()

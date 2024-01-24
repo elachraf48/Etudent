@@ -39,7 +39,7 @@
                     <select name="filiere" id="filiereDropdown" class="form-control" required>
                         @foreach($filieres as $filiere)
                         <option value="{{ $filiere->id }}">{{ $filiere->NomFiliere }}
-                            @if($filiere->Parcours!='NULL')
+                            @if($filiere->Parcours!=NULL)
                             {({{ $filiere->Parcours }})}
                             @endif
                         </option>
@@ -69,7 +69,7 @@
                     <select name="sessions" id="sessionDropdown" class="form-control" required>
                         <!-- <option value="" disabled selected>Select Session</option> -->
                         @foreach($sessions as $session)
-                        <option value="{{ $session->id }}">Semester: {{ $session->part_semester }} - Session
+                        <option value="{{ $session->id }}">Session: {{ $session->part_semester }} -
                             @if($session->SESSION == 'ORD')
                             Ordinaire
                             @else
@@ -186,8 +186,8 @@
                         $.each(filieres, function(index, filiere) {
                             optionsHtml += '<option value="' + filiere.id + '">' + filiere.NomFiliere;
 
-                            // Include Parcours in parentheses if it's not 'NULL'
-                            if (filiere.Parcours !== 'NULL') {
+                            // Include Parcours in parentheses if it's not NULL
+                            if (filiere.Parcours !=='') {
                                 optionsHtml += ' (' + filiere.Parcours + ')';
                             }
 

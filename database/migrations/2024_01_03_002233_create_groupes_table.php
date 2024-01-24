@@ -17,8 +17,10 @@ return new class extends Migration
             $table->id();
             $table->string('nomGroupe', 10);
             $table->string('Semester', 5);
-            $table->date('Date_creation');
-            $table->unique(['nomGroupe', 'Semester', 'Date_creation']);
+            $table->string('AnneeUniversitaire', 10);
+            $table->unsignedBigInteger('idSESSION');
+            $table->foreign('idSESSION')->references('id')->on('calendrier_sessions');
+            $table->unique(['AnneeUniversitaire','nomGroupe', 'Semester', 'idSESSION']);
             $table->timestamps();
         });
     }

@@ -39,7 +39,7 @@
                     <select name="filiere" id="filiereDropdown" class="form-control" required>
                         @foreach($filieres as $filiere)
                         <option value="{{ $filiere->id }}">{{ $filiere->NomFiliere }}
-                            @if($filiere->Parcours!='NULL')
+                            @if($filiere->Parcours!=NULL)
                             {({{ $filiere->Parcours }})}
                             @endif
                         </option>
@@ -77,11 +77,14 @@
             </div>
 
 
-
+            <div class="form-check form-switch form-check-inline">
+                    <input class="form-check-input" type="checkbox" role="switch" id="groupe" name="groupe">
+                    <label class="form-check-label" for="groupe">Aucun groupe</label>
+                </div>
         </div>
         <!-- Add a textarea to paste the data -->
         <div class="mb-3">
-            <textarea name="cld_mod_data" class="form-control" rows="10" placeholder="Module , Jour , Horaire , group" required></textarea>
+            <textarea name="cld_mod_data" class="form-control" rows="10" placeholder="Module , Jour , Horaire , GROUPE" required></textarea>
         </div>
 
         <button style="background: gray;" type="submit" class="btn btn-primary">Insert Data</button>
@@ -113,6 +116,18 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
     $(document).ready(function() {
+        $('#groupe').change(function() {
+                var groupeChecked = $('#groupe').prop('checked');
+
+                if (groupeChecked) {
+                    $('textarea[name="cld_mod_data"]').attr('placeholder', "Module , Jour , Horaire");
+
+                } else {
+                    $('textarea[name="cld_mod_data"]').attr('placeholder', "Module , Jour , Horaire , GROUPE");
+
+                }
+            });
+
         // Event listener for changes in the semester dropdown
         $('#semesterDropdown').change(function() {
             var selectedSemester = $(this).val();
@@ -131,7 +146,7 @@
                         optionsHtml += '<option value="' + filiere.id + '">' + filiere.NomFiliere;
 
                         // Include Parcours in parentheses if it's not 'NULL'
-                        if (filiere.Parcours !== 'NULL') {
+                        if (filiere.Parcours !=='' ) {
                             optionsHtml += ' (' + filiere.Parcours + ')';
                         }
 

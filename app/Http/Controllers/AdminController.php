@@ -52,13 +52,13 @@ class AdminController extends Controller
                 );
 
                 // Fetch the id of the existing record or the newly inserted record
-                $filiereId = DB::table('Filieres')
+                $filiere = DB::table('Filieres')
                     ->where('CodeFiliere', $columns[5])
                     ->value('id');
 
                 $module = DB::table('modules')->updateOrInsert(
                     ['CodeModule' => $columns[1]],
-                    ['NomModule' => $columns[2], 'Semester' => $columns[0], 'created_at' => now(), 'updated_at' => now(), 'idFiliere' => $filiereId]
+                    ['NomModule' => $columns[2], 'Semester' => $columns[0], 'created_at' => now(), 'updated_at' => now(), 'idFiliere' => $filiere]
                 );
 
                 // Add more similar logic for other tables
@@ -114,12 +114,17 @@ class AdminController extends Controller
             'student_data' => 'required_without:file',
             'file' => 'required_without:student_data|file|mimes:csv,txt|max:2048',
         ]);
-        $sessions = $request->input('sessions');
+        $semester = $request->input('semester');
+        $filiere = $request->input('filiere');
         $anneeUniversitaire = $request->input('AnneeUniversitaire');
+        $sessions = $request->input('sessions');
 
         // Check the value of the switch
         $useFile = $request->has('method_switch');
+        $isGroupe = $request->has('groupe');
+        $iseExamen = $request->has('nbexamen');
 
+        
         if ($useFile) {
             // File handling logic
             $fileContent = file_get_contents($request->file('file')->path());
@@ -129,89 +134,104 @@ class AdminController extends Controller
             $studentData = $request->input('student_data');
             $rows = explode("\n", $studentData);
         }
+        $incrementexamen=$request->input('num');
 
         foreach ($rows as $row) {
             $columns = str_getcsv($row);
+            if ($isGroupe) {
+                $groupe=0;
+            } else if($iseExamen){
+                $groupe=$columns[5];
+            }
+            else{
+                $groupe=$columns[6];
+            }
 
+            if ($iseExamen) {
+                $Examen=$incrementexamen;
+            } 
+            else{
+                $Examen=$columns[5];
+            }
             // Convert the date format
-            $formattedDate = Carbon::createFromFormat('d/m/Y', $columns[4])->format('Y-m-d');
 
             // Check if the student already exists based on Code Apogee
             $existingStudent = DB::table('etudiants')
-                ->where('CodeApogee', $columns[1])
+                ->where('CodeApogee', $columns[0])
                 ->first();
 
             if ($existingStudent) {
                 // If student exists, get the existing student's ID
                 $etudiantId = $existingStudent->id;
             } else {
+                $rawDate = str_replace(' ', '', $columns[3]);
+                $formattedDate = Carbon::createFromFormat('d/m/Y', $rawDate)->format('Y-m-d');
+
                 // If student doesn't exist, insert into Etudiants table and get the new student's ID
                 $etudiantId = DB::table('etudiants')->insertGetId([
-                    'CodeApogee' => $columns[1],
-                    'Nom' => $columns[2],
-                    'Prenom' => $columns[3],
+                    'CodeApogee' => $columns[0],
+                    'Nom' => $columns[1],
+                    'Prenom' => $columns[2],
                     'DateNaiss' => $formattedDate,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
             }
 
-            // Fetch the filiere ID based on your criteria (adjust this query accordingly)
-            $filiereId = DB::table('filieres')
-                ->where('CodeFiliere', $columns[6]) // Assuming the criteria is based on CodeFiliere
-                ->value('id');
+           
 
             // Check if the entry already exists in Etudiants_Filieres table
             $existingEntry = DB::table('etudiants_filieres')
                 ->where('idEtudiant', $etudiantId)
-                ->where('idFiliere', $filiereId)
+                ->where('idFiliere', $filiere)
                 ->exists();
 
             if (!$existingEntry) {
                 // Insert into Etudiants_Filieres table
                 DB::table('etudiants_filieres')->insert([
                     'idEtudiant' => $etudiantId,
-                    'idFiliere' => $filiereId,
+                    'idFiliere' => $filiere,
                 ]);
             }
 
-            $groupeId = DB::table('groupes')
-                ->where('nomGroupe', $columns[8])
-                ->where('Semester', $columns[7])
-                ->where('Date_creation', now()->format('Y/m/d'),)
-                ->value('id');
+            $existingGroup = DB::table('groupes')
+                ->where('nomGroupe', $groupe)
+                ->where('Semester', $semester)
+                ->where('idSESSION', $sessions)
+                ->where('AnneeUniversitaire', $anneeUniversitaire)
+                ->first();
 
-            if (!$groupeId) {
-                // If the entry doesn't exist, insert into the groupes table and get the new group's ID
+            if ($existingGroup) {
+                // Group already exists, no need to insert again
+                $groupeId = $existingGroup->id;
+            } else {
+                // Insert into the groupes table if it doesn't exist and get the ID
                 $groupeId = DB::table('groupes')->insertGetId([
-                    'nomGroupe' => $columns[8],
-                    'Semester' => $columns[7],
-                    'Date_creation' => now()->format('Y/m/d'),
+                    'nomGroupe' => $groupe,
+                    'Semester' => $semester,
+                    'idSESSION' => $sessions, 
+                    'AnneeUniversitaire' => $anneeUniversitaire,
                     'created_at' => now(),
-                    'updated_at' => now(),
+                    'updated_at' => now()
                 ]);
             }
 
 
             // Insert into Groupe_etudiant table
-            DB::table('groupe_etudiant')->insert([
+            DB::table('groupe_etudiant')->updateOrInsert([
                 'idEtudiant' => $etudiantId,
-                'idGroupe' => $groupeId,
+                'idGroupe' => $groupeId
 
             ]);
 
             // Insert into Info_Exames table
-            DB::table('info_exames')->insert([
-                'NumeroExamen' => $columns[0],
-                'Semester' => $columns[7],
-                'AnneeUniversitaire' =>  $anneeUniversitaire,
-                'Lieu' => $columns[5],
-                'idEtudiant' => $etudiantId,
-                'idGroupe' => $groupeId,
+            DB::table('info_exames')->updateOrInsert(
+                ['NumeroExamen' => $Examen,'Semester' => $semester,'AnneeUniversitaire' =>  $anneeUniversitaire,'idEtudiant' => $etudiantId,'idGroupe' => $groupeId],
+                ['Lieu' => $columns[4],
                 'created_at' => now(),
-                'updated_at' => now(),
+                'updated_at' => now()
             ]);
-
+            $incrementexamen+=1;
             // Add more similar logic for other tables
         }
 
@@ -224,6 +244,21 @@ class AdminController extends Controller
     public function showInsertStudentForm()
     {
         $sessions = CalendrierSession::all();
-        return view('admin.insert-student', compact('sessions'));
+        $filieres = Filiere::where('CodeFiliere', 'LIKE', '%S1' )->get(['id', 'NomFiliere', 'Parcours']);
+
+        return view('admin.insert-student', compact('filieres','sessions'));
+    }
+    public function fetchFilieresBySemester($semester)
+    {
+        // Fetch filieres based on the selected semester
+        $filieres = Filiere::where('CodeFiliere', 'LIKE', '%' . $semester)->get(['id', 'NomFiliere', 'Parcours']);
+
+        // Check if filieres are empty
+        if ($filieres->isEmpty()) {
+            return response()->json(['message' => 'No filieres found for the selected semester'], 404);
+        }
+
+        // Return filieres as JSON
+        return response()->json(['filieres' => $filieres]);
     }
 }

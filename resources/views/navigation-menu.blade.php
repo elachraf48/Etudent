@@ -5,7 +5,7 @@
             <div class="shrink-0 flex items-center">
                 <a href="{{ route('dashboard') }}">
                     <!-- <x-application-mark class="block h-9 w-auto" /> -->
-                    <img style="width: 80px;" src="{{ url('./img/banner.png') }}" />
+                    <img class="block h-12 w-auto" src="{{ url('./img/banner.png') }}" />
 
                 </a>
             </div>
@@ -17,7 +17,7 @@
                 </x-nav-link>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle w-25" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ __('Bulk insert ') }}
+                        {{ __('insert multiple') }}
                     </a>
                     <ul class="dropdown-menu">
                         <x-nav-link href="{{ route('Filier_modules_form') }}" :active="request()->routeIs('dashboard')">

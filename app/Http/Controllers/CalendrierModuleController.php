@@ -121,6 +121,7 @@ class CalendrierModuleController extends Controller
         $filiere = $request->input('filiere');
         $anneeUniversitaire = $request->input('AnneeUniversitaire');
         $sessions = $request->input('sessions');
+        $isGroupe = $request->has('groupe');
 
         // Create a CalendrierModule record
 
@@ -163,10 +164,15 @@ class CalendrierModuleController extends Controller
                     );
                 }
                 // Retrieve the ID of the inserted record
-                
+                if ($isGroupe) {
+                    $groupNames = explode('+', 0);
+
+                } 
+                else{
+                    $groupNames = explode('+', $columns[3]);
+                }
 
                 // Explode the group names separated by '+'
-                $groupNames = explode('+', $columns[3]);
 
                 // Loop through each group and insert into calendrier_module_groupes
                 foreach ($groupNames as $groupName) {
@@ -175,6 +181,8 @@ class CalendrierModuleController extends Controller
                     $existingGroup = DB::table('groupes')
                         ->where('nomGroupe', $groupName)
                         ->where('Semester', $semester)
+                        ->where('idSESSION', $sessions)
+                        ->where('AnneeUniversitaire', $anneeUniversitaire)
                         ->first();
 
                     if ($existingGroup) {
@@ -185,7 +193,8 @@ class CalendrierModuleController extends Controller
                         $groupeId = DB::table('groupes')->insertGetId([
                             'nomGroupe' => $groupName,
                             'Semester' => $semester,
-                            'Date_creation' => now()->format('Y/m/d'),
+                            'idSESSION' => $sessions, 
+                            'AnneeUniversitaire' => $anneeUniversitaire,
                             'created_at' => now(),
                             'updated_at' => now()
                         ]);
