@@ -101,70 +101,94 @@ class EtudiantController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $student = DB::table('Etudiants as e')
-        ->select('e.CodeApogee', 'e.Nom', 'e.Prenom', 'f.NomFiliere', 'f.Parcours', 'ie.Semester as ExamenSemester', 'ie.AnneeUniversitaire as ExamenAnneeUniversitaire')
-        ->join('etudiants_filieres as ef', 'e.id', '=', 'ef.idEtudiant')
-        ->join('filieres as f', 'ef.idFiliere', '=', 'f.id')
-        ->join('modules as m', 'f.id', '=', 'm.idFiliere')
-        ->join('detail_modules as dm', function ($join) {
-            $join->on('m.id', '=', 'dm.idModule')
-                ->on('dm.idEtudiant', '=', 'e.id')
-                ->where('dm.etat', '=', 'I');
-        })
-        ->join('groupe_etudiant as ge', 'e.id', '=', 'ge.idEtudiant')
-        ->join('groupes as g', function ($join) {
-            $join->on('ge.idGroupe', '=', 'g.id')
-                ->whereRaw('g.Semester = m.Semester');
-        })
-        ->join('info_exames as ie', function ($join) {
-            $join->on('e.id', '=', 'ie.idEtudiant')
-                ->on('g.id', '=', 'ie.idGroupe');
-        })
-        ->join('calendrier_modules as cm', 'm.id', '=', 'cm.idModule')
-        ->where('g.idSESSION', '=', DB::raw('(SELECT max(idSESSION) FROM detail_modules dm WHERE dm.AnneeUniversitaire=(SELECT MAX(AnneeUniversitaire) FROM info_exames))'))
-        
-        ->where('e.CodeApogee', '=', $codeApogee)
-        ->first();
-        $semesters = DB::table('Etudiants as e')
-        ->select(
-            'f.NomFiliere as NomFiliere',
-            'f.Parcours as Parcours',
-            'm.NomModule as NomModule',
-            'g.nomGroupe as NomGroupe',
-            'g.Semester as GroupeSemester',
-            'ie.Lieu as Lieu',
-            'ie.AnneeUniversitaire as ExamenAnneeUniversitaire',
-            'ie.NumeroExamen as NumeroExamen',
-            'ie.Semester as ExamenSemester',
-            'dm.etat as Etat',
-            'cm.DateExamen as DateExamen',
-            'cm.Houre as Houre' )
-        ->join('etudiants_filieres as ef', 'e.id', '=', 'ef.idEtudiant')
-        ->join('filieres as f', 'ef.idFiliere', '=', 'f.id')
-        ->join('modules as m', 'f.id', '=', 'm.idFiliere')
-        ->join('detail_modules as dm', function ($join) {
-            $join->on('m.id', '=', 'dm.idModule')
-                ->on('dm.idEtudiant', '=', 'e.id')
-                ->where('dm.etat', '=', 'I');
-        })
-        ->join('groupe_etudiant as ge', 'e.id', '=', 'ge.idEtudiant')
-        ->join('groupes as g', function ($join) {
-            $join->on('ge.idGroupe', '=', 'g.id')
-                ->whereRaw('g.Semester = m.Semester');
-        })
-        ->join('info_exames as ie', function ($join) {
-            $join->on('e.id', '=', 'ie.idEtudiant')
-                ->on('g.id', '=', 'ie.idGroupe');
-        })
-        ->join('calendrier_modules as cm', 'm.id', '=', 'cm.idModule')
-        ->where('g.idSESSION', '=', DB::raw('(SELECT max(idSESSION) FROM detail_modules dm WHERE dm.AnneeUniversitaire=(SELECT MAX(AnneeUniversitaire) FROM info_exames))'))
-        ->where('e.CodeApogee', '=', $codeApogee)
-        ->get();
+       
+
+$student  = DB::table('Etudiants as e')
+->select(
+    'e.CodeApogee as CodeApogee',
+    'e.Nom as Nom',
+    'e.Prenom as Prenom',
+    'f.NomFiliere as NomFiliere',
+    'f.Parcours as Parcours',
+    'm.NomModule as NomModule',
+    'g.nomGroupe as NomGroupe',
+    'ie.Lieu as Lieu',
+    'ie.AnneeUniversitaire as ExamenAnneeUniversitaire',
+    'ie.NumeroExamen as NumeroExamen',
+    'ie.Semester as ExamenSemester',
+    'cm.DateExamen as DateExamen',
+    'cm.Houre as Houre'
+)
+->join('etudiants_filieres as ef', 'e.id', '=', 'ef.idEtudiant')
+->join('filieres as f', 'ef.idFiliere', '=', 'f.id')
+->join('modules as m', 'f.id', '=', 'm.idFiliere')
+->join('detail_modules as dm', function ($join) {
+    $join->on('m.id', '=', 'dm.idModule')
+        ->on('dm.idEtudiant', '=', 'e.id')
+        ->where('dm.etat', '=', 'I');
+})
+->join('groupe_etudiant as ge', 'e.id', '=', 'ge.idEtudiant')
+->join('groupes as g', function ($join) {
+    $join->on('ge.idGroupe', '=', 'g.id')
+        ->whereRaw('g.Semester = m.Semester');
+})
+->join('info_exames as ie', function ($join) {
+    $join->on('e.id', '=', 'ie.idEtudiant')
+        ->on('g.id', '=', 'ie.idGroupe');
+})
+->join('calendrier_modules as cm', function ($join) {
+    $join->on('m.id', '=', 'cm.idModule')
+        ->where('cm.AnneeUniversitaire', '=', DB::raw('(SELECT MAX(AnneeUniversitaire) FROM detail_modules)'));
+})
+->where('g.idSESSION', '=', DB::raw('(SELECT max(idSESSION) FROM detail_modules WHERE AnneeUniversitaire = (SELECT MAX(AnneeUniversitaire) FROM info_exames))'))
+->where('dm.AnneeUniversitaire', '=', DB::raw('(SELECT MAX(AnneeUniversitaire) FROM info_exames)'))
+->where('ie.AnneeUniversitaire', '=', DB::raw('(SELECT MAX(AnneeUniversitaire) FROM detail_modules)'))
+->where('e.CodeApogee', '=', $codeApogee)
+
+->get();
+
+
+        // $semesters = DB::table('Etudiants as e')
+        // ->select(
+        //     'f.NomFiliere as NomFiliere',
+        //     'f.Parcours as Parcours',
+        //     'm.NomModule as NomModule',
+        //     'g.nomGroupe as NomGroupe',
+        //     'g.Semester as GroupeSemester',
+        //     'ie.Lieu as Lieu',
+        //     'ie.AnneeUniversitaire as ExamenAnneeUniversitaire',
+        //     'ie.NumeroExamen as NumeroExamen',
+        //     'ie.Semester as ExamenSemester',
+        //     'dm.etat as Etat',
+        //     'cm.DateExamen as DateExamen',
+        //     'cm.Houre as Houre' )
+        // ->join('etudiants_filieres as ef', 'e.id', '=', 'ef.idEtudiant')
+        // ->join('filieres as f', 'ef.idFiliere', '=', 'f.id')
+        // ->join('modules as m', 'f.id', '=', 'm.idFiliere')
+        // ->join('detail_modules as dm', function ($join) {
+        //     $join->on('m.id', '=', 'dm.idModule')
+        //         ->on('dm.idEtudiant', '=', 'e.id')
+        //         ->where('dm.etat', '=', 'I');
+        // })
+        // ->join('groupe_etudiant as ge', 'e.id', '=', 'ge.idEtudiant')
+        // ->join('groupes as g', function ($join) {
+        //     $join->on('ge.idGroupe', '=', 'g.id')
+        //         ->whereRaw('g.Semester = m.Semester');
+        // })
+        // ->join('info_exames as ie', function ($join) {
+        //     $join->on('e.id', '=', 'ie.idEtudiant')
+        //         ->on('g.id', '=', 'ie.idGroupe');
+        // })
+        // ->join('calendrier_modules as cm', 'm.id', '=', 'cm.idModule')
+        // ->where('g.idSESSION', '=', DB::raw('(SELECT max(idSESSION) FROM detail_modules dm WHERE dm.AnneeUniversitaire=(SELECT MAX(AnneeUniversitaire) FROM info_exames))'))
+        // ->where('e.CodeApogee', '=', $codeApogee)
+        // ->get();
+        $groupedModules = $student->groupBy('ExamenSemester');
 
         if ($student) {
-            return view('etudiant.search', compact('student', 'semesters'));
+            return view('etudiant.search', compact('student', 'groupedModules'));
         } else {
-            return redirect()->route('index')->with('error', 'Aucun étudiant trouvé avec le Code Apogee fourni.');
+            return redirect()->route('index')->with('error', 'Aucun étudiant trouvé <br>avec le Code Apogee fourni.');
         }
 
 

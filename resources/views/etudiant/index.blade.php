@@ -11,7 +11,12 @@
                     <img src="./img/banner.png" class="w-50" alt="Logo">
                 </div>
                 <style>
-                    .hr-custom-color {border: 0;height: 2px;background: linear-gradient(to right, red, green, blue);opacity: 1;}
+                    .hr-custom-color {
+                        border: 0;
+                        height: 2px;
+                        background: linear-gradient(to right, red, green, blue);
+                        opacity: 1;
+                    }
                 </style>
                 <hr class="hr-custom-color mb-4" />
 
@@ -27,20 +32,23 @@
                 <form action="{{ route('search') }}" method="GET" class="mb-4">
                     <div class="row justify-content-center">
                         <div class="col-12">
-                        <div class="form-floating">
-                        <input type="number" placeholder="" name="CodeApogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
-                        <label for="floatingSelectGrid">Code Apogée</label>
+                            <div class="form-floating">
+                                <input type="number" placeholder="" name="CodeApogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                                <label for="floatingSelectGrid">Code Apogée</label>
 
-                    </div>
+                            </div>
                         </div>
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary w-100 mt-2 shadow">Trouver</button>
                         </div>
                         <div class="col-md-12">
                             <!-- Display the error message if no student is found -->
-                            @if(session('error'))
-                                <b class="text-danger">{{ session('error') }}</b>
-                               @endif
+                            @if (session('error'))
+                            <div class="alert alert-danger mt-3">
+                                {!! session('error') !!}
+                            </div>
+                            @endif
+
                         </div>
                     </div>
                 </form>
@@ -53,10 +61,10 @@
         </div>
     </div>
 
-   
+
 </div>
 <script>
-         function removeLeadingZeros(input) {
+    function removeLeadingZeros(input) {
         // Remove leading zeros using a regular expression
         input.value = input.value.replace(/^0+/, '');
 

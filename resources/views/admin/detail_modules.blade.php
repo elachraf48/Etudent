@@ -52,7 +52,7 @@
                 <div class="form-floating">
                     <select name="AnneeUniversitaire" id="AnneeUniversitaire" class="form-control" required>
                         <?php
-                        $currentYear = date('Y') - 1;
+                        $currentYear = date('Y') ;
                         for ($i = 0; $i < 3; $i++) {
                             $startYear = $currentYear - $i;
                             $endYear = $startYear + 1;

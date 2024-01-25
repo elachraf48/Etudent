@@ -93,8 +93,8 @@
                             | Groupe: {{ $groupe->nomGroupe }}
                         @endif
                         | Numero Examen: {{ $examen->NumeroExamen }}
-                    </th>
-                </tr>
+                        </th>
+                    </tr>
             </thead>
             <tbody>
                 <tr class="text-center table-info">
