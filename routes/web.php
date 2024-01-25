@@ -101,17 +101,23 @@ Route::resource('calendrier-module-groupes', CalendrierModuleGroupeController::c
 
 // admin/Filier_modules
 
+
+// routes/web.php
+
+Route::middleware(['auth'])->group(function () {
+    // Your authenticated routes here
+
+Route::get('/admin/insert-student', [AdminController::class, 'showInsertStudentForm'])->name('insert_student_form');
+Route::post('/admin/process-student-data', [AdminController::class, 'processStudentData'])->name('process_student_data');
+//detail_modules
+Route::get('/admin/detail_modules', [DetailModuleController::class, 'index'])->name('detail_modules_form');
+Route::post('/admin/detail_modules', [DetailModuleController::class, 'processDetailModulesData'])->name('process_detail_modules_data');
 Route::get('/admin/Filier_modules', [AdminController::class, 'showFiliermodules'])->name('Filier_modules_form');
 Route::post('/admin/Filier_modules', [AdminController::class, 'processFiliermodules'])->name('Filier_modules_process');
 // admin/Filier_modules
 
 Route::post('/admin/Calendrier_modules', [CalendrierModuleController::class, 'insertCalendrierModules'])->name('Calendrier_modules_process');
 Route::get('/admin/Calendrier_modules', [CalendrierModuleController::class, 'showCalendriermodules'])->name('Calendrier_modules_form');
-
-// routes/web.php
-
-Route::middleware(['auth'])->group(function () {
-    // Your authenticated routes here
 
     Route::get('/admin', function () {
         return view('/dashboard');
@@ -128,9 +134,4 @@ Route::get('/login', function () {
 //         return redirect()->route('login');
 //     }
 // })->where('any', '.*');
-Route::get('/admin/insert-student', [AdminController::class, 'showInsertStudentForm'])->name('insert_student_form');
-Route::post('/admin/process-student-data', [AdminController::class, 'processStudentData'])->name('process_student_data');
-//detail_modules
-Route::get('/admin/detail_modules', [DetailModuleController::class, 'index'])->name('detail_modules_form');
-Route::post('/admin/detail_modules', [DetailModuleController::class, 'processDetailModulesData'])->name('process_detail_modules_data');
 

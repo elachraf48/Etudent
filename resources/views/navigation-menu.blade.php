@@ -7,7 +7,7 @@
                     <!-- <x-application-mark class="block h-9 w-auto" /> -->
                     <img class="block h-12 w-auto" src="{{ url('./img/banner.png') }}" />
 
-                </a>
+                </a>    
             </div>
 
             <!-- Navigation Links -->
