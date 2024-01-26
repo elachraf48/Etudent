@@ -120,7 +120,7 @@ Route::post('/admin/Calendrier_modules', [CalendrierModuleController::class, 'in
 Route::get('/admin/Calendrier_modules', [CalendrierModuleController::class, 'showCalendriermodules'])->name('Calendrier_modules_form');
 
     Route::get('/admin', function () {
-        return view('/dashboard');
+        return view('/admin/Filier_modules');
     })->name('admin.dashboard');
 });
 

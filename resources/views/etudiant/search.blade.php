@@ -4,8 +4,9 @@
 
 <div class="container">
 
-    @if ($student)
-    @foreach($student as $students)
+    @if ($student && count($student) > 0)
+    @foreach ($student as $key => $students)
+        @if ($key === count($student) - 1)
     <div class="container">
         <!-- Left Top Section -->
         <header class="row">
@@ -43,26 +44,25 @@
             <nav class="navbar navbar-expand-lg bg-dark">
                 <div class="container">
                     <a class="nav-link active text-white" aria-current="page" href="/">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
-                        </svg>Accueil
+                        <i class="fa-solid fa-house"></i> Accueil
                     </a>
-                    <a class="nav-link text-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
-                        </svg>Espace étudiant
+                    <a class="nav-link text-white m-1">
+                        <i class="fa-solid fa-arrow-right-long"></i> Espace étudiant
                     </a>
-                    <div class="d-flex ms-auto">
-                        <button class="btn btn-success" onclick="submitReclamation()">
+                    <div class="d-flex ms-auto ">
+                    <button class="btn btn-info m-1" onclick="printPage()">
+                            <i class="fa-solid fa-print"></i>
+                        </button>
+                        <button class="btn btn-success m-1" onclick="submitReclamation()">
                             Reclamation
                         </button>
-                        <button class="btn btn-danger" onclick='window.location.href = "{{ url("/") }}"'>
+                        <button class="btn btn-danger m-1" onclick='window.location.href = "{{ url("/") }}"'>
                             Déconnexion
                         </button>
 
                     </div>
 
-                </div>
+
             </nav>
         </header>
 
@@ -76,13 +76,13 @@
 
 
     </div>
-    @break
+    @endif
     @endforeach
     @endif
 
     @if ($student && count($groupedModules) > 0)
     @foreach ($groupedModules as $semesterKey => $modules)
-    <h5 class="mb-3 text-success">
+    <h5 class="mb-3 text-success mt-5">
         Licence d'études fondamentales Session de Printemps Semestre {{ $semesterKey }}
     </h5>
     <div class="exam-details">
@@ -147,6 +147,9 @@
             // Implement your reclamation submission logic here, for example, redirect to the reclamation page
             window.location.href = "{{ route('reclamation') }}";
         }
+        function printPage() {
+        window.print();
+    }
     </script>
 
 

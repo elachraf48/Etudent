@@ -1,7 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight text-center">
+            <!-- {{ __('WHELCOME') }}                                  -->
+            {{ __('Bonjour') }}  <span class="text-danger">{{ Auth::user()->name }}</span>
+
         </h2>
     </x-slot>
 
@@ -13,7 +15,6 @@
                     @yield('content')
                 </div>
                 <!-- Add a link to the bulk insert page -->
-                
             </div>
         </div>
     </div>

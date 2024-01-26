@@ -104,7 +104,7 @@
                         <select name="filiere" id="filiereDropdown" class="form-control" required>
                             @foreach($filieres as $filiere)
                             <option value="{{ $filiere->id }}">{{ $filiere->NomFiliere }}
-                                @if($filiere->Parcours!='NULL')
+                                @if($filiere->Parcours!='')
                                 {({{ $filiere->Parcours }})}
                                 @endif
                             </option>
@@ -309,7 +309,7 @@
                         optionsHtml += '<option value="' + filiere.id + '">' + filiere.NomFiliere;
 
                         // Include Parcours in parentheses if it's not 'NULL'
-                        if (filiere.Parcours !== 'NULL') {
+                        if (filiere.Parcours !== '') {
                             optionsHtml += ' (' + filiere.Parcours + ')';
                         }
 
