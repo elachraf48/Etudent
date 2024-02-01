@@ -11,7 +11,7 @@ use App\Models\Module;
 
 use Illuminate\Http\Request;
 
-class Reclamation extends Controller
+class ReclamationController extends Controller
 {
     public function index(Request $request)
     {

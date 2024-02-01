@@ -33,6 +33,10 @@
                         <x-nav-link href="{{ route('detail_modules_form') }}" :active="request()->routeIs('dashboard')">
                             {{ __('Detail Modules') }}
                         </x-nav-link>
+                        <br>
+                        <x-nav-link href="{{ route('bulk_professeurs_process') }}" :active="request()->routeIs('dashboard')">
+                            {{ __('Professeurs') }}
+                        </x-nav-link>
                     </ul>
                 </li>
 
