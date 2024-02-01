@@ -29,7 +29,14 @@
             <div id="liveAlertPlaceholder"></div>
 
             <!-- Display the current date -->
-            <input type="hidden" value="{{ now()->toDateString() }}">
+
+            <?php
+            $currentYear = date('Y');
+            $AnneeUniversitaire = ($currentYear - 1) . '-' . $currentYear;
+            ?>
+
+            <input type="hidden" name="AnneeUniversitaire" value="<?= $AnneeUniversitaire ?>" />
+
             <!-- Input fields for nom and prenom -->
             <div class="row g-2 mt-1  pt-2">
                 <label for="nom" class="clearfix">
@@ -38,7 +45,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="text" name="nom" placeholder="" class="form-control" required>
+                        <input type="text" name="nom" value="{{$etudiants->Nom}}" placeholder="" class="form-control" required>
                         <label for="floatingSelectGrid">Nom de famille</label>
                     </div>
                 </div>
@@ -51,7 +58,7 @@
                 <div class="col-md">
 
                     <div class="form-floating">
-                        <input type="text" name="prenom" placeholder="" class="form-control" required>
+                        <input type="text" name="prenom" value="{{$etudiants->Prenom}}" placeholder="" class="form-control" required>
                         <label for="floatingSelectGrid">prénom</label>
                     </div>
                 </div>
@@ -65,7 +72,7 @@
                 </label>
                 <div class="col-md" alt="madirch 0">
                     <div class="form-floating">
-                        <input type="number" placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                        <input type="number" value="{{$etudiants->CodeApogee}}" placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
                         <label for="floatingSelectGrid">Code Apogée</label>
 
                     </div>
@@ -359,40 +366,39 @@
     const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
     const formswitch = document.getElementById('formswitch');
 
-const alert = (message, type) => {
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = [
-        `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-        `   <div>${message}</div>`,
-        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-        '</div>'
-    ].join('');
+    const alert = (message, type) => {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = [
+            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+            `   <div>${message}</div>`,
+            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+        ].join('');
 
-    alertPlaceholder.innerHTML = ''; // Clear previous alerts
-    alertPlaceholder.append(wrapper);
-    formswitch.classList.add('text-danger');
-    // Hide the alert after 6 seconds (6000 milliseconds)
-    setTimeout(() => {
-        alertPlaceholder.innerHTML = ''; // Clear the alert after 6 seconds
-    }, 10000);
-};
+        alertPlaceholder.innerHTML = ''; // Clear previous alerts
+        alertPlaceholder.append(wrapper);
+        formswitch.classList.add('text-danger');
+        // Hide the alert after 6 seconds (6000 milliseconds)
+        setTimeout(() => {
+            alertPlaceholder.innerHTML = ''; // Clear the alert after 6 seconds
+        }, 10000);
+    };
 
-const alertTrigger = document.getElementById('sub');
+    const alertTrigger = document.getElementById('sub');
 
-if (alertTrigger) {
-    alertTrigger.addEventListener('click', () => {
-        if ($('#flexSwitchCheckDefault').is(':checked')) {
-            // Checkbox is checked, perform your actions here
-            // For example, submit the form or execute some other logic
-        } else {
+    if (alertTrigger) {
+        alertTrigger.addEventListener('click', () => {
+            if ($('#flexSwitchCheckDefault').is(':checked')) {
+                // Checkbox is checked, perform your actions here
+                // For example, submit the form or execute some other logic
+            } else {
 
-            alert(`Toutes les informations sont-elles correctes ? Cliquez sur le bouton en fin de page pour accepter<br>
+                alert(`Toutes les informations sont-elles correctes ? Cliquez sur le bouton en fin de page pour accepter<br>
             هل كل المعلومات صحيحة؟ انقر على الزر الموجود في نهاية الصفحة للقبول 
             `, 'danger');
-        }
-    });
-}
-
+            }
+        });
+    }
 </script>
 
 @endsection

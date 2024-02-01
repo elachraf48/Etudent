@@ -42,6 +42,8 @@ use App\Http\Controllers\InfoExameController;
 use App\Http\Controllers\CalendrierModuleController;
 use App\Http\Controllers\CalendrierModuleGroupeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Reclamation;
+use App\Http\Controllers\Professeur;
 // Routes for Filiere
 Route::resource('filieres', FiliereController::class);
 
@@ -52,8 +54,8 @@ Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('sea
 // routes/web.php
 
 // Define the resource routes
-Route::get('/reclamation', [InfoExameController::class, 'index'])->name('reclamation');
-Route::post('/reclamation/next', [InfoExameController::class, 'nextReclamation'])->name('reclamation.next');
+Route::get('/reclamation', [Reclamation::class, 'index'])->name('reclamation');
+Route::post('/reclamation/next', [Reclamation::class, 'nextReclamation'])->name('reclamation.next');
 
 // Add a custom route for the 'next' method
 
@@ -62,11 +64,11 @@ Route::post('/reclamation/next', [InfoExameController::class, 'nextReclamation']
 
 // In web.php
 Route::get('/fetch-filieres/{semester}', [CalendrierModuleController::class, 'fetchFilieresBySemester']);
-Route::get('/fetch-filieres/{semester}', [InfoExameController::class, 'fetchFilieresBySemester']);
+Route::get('/fetch-filieres/{semester}', [Reclamation::class, 'fetchFilieresBySemester']);
 Route::get('/fetch-filieres/{semester}', [DetailModuleController::class, 'fetchFilieresBySemester']);
 Route::get('/fetch-filieres/{semester}', [AdminController::class, 'fetchFilieresBySemester']);
 
-Route::get('/fetch-modules/{filiere}', [InfoExameController::class, 'fetchModules']);
+Route::get('/fetch-modules/{filiere}', [Reclamation::class, 'fetchModules']);
 
 
 // Routes for Etudiants_Filieres

@@ -1,0 +1,546 @@
+html {
+    font-size: 100px;
+    overflow-x: hidden
+}
+html.noScroll,html.noScroll body {
+    overflow: hidden
+}
+@media screen and (max-width: 1300px) and (min-width:801px) {
+    html {
+        font-size:-webkit-calc(((100vw - 800px)/28) + 82px);
+        font-size: -moz-calc(((100vw - 800px)/28) + 82px);
+        font-size: calc(((100vw - 800px)/28) + 82px)
+    }
+}
+
+@media screen and (max-width: 800px) and (min-width:601px) {
+    html {
+        font-size:100px
+    }
+}
+
+@media screen and (max-width: 360px) and (min-width:331px) {
+    html {
+        font-size:-webkit-calc(((100vw - 330px)/3) + 90px);
+        font-size: -moz-calc(((100vw - 330px)/3) + 90px);
+        font-size: calc(((100vw - 330px)/3) + 90px)
+    }
+}
+
+@media screen and (max-width: 330px) {
+    html {
+        font-size:90px
+    }
+}
+
+body {
+    font-family: Nunito,sans-serif;
+    font-weight: 400;
+    font-size: .16rem;
+    background: #fafafa;
+    color: #13375c;
+    overflow-x: hidden
+}
+
+[dir=rtl] body {
+    font-family: NeoSansArabicRegular,sans-serif
+}
+
+
+
+
+
+
+
+
+.formLoginStyle .item {
+    position: relative;
+    margin: 0 0 .3rem
+}
+
+@media screen and (max-width: 800px) {
+    .formLoginStyle .item {
+        text-align:center;
+        margin: 0 0 .16rem
+    }
+}
+
+.formLoginStyle input[type=number]{
+    font-family: Nunito,sans-serif;
+    font-size: .16rem;
+    width: 100%;
+    height: .4rem;
+    line-height: .4rem;
+    color: #6173a2;
+    padding: 0 .12rem;
+    background: #fff;
+    border: 1px solid rgba(97,115,162,.4);
+    -moz-border-radius: .04rem;
+    border-radius: .04rem
+}
+
+
+.formLoginStyle .submitBtn {
+    font-family: Nunito,sans-serif;
+    font-size: .16rem;
+    height: .4rem;
+    line-height: .4rem;
+    color: #fff;
+    background: -webkit-linear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
+    background: -moz- oldlinear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
+    background: -o-linear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
+    background: linear-gradient(135deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
+    -webkit-background-size: 200% 200%;
+    -moz-background-size: 200% 200%;
+    background-size: 200% 200%;
+    background-position: 0 0;
+    -moz-border-radius: .04rem;
+    border-radius: .04rem;
+    padding: 0 .2rem;
+    border: none;
+    cursor: pointer
+}
+
+[dir=rtl] .formLoginStyle .submitBtn {
+    font-family: NeoSansArabicRegular,sans-serif
+}
+
+.formLoginStyle .submitBtn.submitBtn-large {
+    width: 100%
+}
+
+.formLoginStyle .submitBtn:hover {
+    background-position: 100% 100%
+}
+
+
+
+
+
+
+.formLoginStyle .alert {
+    font-size: .13rem;
+    /* color: #fff; */
+    max-height: 5vh;
+    text-align: center;
+    padding: .5vh;
+    /* margin: 0 0 .3rem */
+}
+
+@media screen and (max-width: 800px) {
+    .formLoginStyle .alert {
+        text-align:center;
+        margin: 0 0 .16rem;
+        max-height: 7vh;
+    }
+}
+
+
+
+
+/* 
+
+.loginContent {
+    background: #fff
+} */
+
+.loginContent .main {
+    /* max-width: 1440px; */
+    margin: 0 auto;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -webkit-flex-direction: row-reverse;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+    -moz-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    min-height: 100vh
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .main {
+        display:block
+    }
+}
+
+.loginContent .rightSide {
+    position: relative;
+    z-index: 1;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 58.5%;
+    -moz-box-flex: 1;
+    -ms-flex: 1 1 58.5%;
+    flex: 1 1 58.5%;
+    min-height: 100vh
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .rightSide {
+        min-height:.01rem
+    }
+}
+
+.loginContent .rightSide:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: -webkit-calc(100% + 50vw - 720px);
+    width: -moz-calc(100% + 50vw - 720px);
+    width: calc(100% + 50vw - 720px);
+    background: -webkit-linear-gradient(316.36deg,#5c61a3,#105ba6 100%,#09203f 0);
+    background: -moz- oldlinear-gradient(316.36deg,#5c61a3,#105ba6 100%,#09203f 0);
+    background: -o-linear-gradient(316.36deg,#5c61a3,#105ba6 100%,#09203f 0);
+    background: linear-gradient(133.64deg,#5c61a3,#105ba6 100%,#09203f 0)
+}
+
+[dir=rtl] .loginContent .rightSide:before {
+    right: 0;
+    left: auto
+}
+
+@media screen and (max-width: 1440px) {
+    .loginContent .rightSide:before {
+        width:100%
+    }
+}
+
+.loginContent .rightSide.withPhotos:after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: -webkit-calc(100% + 50vw - 720px);
+    width: -moz-calc(100% + 50vw - 720px);
+    width: calc(100% + 50vw - 720px);
+    background: url(../img/photos-bg.png) 100% 0 no-repeat;
+    -webkit-background-size: auto 100%;
+    -moz-background-size: auto 100%;
+    background-size: auto 100%;
+    opacity: .65
+}
+
+[dir=rtl] .loginContent .rightSide.withPhotos:after {
+    right: 0;
+    left: auto;
+    -webkit-transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1)
+}
+
+@media screen and (max-width: 1440px) {
+    .loginContent .rightSide.withPhotos:after {
+        width:100%
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .rightSide.withPhotos:after {
+        background-position:100%;
+        -webkit-background-size: auto 216%;
+        -moz-background-size: auto 216%;
+        background-size: auto 216%;
+        opacity: .3
+    }
+}
+
+.loginContent .rightSide.withPhotos .welcome:before {
+    display: none
+}
+
+.loginContent .rightSide .welcome {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    padding: .84rem .54rem;
+    height: 100%;
+    text-shadow: 0 0 3px #5c61a3
+}
+
+@media screen and (max-width: 1100px) {
+    .loginContent .rightSide .welcome {
+        padding:.6rem .3rem
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .rightSide .welcome {
+        padding:.22rem .2rem 30px;
+        min-height: 1.7rem
+    }
+}
+
+.loginContent .rightSide .welcome:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: url(../img/welcome-bg.png) center bottom 10% no-repeat
+}
+
+[dir=rtl] .loginContent .rightSide .welcome:before {
+    -webkit-transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1)
+}
+
+@media screen and (max-width: 1100px) {
+    .loginContent .rightSide .welcome:before {
+        padding:.6rem .3rem
+    }
+}
+
+@media screen and (max-height: 900px) {
+    .loginContent .rightSide .welcome:before {
+        -webkit-background-size:auto 60%;
+        -moz-background-size: auto 60%;
+        background-size: auto 60%
+    }
+}
+
+@media (orientation: portrait) {
+    .loginContent .rightSide .welcome:before {
+        -webkit-background-size:90% auto;
+        -moz-background-size: 90% auto;
+        background-size: 90% auto
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .rightSide .welcome:before {
+        -webkit-background-size:auto 116%;
+        -moz-background-size: auto 116%;
+        background-size: auto 116%;
+        background-position: right 10% top 10px;
+        opacity: .6
+    }
+}
+
+.loginContent .rightSide .welcome .inner {
+    position: relative;
+    z-index: 2;
+
+}
+/* .logine {
+    position: absolute;
+    z-index: 2;
+    top: -20vh; 
+} */
+.loginContent .rightSide .welcome .welcomeTitle {
+    font-size: .62rem;
+    line-height: .62rem;
+    font-weight: 400;
+    margin: 0 0 .3rem;
+    max-width: 106rem
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .rightSide .welcome .welcomeTitle {
+        font-size:.2rem;
+        line-height: .35rem;
+        margin: 0 0 .14rem
+    }
+    .logine {
+        position: relative;
+        z-index: 2;
+        top: 0;
+    }
+    /* body{
+        overflow: hidden
+    }*/
+    .rightSide {
+        height: 30vh;
+        font-size: small;
+    
+    } 
+}
+
+.loginContent .rightSide .welcome .welcomeDesc {
+    font-size: .18rem;
+    line-height: .26rem;
+    max-width: 5.3rem
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .rightSide .welcome .welcomeDesc {
+        font-size:.14rem;
+        line-height: .2rem
+    }
+}
+
+.loginContent .leftSide {
+    background: #fff;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 41.5%;
+    -moz-box-flex: 1;
+    -ms-flex: 1 1 41.5%;
+    flex: 1 1 41.5%;
+    padding: .3rem 0
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .leftSide {
+        position:relative;
+        z-index: 2;
+        margin: -13px 0 0;
+        padding: .18rem 0;
+        -moz-border-radius: 13px 13px 0 0;
+        border-radius: 13px 13px 0 0
+    }
+}
+
+.loginContent .leftSide .inner {
+    height: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -moz-box-orient: vertical;
+    -moz-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -moz-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    max-width: 5.46rem;
+    padding: 0 .2rem;
+    margin: 0 auto
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .leftSide .inner {
+        max-width:6.4rem
+    }
+}
+
+.loginContent .ministryLogo {
+    margin: 0 0 .3rem
+}
+
+.loginContent .ministryLogo img {
+    display: block;
+    height: auto;
+    margin: 0 auto;
+    max-width: 8.47rem;
+    width: 100%
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .ministryLogo img {
+        width:78%
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .formLogin {
+        margin:0 0 .16rem
+    }
+}
+
+.loginContent .formLogin .massarLogo {
+    margin: 0 0 .3rem
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .formLogin .massarLogo {
+        margin:0 0 .16rem
+    }
+}
+
+.loginContent .formLogin .massarLogo img {
+    display: block;
+    height: auto;
+    margin: 0 auto;
+    max-width: 2.45rem;
+    width: 90%
+}
+
+@media screen and (max-width: 800px) {
+    .loginContent .formLogin .massarLogo img {
+        width:42%
+    }
+}
+
+.loginContent .formLogin a {
+    font-size: .12rem;
+    line-height: .16rem;
+    color: #9296a1
+}
+
+.loginContent .formLogin a:hover {
+    text-decoration: underline
+}
+
+.loginContent .navLang ul {
+    font-size: 0
+}
+
+.loginContent .navLang ul li {
+    font-size: .14rem;
+    line-height: .18rem;
+    text-transform: uppercase;
+    display: inline-block;
+    vertical-align: middle
+}
+
+.loginContent .navLang ul li:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: .06rem;
+    width: 1px;
+    background: #abb5ce;
+    margin: 0 .08rem
+}
+
+[dir=rtl] .loginContent .navLang ul li:before {
+    margin: .04rem .08rem 0
+}
+
+.loginContent .navLang ul li:first-child:before {
+    display: none
+}
+
+.loginContent .navLang ul li a {
+    display: inline-block;
+    vertical-align: middle;
+    color: #abb5ce
+}
+
+.loginContent .navLang ul li a.current {
+    font-weight: 700;
+    color: #505f86
+}
+
+.loginContent .navLang ul li a:not(.current):hover {
+    color: #505f86
+}
+
+/*# sourceMappingURL=login.css.map */
