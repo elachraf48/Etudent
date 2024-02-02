@@ -3,10 +3,14 @@
 @section('content')
 
 <div class="container">
-
+    @if (session('error'))
+    <div class="alert alert-danger">
+        <p>{!! session('error') !!}</p>
+    </div>
+    @endif
     @if ($student && count($student) > 0)
     @foreach ($student as $key => $students)
-        @if ($key === count($student) - 1)
+    @if ($key === count($student) - 1)
     <div class="container">
         <!-- Left Top Section -->
         <header class="row">
@@ -50,7 +54,7 @@
                         <i class="fa-solid fa-arrow-right-long"></i> Espace étudiant
                     </a>
                     <div class="d-flex ms-auto ">
-                    <button class="btn btn-info m-1" onclick="printPage()">
+                        <button class="btn btn-info m-1" onclick="printPage()">
                             <i class="fa-solid fa-print"></i>
                         </button>
                         <button class="btn btn-success m-1" onclick="submitReclamation()">
@@ -147,9 +151,10 @@
             // Implement your reclamation submission logic here, for example, redirect to the reclamation page
             window.location.href = "{{ route('reclamation') }}";
         }
+
         function printPage() {
-        window.print();
-    }
+            window.print();
+        }
     </script>
 
 

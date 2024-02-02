@@ -56,8 +56,9 @@ Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('sea
 // routes/web.php
 
 // Define the resource routes
-Route::get('/reclamation', [ReclamationController::class, 'index'])->name('reclamation');
+Route::resource('/reclamation', ReclamationController::class);  
 Route::post('/reclamation/next', [ReclamationController::class, 'nextReclamation'])->name('reclamation.next');
+// Route::resource('/reclamation', ReclamationController::class)->except(['show']);
 
 // Add a custom route for the 'next' method
 

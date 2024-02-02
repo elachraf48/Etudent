@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 class DetailModuleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource.lmowadef dyalna lah ynesro 
      *
      * @return \Illuminate\Http\Response
      */

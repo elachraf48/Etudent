@@ -5,7 +5,8 @@
 @section('content')
 <!-- Center the container vertically and horizontally, and apply cool background color -->
 
-@csrf
+
+
 <!-- CSRF token for Laravel security -->
 <section class="text-center">
     <div class="container text-center">
@@ -25,7 +26,9 @@
     </div>
 
     <div class="container-fluid d-flex align-items-center justify-content-center bg-cool   p-3">
-        <form>
+
+        <form  action="{{ route('reclamation.next') }}">
+
             <div id="liveAlertPlaceholder"></div>
 
             <!-- Display the current date -->
@@ -36,29 +39,211 @@
             ?>
 
             <input type="hidden" name="AnneeUniversitaire" value="<?= $AnneeUniversitaire ?>" />
+            @if ($student && count($student) > 0)
+                @foreach ($student as $key => $students)
+                    @if ($key === count($student) - 1)
+                    <!-- Input fields for nom and prenom -->
+                    <div class="row g-2 mt-1  pt-2">
+                        <label for="nom" class="clearfix">
+                            <span class="float-start">Nom de famille</span>
+                            <span class="float-end"> اسم العائلي</span>
+                        </label>
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="text" name="nom" value="{{ $students->Nom }}" placeholder="" class="form-control" disabled required>
+                                <label for="floatingSelectGrid">Nom de famille</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-1  pt-2">
+                        <label for="prenom" class="clearfix">
+                            <span class="float-start">prénom</span>
+                            <span class="float-end"> الاسم الشخصي </span>
+                        </label>
+                        <div class="col-md">
 
+                            <div class="form-floating">
+                                <input type="text" name="prenom" value="{{$students->Prenom}}" placeholder="" class="form-control" disabled required>
+                                <label for="floatingSelectGrid">prénom</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row g-2 mt-1  pt-2">
+                        <label for="number" class="clearfix">
+                            <span class="float-start">Numéro d'inscription Apogée</span>
+                            <span class="float-end"> رقم التسجيل أبوجي</span>
+                        </label>
+                        <div class="col-md" alt="madirch 0">
+                            <div class="form-floating">
+                                <input type="number" value="{{$students->CodeApogee}}" disabled placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                                <label for="floatingSelectGrid">Code Apogée</label>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    @endif
+                @endforeach
+                <div class="row g-2 mt-1">
+                    <label for="semester" class="clearfix">
+                        <span class="float-start">Semestre</span>
+                        <span class="float-end"> السداسي</span>
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <select name="semester" id="semesterDropdown" class="form-control" disabled required>
+                                <!-- <option value="S1">S1</option>
+                                <option value="S2">S2</option>
+                                <option value="S3">S3</option>
+                                <option value="S4">S4</option>
+                                <option value="S5">S5</option>
+                                <option value="S6">S6</option> -->
+                                <option value="{{$semester}}">{{$semester}}</option>
+
+                            </select>
+                            <label for="floatingSelectGrid">Semester</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dropdown list for semester, filiere, option -->
+                <!-- Input fields for N apogee and N d'examen -->
+                <div class="row g-2 mt-1">
+                    <label for="filiere" class="clearfix">
+                        <span class="float-start">Filiere</span>
+                        <span class="float-end"> المسلك</span>
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <select name="filiere" id="filiereDropdown" class="form-control" disabled required>
+                                @foreach($filieres as $filiere)
+                                <option value="{{ $filiere->id }}">{{ $filiere->NomFiliere }}
+                                    @if($filiere->Parcours!='')
+                                    {({{ $filiere->Parcours }})}
+                                    @endif
+                                </option>
+                                @endforeach
+                            </select>
+                            <label for="floatingSelectGrid">Filiere</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-2 mt-1  pt-2">
+                    <label for="module" class="clearfix">
+                        <span class="float-start">Module</span>
+                        <span class="float-end"> الوحدة</span>
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <select name="module" id="moduleDropdown" class="form-control" required>
+                                
+                                @foreach ($student as $Module )
+                                <option value="{{$Module->idModule}}" >{{ $Module->NomModule }}</option>
+                                @endforeach
+                            </select>
+                            <label for="floatingSelectGrid">Module</label>
+                        </div>
+                    </div>
+                </div>
+
+
+                @foreach ($student as $key => $students)
+                    @if ($key === count($student) - 1)
+                <div class="row g-2 mt-1  pt-2">
+                    <label for="ndexamen" class="clearfix">
+                        <span class="float-start">N d'examen</span>
+                        <span class="float-end"> رقم الامتحان</span>
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="number" disabled value="{{$students->NumeroExamen}}" name="ndexamen" oninput="removeLeadingZeros(this)" maxlength="7" placeholder="" class="form-control" required>
+                            <label for="floatingSelectGrid">N d'examen</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2 mt-1  pt-2">
+                    <label for="filiere" class="clearfix">
+                        <span class="float-start">Salle ou Aphhi</span>
+                        <span class="float-end"> مكان اجتياز الامتحان</span>
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" value="{{$students->Lieu}}" name="filiere" placeholder="" class="form-control" disabled required>
+                            <label for="floatingSelectGrid">Salle ou Aphhi</label>
+                        </div>
+                    </div>
+                </div>
+                @if($students->NomGroupe!='0')
+                <div class="row g-2 mt-1  pt-2">
+                    <label for="option" class="clearfix">
+                        <span class="float-start">Group</span>
+                        <span class="float-end"> مجموعة</span>
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" value="{{$students->NomGroupe}}" name="option" placeholder="" disabled class="form-control">
+                            <label for="floatingSelectGrid">Group</label>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+
+                @endif
+                @endforeach
+
+                <!-- Input field for professeur -->
+                <div class="row g-2 mt-1">
+                    <label for="professeurv" class="clearfix">
+                        <span class="float-start">Professeur</span>
+                        <span class="float-end"> مدرس</span>
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <select name="professeur" id="filiereDropdown" class="form-control" required>
+                                <option value="S2">S2</option>
+
+                            </select>
+                            <label for="floatingSelectGrid">Professeur</label>
+                        </div>
+                    </div>
+                </div>
+
+
+            
+
+                
+            @else
+            <div class="alert alert-danger" role="alert">
+                اسمك غير مدرج في قائمة الامتحانات المرجو ملئ الاستمارة كاملة
+                <br>
+                Votre nom ne figure pas sur la liste d'examen, veuillez remplir complètement le formulaire.
+            </div>
             <!-- Input fields for nom and prenom -->
             <div class="row g-2 mt-1  pt-2">
                 <label for="nom" class="clearfix">
-                    <span class="float-start">Nom de famille</span>
-                    <span class="float-end"> اسم العائلي</span>
+                    <span class="float-start">Nom de famille <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> اسم العائلي</span>
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="text" name="nom" value="{{$etudiants->Nom}}" placeholder="" class="form-control" required>
+                        <input type="text" name="nom"  placeholder="" class="form-control" required>
                         <label for="floatingSelectGrid">Nom de famille</label>
                     </div>
                 </div>
             </div>
             <div class="row g-2 mt-1  pt-2">
                 <label for="prenom" class="clearfix">
-                    <span class="float-start">prénom</span>
-                    <span class="float-end"> الاسم الشخصي </span>
+                    <span class="float-start">prénom <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> الاسم الشخصي </span>
                 </label>
                 <div class="col-md">
 
                     <div class="form-floating">
-                        <input type="text" name="prenom" value="{{$etudiants->Prenom}}" placeholder="" class="form-control" required>
+                        <input type="text" name="prenom"  placeholder="" class="form-control" required>
                         <label for="floatingSelectGrid">prénom</label>
                     </div>
                 </div>
@@ -67,12 +252,12 @@
 
             <div class="row g-2 mt-1  pt-2">
                 <label for="number" class="clearfix">
-                    <span class="float-start">Numéro d'inscription Apogée</span>
-                    <span class="float-end"> رقم التسجيل أبوجي</span>
+                    <span class="float-start">Numéro d'inscription Apogée <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> رقم التسجيل أبوجي</span>
                 </label>
                 <div class="col-md" alt="madirch 0">
                     <div class="form-floating">
-                        <input type="number" value="{{$etudiants->CodeApogee}}" placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                        <input type="number"  placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
                         <label for="floatingSelectGrid">Code Apogée</label>
 
                     </div>
@@ -81,18 +266,14 @@
             </div>
             <div class="row g-2 mt-1">
                 <label for="semester" class="clearfix">
-                    <span class="float-start">Semestre</span>
-                    <span class="float-end"> السداسي</span>
+                    <span class="float-start">Semestre <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> السداسي</span>
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
                         <select name="semester" id="semesterDropdown" class="form-control" required>
-                            <option value="S1">S1</option>
-                            <option value="S2">S2</option>
-                            <option value="S3">S3</option>
-                            <option value="S4">S4</option>
-                            <option value="S5">S5</option>
-                            <option value="S6">S6</option>
+                            <option value="{{$semester}}">{{$semester}}</option>
+                           
                         </select>
                         <label for="floatingSelectGrid">Semester</label>
                     </div>
@@ -103,8 +284,8 @@
             <!-- Input fields for N apogee and N d'examen -->
             <div class="row g-2 mt-1">
                 <label for="filiere" class="clearfix">
-                    <span class="float-start">Filiere</span>
-                    <span class="float-end"> المسلك</span>
+                    <span class="float-start">Filiere <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> المسلك</span>
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
@@ -124,8 +305,8 @@
 
             <div class="row g-2 mt-1  pt-2">
                 <label for="module" class="clearfix">
-                    <span class="float-start">Module</span>
-                    <span class="float-end"> الوحدة</span>
+                    <span class="float-start">Module <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> الوحدة</span>
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
@@ -143,8 +324,8 @@
 
             <div class="row g-2 mt-1  pt-2">
                 <label for="ndexamen" class="clearfix">
-                    <span class="float-start">N d'examen</span>
-                    <span class="float-end"> رقم الامتحان</span>
+                    <span class="float-start">N d'examen <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> رقم الامتحان</span>
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
@@ -155,8 +336,8 @@
             </div>
             <div class="row g-2 mt-1  pt-2">
                 <label for="filiere" class="clearfix">
-                    <span class="float-start">Salle ou Aphhi</span>
-                    <span class="float-end"> مكان اجتياز الامتحان</span>
+                    <span class="float-start">Salle ou Aphhi <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> مكان اجتياز الامتحان</span>
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
@@ -165,23 +346,48 @@
                     </div>
                 </div>
             </div>
+        @if( count($Groups)>1)
             <div class="row g-2 mt-1  pt-2">
                 <label for="option" class="clearfix">
                     <span class="float-start">Group</span>
-                    <span class="float-end"> </span>
+                    <span class="float-end">مجموعة </span>
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="text" name="option" placeholder="" class="form-control">
+                        <select name="module" id="moduleDropdown" class="form-control" required>
+                            @foreach($Groups as $Group)
+                            <option value="{{ $Group->id }}">{{ $Group->nomGroupe }}</option>
+                            @endforeach
+                        </select>
                         <label for="floatingSelectGrid">Group</label>
                     </div>
                 </div>
             </div>
+            @endif
+            <!-- Input field for professeur -->
+            <div class="row g-2 mt-1">
+                <label for="professeurv" class="clearfix">
+                    <span class="float-start">Professeur <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> مدرس</span>
+                </label>
+                <div class="col-md">
+                    <div class="form-floating">
+                        <select name="professeur" id="filiereDropdown" class="form-control" required>
+                            <option value="S2">S2</option>
 
+                        </select>
+                        <label for="floatingSelectGrid">Professeur</label>
+                    </div>
+                </div>
+            </div>
+
+
+
+            @endif
             <div class="row g-2 mt-1">
                 <label for="reclamation" class="clearfix">
-                    <span class="float-start">Sujet de la réclamation</span>
-                    <span class="float-end"> موضوع الطلب</span>
+                    <span class="float-start">Sujet de la réclamation <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> موضوع الطلب</span>
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
@@ -217,33 +423,11 @@
                 </div>
             </div>
 
-
-
-
-
-            <!-- Input field for professeur -->
-            <div class="row g-2 mt-1">
-                <label for="professeurv" class="clearfix">
-                    <span class="float-start">Professeur</span>
-                    <span class="float-end"> مدرس</span>
-                </label>
-                <div class="col-md">
-                    <div class="form-floating">
-                        <select name="professeur" id="filiereDropdown" class="form-control" required>
-                            <option value="S2">S2</option>
-
-                        </select>
-                        <label for="floatingSelectGrid">Professeur</label>
-                    </div>
-                </div>
-            </div>
-
-
             <!-- Input field for Comments -->
             <div class="row g-2 mt-1  pt-2">
                 <label for="couse" class="clearfix">
-                    <span class="float-start">observations</span>
-                    <span class="float-end">ملاحظات</span>
+                    <span class="float-start">observations <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span>  ملاحظات   </span>
                 </label>
                 <div class="col-md">
                     <div class="form-floating">

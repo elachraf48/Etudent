@@ -65,7 +65,7 @@ body {
     }
 }
 
-.formLoginStyle input[type=number]{
+.formLoginStyle input[type=number],.formLoginStyle select{
     font-family: Nunito,sans-serif;
     font-size: .16rem;
     width: 100%;
@@ -76,9 +76,11 @@ body {
     background: #fff;
     border: 1px solid rgba(97,115,162,.4);
     -moz-border-radius: .04rem;
-    border-radius: .04rem
-}
+    border-radius: .04rem;
+    margin-bottom: .5vh;
+    cursor: pointer;
 
+}
 
 .formLoginStyle .submitBtn {
     font-family: Nunito,sans-serif;

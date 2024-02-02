@@ -53,7 +53,7 @@
                     <select name="AnneeUniversitaire" id="AnneeUniversitaire" class="form-control" required>
                         <?php
                         $currentYear = date('Y');
-                        for ($i = 0; $i < 3; $i++) {
+                        for ($i = 1; $i < 4; $i++) {
                             $startYear = $currentYear - $i;
                             $endYear = $startYear + 1;
                             $academicYear = $startYear . '-' . $endYear;
@@ -64,7 +64,6 @@
                     <label for="floatingSelectGrid">Annee Universitaire</label>
                 </div>
             </div>
-
             <div class="form-check form-switch form-check-inline">
                     <input class="form-check-input" type="checkbox" role="switch" id="groupe" name="groupe">
                     <label class="form-check-label" for="groupe">Aucun groupe</label>
