@@ -76,7 +76,7 @@
 
         <div class="mb-3">
 
-            <textarea name="bulk_professeurs_data" class="form-control" rows="10" required placeholder="Numéro d'examen,Code Apogee,Nom,Prénom,Date Naiss,LIEU,code FILIERE,Semester,GROUPE"></textarea>
+            <textarea name="bulk_professeurs_data" class="form-control" rows="10" required placeholder="Code Module ,Nom ,Prénom ,GROUPE "></textarea>
         </div>
         <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" id="methodSwitch" name="method_switch">
@@ -119,10 +119,10 @@
                 var groupeChecked = $('#groupe').prop('checked');
 
                 if (groupeChecked) {
-                    $('textarea[name="bulk_professeurs_data"]').attr('placeholder', "Module , Jour , Horaire");
+                    $('textarea[name="bulk_professeurs_data"]').attr('placeholder', "Code Module ,Nom ,Prénom ");
 
                 } else {
-                    $('textarea[name="bulk_professeurs_data"]').attr('placeholder', "Module , Jour , Horaire , GROUPE");
+                    $('textarea[name="bulk_professeurs_data"]').attr('placeholder', "Code Module ,Nom ,Prénom ,GROUPE ");
 
                 }
             });
@@ -141,7 +141,7 @@
                 var isChecked = $('#methodSwitch').prop('checked');
 
                 // Enable or disable the textarea and file input based on the checkbox state
-                $('textarea[name="detail_modules_data"]').prop('disabled', isChecked);
+                $('textarea[name="bulk_professeurs_data"]').prop('disabled', isChecked);
                 $('input[name="file"]').prop('disabled', !isChecked);
             }
             //filier show after change semester
@@ -200,7 +200,7 @@
                     // Loop through the modules and add rows to the table
                     $.each(modules, function(index, module) {
                         tableHtml += '<tr>';
-                        tableHtml += '<td>' + module.id + '</td>';
+                        tableHtml += '<td>' + module.CodeModule + '</td>';
                         tableHtml += '<td>' + module.NomModule + '</td>';
                         tableHtml += '</tr>';
                     });
