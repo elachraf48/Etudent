@@ -149,7 +149,7 @@
     <script>
         function submitReclamation() {
             // Implement your reclamation submission logic here, for example, redirect to the reclamation page
-            window.location.href = "{{ route('reclamation') }}";
+            window.location.href = "{{ route('reclamation.index') }}";
         }
 
         function printPage() {

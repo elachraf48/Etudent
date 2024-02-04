@@ -23,8 +23,7 @@
                     <div class="ministryLogo">
                         <img src="/img/ministry-logo-ar.png" alt="" />
                     </div>
-                    <form action="{{ route('reclamation.next') }}" method="POST" class="">
-                        @csrf
+                    <form action="{{ route('reclamation') }}" method="GET" class="">
                         <div class="formLogin">
                             <div class="massarLogo">
                                 <img src="/img/banner.png" alt="" />

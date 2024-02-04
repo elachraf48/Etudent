@@ -51,14 +51,15 @@ Route::resource('filieres', FiliereController::class);
 
 // Routes for Etudiant
 Route::resource('/', EtudiantController::class);
+// Route::resource('/etudiant', EtudiantController::class);
 
 Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('search');
 // routes/web.php
 
 // Define the resource routes
-Route::resource('/reclamation', ReclamationController::class);  
-Route::post('/reclamation/next', [ReclamationController::class, 'nextReclamation'])->name('reclamation.next');
-// Route::resource('/reclamation', ReclamationController::class)->except(['show']);
+Route::resource('/reclamation', ReclamationController::class);
+Route::get('/reclamation/next', [ReclamationController::class, 'show'])->name('reclamation');
+Route::post('/reclamation/next', [ReclamationController::class, 'update'])->name('reclamationpost');
 
 // Add a custom route for the 'next' method
 
