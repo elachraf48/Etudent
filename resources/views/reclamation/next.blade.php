@@ -21,6 +21,8 @@
                 <h4 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h4>
                 <h4 class="link-danger p-2">Demande de correction de faute matérielle concernant les résultats des examens.</h4>
 
+                <!-- <h4><span class="title">شكوى</span></h4>
+                <h4><span class="title">Réclamation</span></h4> -->
             </div>
         </div>
     </div>
@@ -34,37 +36,45 @@
 
             <!-- Display the current date -->
 
-            <?php
-            $currentYear = date('Y');
-            $AnneeUniversitaire = ($currentYear - 1) . '-' . $currentYear;
-            ?>
+            
+            @if ($studentuniue && count($studentuniue) > 0)
+                @php
+                    $Nom = $studentuniue[0]->Nom;
+                    $Prenom = $studentuniue[0]->Prenom;
+                    $CodeApogee = $studentuniue[0]->CodeApogee;
+                @endphp
+            @else
+                @php
+                    $Nom = '';
+                    $Prenom = '';
+                    $CodeApogee='';
+                @endphp
+            @endif
 
-            <input type="hidden" name="AnneeUniversitaire" value="<?= $AnneeUniversitaire ?>" />
             @if ($student && count($student) > 0)
                 @foreach ($student as $key => $students)
                     @if ($key === count($student) - 1)
                         @php
-                            $Nom=$students->Nom;
-                            $Prenom=$students->Prenom;
-                            $CodeApogee=$students->CodeApogee;
+                            
                             $NomGroupe=$students->NomGroupe;
                             $Lieu=$students->Lieu;
                             $NumeroExamen=$students->NumeroExamen;
+                            $idexam=$students->idexam;
                         @endphp
                     @endif
                 @endforeach
                 @else
                     @php
-                        $Nom='';
-                        $Prenom='';
-                        $NomGroupe='';
+                        $NomGroupe = '';
                         $Lieu='';
                         $NumeroExamen='';
+                        $idexam='';
                     @endphp
             @endif
+            <input type="hidden" name="idexam" value="<?= $idexam ?>" />
             @if (!$student || count($student) === 0)
             <div class="alert alert-danger" role="alert">
-                اسمك غير مدرج في قائمة الامتحانات المرجو ملئ الاستمارة كاملة
+                .اسمك غير مدرج في قائمة الامتحانات المرجو ملئ الاستمارة كاملة
                 <br>
                 Votre nom ne figure pas sur la liste d'examen, veuillez remplir complètement le formulaire.
             </div>
@@ -104,13 +114,29 @@
                 </label>
                 <div class="col-md" alt="madirch 0">
                     <div class="form-floating">
-                        <input type="number" value="{{ $codeApogee }}" disabled placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                        <input type="number" @if($CodeApogee!='' ) value="{{ $CodeApogee }}" disabled @endif  placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
                         <label for="floatingSelectGrid">Code Apogée</label>
 
                     </div>
                 </div>
 
             </div>
+            @if (!$studentuniue || count($studentuniue) === 0)
+            <div class="row g-2 mt-1  pt-2">
+                <label for="number" class="clearfix">
+                    <span class="float-start">Numéro d'inscription Apogée</span>
+                    <span class="float-end"> رقم التسجيل أبوجي</span>
+                </label>
+                <div class="col-md" alt="madirch 0">
+                    <div class="form-floating">
+                        <input type="date"  value=""   placeholder="" name="datenes"  class="form-control" required>
+                        <label for="floatingSelectGrid">Code Apogée</label>
+
+                    </div>
+                </div>
+
+            </div>
+            @endif
             <div class="row g-2 mt-1">
                 <label for="semester" class="clearfix">
                     <span class="float-start">Semestre <span class="text-danger">*</span></span>
@@ -155,6 +181,7 @@
                 <div class="col-md">
                     <div class="form-floating">
                         <select name="module" id="moduleDropdown" class="form-control" required>
+                            <option value="" disabled selected>Select Module</option>
                             @if ($student && count($student) > 0)
 
                             @foreach ($student as $Module )
@@ -175,13 +202,15 @@
 
             <div class="row g-2 mt-1  pt-2">
                 <label for="ndexamen" class="clearfix">
-                    <span class="float-start">N d'examen <span class="text-danger">*</span></span>
-                    <span class="float-end"><span class="text-danger">*</span> رقم الامتحان</span>
+                    <span class="float-start">N d'examen </span>
+                    <span class="float-end"> رقم الامتحان</span>
+                    
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="number" @if($NumeroExamen!='' ) value="{{ $NumeroExamen }}" disabled @endif name="ndexamen" oninput="removeLeadingZeros(this)" maxlength="7" placeholder="" class="form-control" required>
+                        <input type="number" @if($NumeroExamen!='' ) value="{{ $NumeroExamen }}" disabled @endif name="ndexamen" oninput="removeLeadingZeros(this)"  class="form-control" >
                         <label for="floatingSelectGrid">N d'examen</label>
+
                     </div>
                 </div>
             </div>
@@ -192,7 +221,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="text" name="filiere" @if($Lieu!='' ) value="{{ $Lieu }}" disabled @endif placeholder="" class="form-control" required>
+                        <input type="text" name="lieu" @if($Lieu!='' ) value="{{ $Lieu }}" disabled @endif placeholder="" class="form-control" required>
                         <label for="floatingSelectGrid">Salle ou Aphhi</label>
                     </div>
                 </div>
@@ -207,7 +236,7 @@
                     <div class="form-floating">
                         <!-- <input type="text" value="{{$students->NomGroupe}}" name="option" placeholder="" disabled class="form-control"> -->
 
-                        <select name="module" id="moduleDropdown" class="form-control" required>
+                        <select name="Group" id="GroupDropdown" class="form-control" required>
                             @foreach($Groups as $Group)
                             <option value="{{ $Group->id }}">{{ $Group->nomGroupe }}</option>
                             @endforeach
@@ -225,17 +254,13 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <select name="professeur" id="filiereDropdown" class="form-control" required>
-                            <option value="S2">S2</option>
+                        <select name="professeur" id="professeurDropdown" class="form-control" required>
 
                         </select>
                         <label for="floatingSelectGrid">Professeur</label>
                     </div>
                 </div>
             </div>
-
-
-
             <div class="row g-2 mt-1">
                 <label for="reclamation" class="clearfix">
                     <span class="float-start">Sujet de la réclamation <span class="text-danger">*</span></span>
@@ -244,7 +269,8 @@
                 <div class="col-md">
                     <div class="form-floating">
                         <select name="reclamation" id="idreclamation" class="form-control" required>
-                            <option disabled value="S5" selected><label class="clearfix">
+                            <option disabled value="" selected>
+                                <label class="clearfix">
                                     <span class="float-start">Sujet de la réclamation</span>
                                     <span class="float-end"> موضوع الطلب</span>
                                 </label>
@@ -254,17 +280,17 @@
                                     <span class="float-end"> غير مسجل في الوحدة</span>
                                 </label>
                             </option>
-                            <option value="S2"><label class="clearfix">
+                            <option value=""><label class="clearfix">
                                     <span class="float-start">Omission d'attribution de la note</span>
                                     <span class="float-end"> عدم ادراج النقطة</span>
                                 </label>
                             </option>
-                            <option value="S3"><label class="clearfix">
+                            <option value=""><label class="clearfix">
                                     <span class="float-start">erreur numéro examen ou numéro apogée</span>
                                     <span class="float-end"> خطأ في رقم الامتحان أو رقم أبوجي</span>
                                 </label>
                             </option>
-                            <option value="S4"><label class="clearfix">
+                            <option value=""><label class="clearfix">
                                     <span class="float-start">Demande de re-correction</span>
                                     <span class="float-end"> طلب إعادة التصحيح</span>
                                 </label>
@@ -292,14 +318,14 @@
             <div class="form-check form-switch " id="formswitch">
                 <input class="form-check-input " type="checkbox" id="flexSwitchCheckDefault" required>
                 <label class="form-check-label clearfix" for="flexSwitchCheckDefault">
-                    <span class="float-start">Recueillir des informations correctes ---</span>
-                    <span class="float-end"> جمع المعلومات صحيحة </span>
+                    <span class="float-start">Recueillir des informations correctes |</span>
+                    <span class="float-end">  جمع المعلومات صحيحة </span>
                 </label>
             </div>
-
             <!-- Submit button -->
-            <button onclick='window.location.href = "{{ url("/reclamation")}}"' class="btn btn-primary mt-1 w-25 ">Back</button>
-            <button type="submit" id="sub" class="btn btn-success mt-1 w-50">Next</button>
+            <button onclick='window.location.href = "{{ url("/reclamation/")}}"' class="btn btn-secondary  mt-1  float-start   w-25">Back <br>رجوع</button>
+            <button type="submit" id="sub" class="btn btn-success mt-1 w-25 float-end">Valider
+ <br> تأكيد</button>
         </form>
     </div>
 </section>
@@ -312,7 +338,6 @@
             success: function(data) {
                 // Assuming the data structure is { "modules": [...] }
                 var modules = data.modules;
-                optionsHtml += '<option value="' + selectedSemester + '">' + selectedFiliere + '</option>';
 
                 // Update the dropdown options
                 var optionsHtml = '';
@@ -325,12 +350,38 @@
             }
         });
     }
+    function change_professeurs(selectedmodule) {
+        $.ajax({
+            url: '/fetch-professeur/' + selectedmodule,
+            type: 'GET',
+            success: function(data) {
+                // Assuming the data structure is { "modules": [...] }
+                var professeurs = data.professeurs;
+
+                // Update the dropdown options
+                var optionsHtml = '';
+                $.each(professeurs, function(index, professeur) {
+                    optionsHtml += '<option value="' + professeur.id + '">' + professeur.Nom+' '+professeur.Prenom + '</option>';
+                });
+
+                // Set the updated options HTML to the dropdown
+                $('#professeurDropdown').html(optionsHtml);
+            }
+        });
+    }
     $(document).ready(function() {
         // Event listener for changes in the semester dropdown
         $('#filiereDropdown').change(function() {
             var selectedSemester = $('#semesterDropdown').val();
             var selectedFiliere = $('#filiereDropdown').val();
             change_module(selectedSemester, selectedFiliere);
+            // Make an Ajax request to fetch modules based on the selected semester and filiere
+
+
+        });
+        $('#moduleDropdown').change(function() {
+            var selectedmodule = $('#moduleDropdown').val();
+            change_professeurs(selectedmodule);
             // Make an Ajax request to fetch modules based on the selected semester and filiere
 
 
@@ -372,7 +423,9 @@
             });
         });
     });
-
+    function back(){
+        window.location.href = "{{ url("/reclamation+")}}";
+    }
     function removeLeadingZeros(input) {
         // Remove leading zeros using a regular expression
         input.value = input.value.replace(/^0+/, '');

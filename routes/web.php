@@ -59,7 +59,7 @@ Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('sea
 // Define the resource routes
 Route::resource('/reclamation', ReclamationController::class);
 Route::get('/reclamation/next', [ReclamationController::class, 'show'])->name('reclamation');
-Route::post('/reclamation/next', [ReclamationController::class, 'update'])->name('reclamationpost');
+Route::post('/reclamation/next', [ReclamationController::class, 'reclamationpost'])->name('reclamationpost');
 
 // Add a custom route for the 'next' method
 
@@ -71,6 +71,7 @@ Route::get('/fetch-filieres/{semester}', [CalendrierModuleController::class, 'fe
 Route::get('/fetch-filieres/{semester}', [ReclamationController::class, 'fetchFilieresBySemester']);
 Route::get('/fetch-filieres/{semester}', [DetailModuleController::class, 'fetchFilieresBySemester']);
 Route::get('/fetch-filieres/{semester}', [AdminController::class, 'fetchFilieresBySemester']);
+Route::get('/fetch-professeur/{fetchModules}', [ReclamationController::class, 'fetchProfesseur']);
 
 Route::get('/fetch-modules/{filiere}', [ReclamationController::class, 'fetchModules']);
 
@@ -123,8 +124,8 @@ Route::get('/admin/Filier_modules', [AdminController::class, 'showFiliermodules'
 Route::post('/admin/Filier_modules', [AdminController::class, 'processFiliermodules'])->name('Filier_modules_process');
 // admin/bulk_professeurs
 
-Route::get('/admin/bulk_professeurs', [ProfesseurController::class, 'index'])->name('bulk_professeurs_process');
-Route::post('/admin/bulk_professeurs', [ProfesseurController::class, 'show'])->name('bulk_professeurs_form');
+Route::get('/admin/bulk_professeurs', [ProfesseurController::class, 'index'])->name('bulk_professeurs_form');
+Route::post('/admin/bulk_professeurs', [ProfesseurController::class, 'bulk_professeurs_process'])->name('bulk_professeurs_process');
 // admin/Calendrier_modules
 
 Route::post('/admin/Calendrier_modules', [CalendrierModuleController::class, 'insertCalendrierModules'])->name('Calendrier_modules_process');

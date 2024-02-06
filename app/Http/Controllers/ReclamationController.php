@@ -10,9 +10,11 @@ use App\Models\Etudiant;
 use App\Models\Filiere;
 use App\Models\Module;
 use App\Models\Groupe;
+use App\Models\Professeur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Support\Carbon;
 
 class ReclamationController extends Controller
 {
@@ -36,6 +38,10 @@ class ReclamationController extends Controller
         $codeApogee = $request->input('CodeApogee');
         $semester = $request->input('semester');
         $filiere = $request->input('filiere');
+        $filieres = Filiere::where('id', $filiere)->get(['id', 'NomFiliere', 'Parcours']);
+        $studentuniue = Etudiant::where('CodeApogee', $codeApogee)->get(['CodeApogee', 'Nom', 'Prenom']);
+        $Modules = Module::where('idFiliere', $filiere)->get(['id', 'NomModule', 'CodeModule']);
+        $Groups = Groupe::where('Semester', $semester)->where('AnneeUniversitaire', $AnneeUniversitaire)->get(['id', 'nomGroupe']);
 
         $validator = Validator::make(['CodeApogee' => $codeApogee], [
             'CodeApogee' => 'required|integer', // Add any additional validation rules
@@ -52,7 +58,7 @@ class ReclamationController extends Controller
                 'm.NomModule as NomModule',
                 'm.id as idModule',
                 'g.nomGroupe as NomGroupe',
-                'ie.Lieu as Lieu',
+                'ie.Lieu as Lieu','ie.id as idexam',
                 'ie.AnneeUniversitaire as ExamenAnneeUniversitaire',
                 'ie.NumeroExamen as NumeroExamen',
                 'ie.Semester as ExamenSemester',
@@ -88,63 +94,15 @@ class ReclamationController extends Controller
 
             ->get();
 
-
-        $filieres = Filiere::where('id', $filiere)->get(['id', 'NomFiliere', 'Parcours']);
-
-
-        $Modules = Module::where('idFiliere', $filiere)->get(['id', 'NomModule', 'CodeModule']);
-        $Groups = Groupe::where('Semester', $semester)->where('AnneeUniversitaire', $AnneeUniversitaire)->get(['id', 'nomGroupe']);
-
-
-        // if (count($student)>0) {
-        //     return redirect()->route('reclamation.next')->with('error', 'Aucun étudiant trouvé <br>avec le Code Apogee fourni.');
-        // } else {
-        //     return redirect()->route('reclamation.index')->with('error', 'Aucun étudiant trouvé <br>avec le Code Apogee fourni.');
-        // }
-
         if ($validator->fails()) {
             // Handle validation failure, e.g., return an error response
             return response()->json(['error' => $validator->errors()], 400);
         }
 
 
-        return view('reclamation.next', compact('filieres', 'Modules', 'student', 'semester', 'Groups','codeApogee'));
+        return view('reclamation.next', compact('filieres', 'Modules', 'student', 'semester', 'Groups','studentuniue'));
     }
-    public function getModules(Request $request)
-    {
-        // Validate the request
-        $request->validate([
-            'nomFiliere' => 'required|string',
-            'semester' => 'required|string',
-            'parcours' => 'required|string',
-        ]);
-
-        // Get the selected values from the request
-        $nomFiliere = $request->input('nomFiliere');
-        $semester = $request->input('semester');
-        $parcours = $request->input('parcours');
-
-        // Construct the query to fetch modules based on selected values
-        $modules = Module::select('NomModule', 'CodeModule')
-            ->where('idFiliere', function ($subquery) use ($semester, $nomFiliere, $parcours) {
-                $subquery->select('id')
-                    ->from('Filieres')
-                    ->where('CodeFiliere', 'like', '%' . $semester)
-                    ->where('NomFiliere', $nomFiliere)
-                    ->where('Parcours', $parcours);
-            })
-            ->distinct()
-            ->pluck('NomModule', 'CodeModule');
-
-        // Check if any modules were found
-        if ($modules->isEmpty()) {
-            // If no modules found, you may return an empty array or handle it as needed
-            return response()->json([]);
-        }
-
-        // Return the fetched modules as a JSON response
-        return response()->json($modules);
-    }
+    
     public function fetchFilieresBySemester($semester)
     {
         // Fetch filieres based on the selected semester
@@ -157,6 +115,23 @@ class ReclamationController extends Controller
 
         // Return filieres as JSON
         return response()->json(['filieres' => $filieres]);
+    }
+    public function fetchProfesseur($modules)
+    {
+        // Fetch filieres based on the selected semester
+        $professeurs = DB::table('professeurs as p')
+        ->select('*')
+        ->join('detail_professeurs as dp', 'p.id', '=', 'dp.idProfesseur')
+        ->where('dp.idModule', $modules)
+        ->get();
+    
+        // Check if filieres are empty
+        if ($professeurs->isEmpty()) {
+            return response()->json(['message' => 'No professeurs found for the selected module'], 404);
+        }
+
+        // Return filieres as JSON
+        return response()->json(['professeurs' => $professeurs]);
     }
     public function fetchModules($filiere)
     {
@@ -172,19 +147,58 @@ class ReclamationController extends Controller
         return response()->json(['modules' => $modules]);
     }
     // ReclamationController.php
-    public function update()
+    public function reclamationpost(Request $request)
     {
-        $filieres = Filiere::where('CodeFiliere', 'LIKE', '%S1')->get(['id', 'NomFiliere', 'Parcours']);
+        $AnneeUniversitaire = (date('Y') - 1) . '-' . date('Y');
+        $codeApogee = $request->input('CodeApogee');
+        $semester = $request->input('semester');
+        $filiere = $request->input('filiere');
+        $Nom= $request->input('Nom');
+        $Prenom = $request->input('Prenom');
+        $idexam = $request->input('idexam');
+        $datenes = $request->input('datenes');
+        $module = $request->input('module');
+        $ndexamen = $request->input('ndexamen');
+        $lieu = $request->input('lieu');
+        $Group = $request->input('Group');
+        $professeur = $request->input('professeur');
+        $reclamation = $request->input('reclamation');
+        $couse = $request->input('couse');
+        //insert  Student
+        $existingStudent = DB::table('etudiants')
+        ->where('CodeApogee', $codeApogee)
+        ->first();
 
+        if ($existingStudent) {
+            // If student exists, get the existing student's ID
+            $etudiantId = $existingStudent->id;
+        } else {
+            $rawDate = str_replace(' ', '', $datenes);
+            $formattedDate = Carbon::createFromFormat('d/m/Y', $rawDate)->format('Y-m-d');
 
+            // If student doesn't exist, insert into Etudiants table and get the new student's ID
+            $etudiantId = DB::table('etudiants')->insertGetId([
+                'CodeApogee' => $codeApogee,
+                'Nom' => $Nom,
+                'Prenom' => $Prenom,
+                'DateNaiss' => $formattedDate,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
-        return view('reclamation.index', compact('filieres'));
+        }
+        if($idexam!=''){
+
+            return redirect()->route('reclamation.index')->with('error', 'Aucun étudiant trouvé avec le Code Apogee fourni.'.$AnneeUniversitaire.$idexam);
+
+        }
+
+        return $this->index();
         // Add any necessary logic here
     }
 
     public function nextReclamationv2()
     {
-        return view('reclamation.next');
-        // Add any necessary logic here
+        return $this->index();
     }
 }

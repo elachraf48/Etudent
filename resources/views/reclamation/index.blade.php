@@ -23,7 +23,7 @@
                     <div class="ministryLogo">
                         <img src="/img/ministry-logo-ar.png" alt="" />
                     </div>
-                    <form action="{{ route('reclamation') }}" method="GET" class="">
+                    <form action="{{ route('reclamation') }}" method="GET" class="" onsubmit="return validateForm()">
                         <div class="formLogin">
                             <div class="massarLogo">
                                 <img src="/img/banner.png" alt="" />
@@ -54,7 +54,9 @@
                                 </div>
                                 <div class="item">
                                 </div>
-
+                                <div id="parcoursError" class="alert alert-danger" style="display: none;">
+                                    Code Apogée must be at least 6 characters long.
+                                </div>
 
                                 @if (session('error'))
                                 <div class="alert alert-danger">
@@ -85,6 +87,22 @@
         if (input.value.length > input.maxLength) {
             input.value = input.value.slice(0, input.maxLength);
         }
+    }
+
+    function validateForm() {
+        var codeApogee = document.getElementById('CodeApogee').value;
+
+        if (codeApogee.length < 6) {
+            document.getElementById('parcoursError').style.display = 'block';
+            return false;
+        } else {
+            document.getElementById('parcoursError').style.display = 'none';
+        }
+
+
+        // Additional validation logic can be added here
+
+        return true;
     }
     $(document).ready(function() {
         // Event listener for changes in the semester dropdown
