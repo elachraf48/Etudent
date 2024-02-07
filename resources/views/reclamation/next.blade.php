@@ -5,7 +5,10 @@
 @section('content')
 <!-- Center the container vertically and horizontally, and apply cool background color -->
 
-
+<head>
+    <!-- Include your other <head> elements here -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
 
 <!-- CSRF token for Laravel security -->
 <section class="text-center">
@@ -18,18 +21,18 @@
                         <img src="{{ asset('img/banner.png') }}" class="img-fluid w-50" alt="Logo">
                     </div>
                 </div>
-                <h4 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h4>
-                <h4 class="link-danger p-2">Demande de correction de faute matérielle concernant les résultats des examens.</h4>
+                <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
+                <h5 class="link-danger p-2">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
 
-                <!-- <h4><span class="title">شكوى</span></h4>
-                <h4><span class="title">Réclamation</span></h4> -->
+                <!-- <h5><span class="title">شكوى</span></h5>
+                <h5><span class="title">Réclamation</span></h5> -->
             </div>
         </div>
     </div>
 
     <div class="container-fluid d-flex align-items-center justify-content-center bg-cool   p-3">
 
-        <form action="{{ route('reclamationpost') }}" method="post">
+        <form action="{{ route('reclamationpost') }}" method="post" >
              @csrf
 
             <div id="liveAlertPlaceholder"></div>
@@ -74,7 +77,12 @@
             <input type="hidden" name="idexam" value="<?= $idexam ?>" />
             @if (!$student || count($student) === 0)
             <div class="alert alert-danger" role="alert">
-                .اسمك غير مدرج في قائمة الامتحانات المرجو ملئ الاستمارة كاملة
+               
+                        <h5 class="contactserv">Veuillez contacter le service des affaires étudiantes pour résoudre votre situation.</h5>
+                        <h5 class="contactserv">المرجو التوجه لمصلحة شؤون الطلبة  لتسوية وضعكم</h5>
+                        <hr>
+
+                        .اسمك غير مدرج في قائمة الامتحانات المرجو ملئ الاستمارة كاملة
                 <br>
                 Votre nom ne figure pas sur la liste d'examen, veuillez remplir complètement le formulaire.
             </div>
@@ -82,25 +90,25 @@
             <!-- Input fields for nom and prenom -->
             <div class="row g-2 mt-1  pt-2">
                 <label for="nom" class="clearfix">
-                    <span class="float-start">Nom de famille</span>
-                    <span class="float-end"> اسم العائلي</span>
+                    <span class="float-start">Nom de famille <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> اسم العائلي</span>
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="text" name="nom" @if($Nom!='' ) value="{{ $Nom }}" disabled @endif placeholder="" class="form-control" required>
+                    <input type="text" name="nom" @if($Nom != '') value="{{ $Nom }}" readonly @endif placeholder="" class="form-control" required>
                         <label for="floatingSelectGrid">Nom de famille</label>
                     </div>
                 </div>
             </div>
             <div class="row g-2 mt-1  pt-2">
                 <label for="prenom" class="clearfix">
-                    <span class="float-start">prénom</span>
-                    <span class="float-end"> الاسم الشخصي </span>
+                    <span class="float-start">prénom <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> الاسم الشخصي </span>
                 </label>
                 <div class="col-md">
 
                     <div class="form-floating">
-                        <input type="text" name="prenom" @if($Prenom!='' ) value="{{ $Prenom }}" disabled @endif placeholder="" class="form-control" required>
+                        <input type="text" name="prenom" @if($Prenom!='' ) value="{{ $Prenom }}" readonly @endif placeholder="" class="form-control" required>
                         <label for="floatingSelectGrid">prénom</label>
                     </div>
                 </div>
@@ -109,12 +117,12 @@
 
             <div class="row g-2 mt-1  pt-2">
                 <label for="number" class="clearfix">
-                    <span class="float-start">Numéro d'inscription Apogée</span>
-                    <span class="float-end"> رقم التسجيل أبوجي</span>
+                    <span class="float-start">Numéro d'inscription Apogée <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> رقم التسجيل أبوجي</span>
                 </label>
                 <div class="col-md" alt="madirch 0">
                     <div class="form-floating">
-                        <input type="number" @if($CodeApogee!='' ) value="{{ $CodeApogee }}" disabled @endif  placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                        <input type="number" @if($CodeApogee!='' ) value="{{ $CodeApogee }}" readonly @endif  placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
                         <label for="floatingSelectGrid">Code Apogée</label>
 
                     </div>
@@ -124,13 +132,13 @@
             @if (!$studentuniue || count($studentuniue) === 0)
             <div class="row g-2 mt-1  pt-2">
                 <label for="number" class="clearfix">
-                    <span class="float-start">Numéro d'inscription Apogée</span>
-                    <span class="float-end"> رقم التسجيل أبوجي</span>
+                    <span class="float-start">Date de naissance <span class="text-danger">*</span></span>
+                    <span class="float-end"><span class="text-danger">*</span> تاريخ الازدياد</span>
                 </label>
                 <div class="col-md" alt="madirch 0">
                     <div class="form-floating">
                         <input type="date"  value=""   placeholder="" name="datenes"  class="form-control" required>
-                        <label for="floatingSelectGrid">Code Apogée</label>
+                        <label for="floatingSelectGrid">Date de naissance</label>
 
                     </div>
                 </div>
@@ -144,7 +152,8 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="text" value="{{$semester}}" disabled placeholder="" name="semester" class="form-control" required>
+                    
+                        <input type="text" value="{{$semester}}" readonly placeholder="" name="semester" id="semester" class="form-control" required>
                         <label for="floatingSelectGrid">Semester</label>
                     </div>
                 </div>
@@ -159,7 +168,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <select name="filiere" id="filiereDropdown" class="form-control" disabled required>
+                        <select name="filiere" id="filiereDropdown" class="form-control" readonly required>
                             @foreach($filieres as $filiere)
                             <option value="{{ $filiere->id }}">{{ $filiere->NomFiliere }}
                                 @if($filiere->Parcours!='')
@@ -181,7 +190,7 @@
                 <div class="col-md">
                     <div class="form-floating">
                         <select name="module" id="moduleDropdown" class="form-control" required>
-                            <option value="" disabled selected>Select Module</option>
+                            <option value="" readonly selected>Select Module</option>
                             @if ($student && count($student) > 0)
 
                             @foreach ($student as $Module )
@@ -208,7 +217,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="number" @if($NumeroExamen!='' ) value="{{ $NumeroExamen }}" disabled @endif name="ndexamen" oninput="removeLeadingZeros(this)"  class="form-control" >
+                        <input type="number" @if($NumeroExamen!='' ) value="{{ $NumeroExamen }}" readonly @endif name="ndexamen" oninput="removeLeadingZeros(this)"  class="form-control" >
                         <label for="floatingSelectGrid">N d'examen</label>
 
                     </div>
@@ -221,7 +230,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="text" name="lieu" @if($Lieu!='' ) value="{{ $Lieu }}" disabled @endif placeholder="" class="form-control" required>
+                        <input type="text" name="lieu" @if($Lieu!='' ) value="{{ $Lieu }}" readonly @endif placeholder="" class="form-control" required>
                         <label for="floatingSelectGrid">Salle ou Aphhi</label>
                     </div>
                 </div>
@@ -234,7 +243,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <!-- <input type="text" value="{{$students->NomGroupe}}" name="option" placeholder="" disabled class="form-control"> -->
+                        <!-- <input type="text" value="{{$students->NomGroupe}}" name="option" placeholder="" readonly class="form-control"> -->
 
                         <select name="Group" id="GroupDropdown" class="form-control" required>
                             @foreach($Groups as $Group)
@@ -275,22 +284,22 @@
                                     <span class="float-end"> موضوع الطلب</span>
                                 </label>
                             </option>
-                            <option value="S1"><label class="clearfix">
+                            <option value="غير مسجل في الوحدة"><label class="clearfix">
                                     <span class="float-start">Non inscrit au module</span>
                                     <span class="float-end"> غير مسجل في الوحدة</span>
                                 </label>
                             </option>
-                            <option value=""><label class="clearfix">
+                            <option value="عدم ادراج النقطة"><label class="clearfix">
                                     <span class="float-start">Omission d'attribution de la note</span>
                                     <span class="float-end"> عدم ادراج النقطة</span>
                                 </label>
                             </option>
-                            <option value=""><label class="clearfix">
+                            <option value="خطأ في رقم الامتحان أو رقم أبوجي"><label class="clearfix">
                                     <span class="float-start">erreur numéro examen ou numéro apogée</span>
                                     <span class="float-end"> خطأ في رقم الامتحان أو رقم أبوجي</span>
                                 </label>
                             </option>
-                            <option value=""><label class="clearfix">
+                            <option value="طلب إعادة التصحيح"><label class="clearfix">
                                     <span class="float-start">Demande de re-correction</span>
                                     <span class="float-end"> طلب إعادة التصحيح</span>
                                 </label>
@@ -309,7 +318,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <textarea required class="form-control" placeholder="Leave a comment here" name="couse" id="floatingTextarea2" style="height: 100px"></textarea>
+                    <textarea required class="form-control" placeholder="Leave a comment here" name="couse" id="floatingTextarea2" style="height: 100px"></textarea>
                         <label for="floatingTextarea2">observations</label>
                     </div>
                 </div>
@@ -318,19 +327,50 @@
             <div class="form-check form-switch " id="formswitch">
                 <input class="form-check-input " type="checkbox" id="flexSwitchCheckDefault" required>
                 <label class="form-check-label clearfix" for="flexSwitchCheckDefault">
-                    <span class="float-start">Recueillir des informations correctes |</span>
-                    <span class="float-end">  جمع المعلومات صحيحة </span>
+                    <span class="float-start">Vous avez confirmé que les informations ont été collectées et qu'elles sont correctes | </span>
+                    <span class="float-end">  لقد قمت بتأكيد من جمع المعلومات وهي صحيحة </span>
                 </label>
             </div>
             <!-- Submit button -->
             <button onclick='window.location.href = "{{ url("/reclamation/")}}"' class="btn btn-secondary  mt-1  float-start   w-25">Back <br>رجوع</button>
-            <button type="submit" id="sub" class="btn btn-success mt-1 w-25 float-end">Valider
- <br> تأكيد</button>
-        </form>
+            <button type="submit" class="btn btn-success mt-1 w-25 float-end">Valider<br> تأكيد</button>
+</form>
+<!-- <button onclick="generatePDF()">Generate PDF</button> -->
+
     </div>
+    <button onclick="generatePDF()">Generate PDF</button>
+
 </section>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
 <script>
+    function generatePDF() {
+    const doc = new jsPDF();
+    let y = 10;
+    let lineHeight = 5;
+
+    // Iterate through all input and select elements
+    $('input, select').each(function() {
+        // Get the label associated with this element
+        const label = $('label[for="' + $(this).attr('id') + '"]').text();
+        
+        // Get the value of the element
+        const value = $(this).val();
+        
+        // Add the label and value to the PDF
+        doc.text(label + ': ' + value, 10, y);
+        
+        // Increment the y-coordinate for the next line
+        y += lineHeight;
+    });
+
+    // Save the PDF document
+    doc.save('form_data.pdf');
+}
     function change_module(selectedSemester, selectedFiliere) {
         $.ajax({
             url: '/fetch-modules/' + selectedFiliere,

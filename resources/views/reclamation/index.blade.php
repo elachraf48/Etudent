@@ -15,6 +15,7 @@
                     <div class="inner">
                         <p class="welcomeTitle">Demande de correction de faute matérielle concernant les résultats des examens.</p>
                         <h1 class="welcomeTitle">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h1>
+                        
                     </div>
                 </div>
             </div>
@@ -55,12 +56,16 @@
                                 <div class="item">
                                 </div>
                                 <div id="parcoursError" class="alert alert-danger" style="display: none;">
-                                    Code Apogée must be at least 6 characters long.
+                                    Code Apogée incorrect .
                                 </div>
 
                                 @if (session('error'))
                                 <div class="alert alert-danger">
                                     <p>{!! session('error') !!}</p>
+                                </div>
+                                @elseif(session('success'))
+                                <div class="alert alert-success">
+                                   <p>{!! session('success') !!}</p>
                                 </div>
                                 @endif
 

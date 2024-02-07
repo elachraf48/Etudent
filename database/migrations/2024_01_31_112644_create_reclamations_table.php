@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('reclamations', function (Blueprint $table) {
             $table->id();
+            $table->string('AnneeUniversitaire');
             $table->foreignId('idEtudiant')->constrained('etudiants');
             $table->foreignId('idProfesseur')->constrained('professeurs');
             $table->foreignId('idModule')->constrained('modules');

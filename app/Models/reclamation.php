@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reclamation extends Model
 {
-    protected $fillable = ['idEtudiant', 'idProfesseur', 'idModule', 'idInfo_Exames', 'Sujet', 'observations', 'code_tracking'];
+    protected $fillable = ['AnneeUniversitaire','idEtudiant', 'idProfesseur', 'idModule', 'idInfo_Exames', 'Sujet', 'observations', 'code_tracking'];
 
     public function etudiant()
     {
