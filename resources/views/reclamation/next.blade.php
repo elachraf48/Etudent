@@ -44,13 +44,11 @@
                 @php
                     $Nom = $studentuniue[0]->Nom;
                     $Prenom = $studentuniue[0]->Prenom;
-                    $CodeApogee = $studentuniue[0]->CodeApogee;
                 @endphp
             @else
                 @php
                     $Nom = '';
                     $Prenom = '';
-                    $CodeApogee='';
                 @endphp
             @endif
 
@@ -117,12 +115,12 @@
 
             <div class="row g-2 mt-1  pt-2">
                 <label for="number" class="clearfix">
-                    <span class="float-start">Numéro d'inscription Apogée <span class="text-danger">*</span></span>
+                        <span class="float-start">Numéro d'inscription Apogée <span class="text-danger">*</span></span>
                     <span class="float-end"><span class="text-danger">*</span> رقم التسجيل أبوجي</span>
                 </label>
                 <div class="col-md" alt="madirch 0">
                     <div class="form-floating">
-                        <input type="number" @if($CodeApogee!='' ) value="{{ $CodeApogee }}" readonly @endif  placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                        <input type="number" value="{{ $codeApogee }}" readonly  placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
                         <label for="floatingSelectGrid">Code Apogée</label>
 
                     </div>

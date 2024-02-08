@@ -105,7 +105,7 @@ class ReclamationController extends Controller
         }
 
 
-        return view('reclamation.next', compact('filieres', 'Modules', 'student', 'semester', 'Groups', 'studentuniue'));
+        return view('reclamation.next', compact('filieres', 'Modules', 'student', 'semester', 'Groups', 'studentuniue','codeApogee'));
     }
 
     public function fetchFilieresBySemester($semester)
@@ -173,8 +173,44 @@ class ReclamationController extends Controller
         $filieres = Filiere::where('id', $filiere)->get(['id', 'NomFiliere', 'Parcours'])->first();
         $professeurs = professeur::where('id', $professeur)->get(['id', 'Nom', 'Prenom'])->first();
         $modules = module::where('id', $module)->get(['id', 'NomModule'])->first();
-       
+        $data = [
+            'AnneeUniversitaire' => $AnneeUniversitaire,
+            'codeApogee' => $codeApogee,
+            'semester' => $semester,
+            'filiere' => $filieres->NomFiliere, // Assuming 'NomFiliere' is the field name for the filiere name
+            'Nom' => $Nom,
+            'Prenom' => $Prenom,
+            'idexam' => $idexam,
+            'datenes' => $datenes,
+            'module' => $modules->NomModule, // Assuming 'NomModule' is the field name for the module name
+            'ndexamen' => $ndexamen,
+            'lieu' => $lieu,
+            'Group' => $Group,
+            'professeur' => $professeurs->Nom . ' ' . $professeurs->Prenom, // Assuming 'Nom' and 'Prenom' are the field names for professor's name
+            'reclamation' => $reclamation,
+            'couse' => $couse,
+            'code_tracking' => $code_tracking,
+        ];
+        $html = view('invoice')->toArabicHTML();
+
+        $pdf = PDF::loadHTML($html)->output();
+        
+        $headers = array(
+            "Content-type" => "application/pdf",
+        );
+        
+        // Create a stream response as a file download
+        return response()->streamDownload(
+            fn () => print($pdf), // add the content to the stream
+            "invoice.pdf", // the name of the file/stream
+            $headers
+        );
+        return view('reclamation.showpdf', $data);
+
+        return redirect()->route('showpdf', $data);
         $dompdf = new Dompdf();
+
+        $data = (object)$data;
 
         $html = '<div class="container text-center">
         <div class="row">
@@ -196,7 +232,7 @@ class ReclamationController extends Controller
 
         $html .= '<table border="1" style="width: 100%"> ';
         $html .= '<tr><th>Field</th><th>Value</th></tr>';
-        $html .= "<tr><td>Annee Universitaire</td><td>$AnneeUniversitaire</td></tr>";
+        $html .= "<tr><td>Annee Universitaire</td><td>$data->AnneeUniversitaire</td></tr>";
         $html .= "<tr><td>Code Apogee</td><td>$codeApogee</td></tr>";
         $html .= "<tr><td>Semester</td><td>$semester</td></tr>";
         $html .= "<tr><td>Filiere</td><td>$filieres->NomFiliere</td></tr>";

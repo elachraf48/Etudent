@@ -58,8 +58,9 @@ Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('sea
 
 // Define the resource routes
 Route::resource('/reclamation', ReclamationController::class);
-Route::get('/reclamation/next', [ReclamationController::class, 'show'])->name('reclamation');
+Route::get('/reclamation/next', 'ReclamationController@show')->name('reclamation');
 Route::post('/reclamation/next', [ReclamationController::class, 'reclamationpost'])->name('reclamationpost');
+Route::get('/reclamation/showpdf', 'PDFController@showPDF')->name('showpdf');
 
 // Add a custom route for the 'next' method
 
