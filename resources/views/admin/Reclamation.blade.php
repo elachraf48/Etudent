@@ -26,7 +26,7 @@
 
 
     <div class="row g-2 mt-1 mb-2">
-    <div class="col-md">
+        <div class="col-md">
             <div class="form-floating">
                 <select name="AnneeUniversitaire" id="AnneeUniversitaire" class="form-control" required>
                     <?php
@@ -45,7 +45,7 @@
         <div class="col-md">
             <div class="form-floating">
                 <select name="semester" id="semesterDropdown" class="form-control" required>
-                    <option value="all">All</option>
+                    <option value="%">All</option>
                     <option value="S1">S1</option>
                     <option value="S2">S2</option>
                     <option value="S3">S3</option>
@@ -59,17 +59,17 @@
         <div class="col-md">
             <div class="form-floating">
                 <select name="filiere" id="filiereDropdown" class="form-control" required>
-                    <option value="all">All</option>
+                    <option value="%" selected>All</option>
                 </select>
                 <label for="floatingSelectGrid">Filiere</label>
             </div>
         </div>
-        
+
 
         <div class="col-md">
             <div class="form-floating">
                 <select name="module" id="moduleDropdown" class="form-control" required>
-                    <option value="all">All</option>
+                    <option value="%">All</option>
 
                 </select>
                 <label for="floatingSelectGrid">Module</label>
@@ -79,7 +79,7 @@
         <div class="col-md">
             <div class="form-floating">
                 <select name="professeur" id="professeurDropdown" class="form-control" required>
-                    <option value="all">All</option>
+                    <option value="%">All</option>
                 </select>
                 <label for="floatingSelectGrid">Professeur</label>
             </div>
@@ -89,9 +89,9 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-            <button id="downloadAll" class="btn btn-primary mb-3 float-start">Tout télécharger</button>
+                <button id="downloadAll" class="btn btn-primary mb-3 float-start">Tout télécharger</button>
                 <button id="downloadByProfesseur" class="btn btn-primary mb-3 float-end">Télécharger par Professeur</button>
-                
+
             </div>
             <div class="col-md-12">
                 <table id="reclamation-table" class="table ">
@@ -110,7 +110,8 @@
                     </thead>
                     <tbody>
                         @foreach ($data as $item)
-                        <tr>
+                        <tr style="max-height: 100px;overflow: hidden;
+    transition: max-height 0.3s ease;">
                             <td>{{ $item->prof_nom }} {{ $item->prof_prenom }}</td>
                             <td>{{ $item->NomModule }}</td>
                             <td>{{ $item->CodeApogee }}</td>
@@ -146,7 +147,14 @@
 
     <script>
         $(document).ready(function() {
-            $('#reclamation-table').DataTable();
+            $('#reclamation-table').DataTable({
+                lengthMenu: [
+                    [5, 10, 25, 50, -1],
+                    [5, 10, 25, 50, "All"]
+                ],
+                // Other DataTables options...
+            });
+
             $('#downloadAll').click(function() {
                 downloadCSV('all');
             });
@@ -183,34 +191,34 @@
                         document.body.removeChild(link);
                     }
                 } else if (type === 'professeur') {
-                    
+
                     var headerRow = "\uFEFFModule,Code Apogee, Étudiant,Numéro Examen,Lieu, Groupe,Sujet,Observations\n";
-    var columnIndex = [];
-    $('#reclamation-table thead tr th').each(function(index) {
-        var columnName = $(this).text();
-        if (columnName !== 'Professeur') {
-            columnIndex.push(index);
-        }
-    });
+                    var columnIndex = [];
+                    $('#reclamation-table thead tr th').each(function(index) {
+                        var columnName = $(this).text();
+                        if (columnName !== 'Professeur') {
+                            columnIndex.push(index);
+                        }
+                    });
 
-    var professeurs = {};
-    $('#reclamation-table tbody tr').each(function() {
-        var professeur = $(this).find('td:eq(0)').text();
-        if (!professeurs[professeur]) {
-            professeurs[professeur] = [];
-        }
-        var rowData = [];
-        $(this).find('td').slice(1).each(function(index) {
-            if (columnIndex.includes(index)) {
-                rowData.push($(this).text());
-            }
-        });
-        professeurs[professeur].push(rowData.join(','));
-    });
+                    var professeurs = {};
+                    $('#reclamation-table tbody tr').each(function() {
+                        var professeur = $(this).find('td:eq(0)').text();
+                        if (!professeurs[professeur]) {
+                            professeurs[professeur] = [];
+                        }
+                        var rowData = [];
+                        $(this).find('td').slice(1).each(function(index) {
+                            if (columnIndex.includes(index)) {
+                                rowData.push($(this).text());
+                            }
+                        });
+                        professeurs[professeur].push(rowData.join(','));
+                    });
 
-    for (var prof in professeurs) {
-        zip.file(prof.replace(/\s+/g, '-') + '.csv', headerRow + professeurs[prof].join('\n'));
-    }
+                    for (var prof in professeurs) {
+                        zip.file(prof.replace(/\s+/g, '-') + '.csv', headerRow + professeurs[prof].join('\n'));
+                    }
                     zip.generateAsync({
                         type: 'blob'
                     }).then(function(content) {
@@ -218,7 +226,6 @@
                     });
                 }
 
-                // Generate and trigger download link for the ZIP file
 
             }
             //filier show after change semester
@@ -233,7 +240,8 @@
                         var filieres = data.filieres;
 
                         // Update the dropdown options
-                        var optionsHtml = '';
+                        var optionsHtml = '<option value="%">All</option>';
+
                         $.each(filieres, function(index, filiere) {
                             optionsHtml += '<option value="' + filiere.id + '">' + filiere.NomFiliere;
 
@@ -253,50 +261,67 @@
                     }
                 });
             });
+            $('#filiereDropdown').change(function() {
+            var selectedSemester = $('#semesterDropdown').val();
+            var selectedFiliere = $('#filiereDropdown').val();
+            change_module(selectedSemester, selectedFiliere);
+            // Make an Ajax request to fetch modules based on the selected semester and filiere
+
+
+        });
+        $('#moduleDropdown').change(function() {
+            var selectedmodule = $('#moduleDropdown').val();
+            change_professeurs(selectedmodule);
+            // Make an Ajax request to fetch modules based on the selected semester and filiere
+
 
         });
 
+        });
+        function change_module(selectedSemester, selectedFiliere) {
+        $.ajax({
+            url: '/fetch-modules/' + selectedFiliere,
+            type: 'GET',
+            success: function(data) {
+                // Assuming the data structure is { "modules": [...] }
+                var modules = data.modules;
 
-
-        function tableToCsv() {
-            // Select the table
-            var table = document.querySelector('.table');
-
-            // Get the additional information
-            var filiereInfo = 'Filiere :' + $('#filiereDropdown :selected').text();
-            var semesterInfo = 'Semester :' + $('#semesterDropdown').val();
-
-            // Initialize the CSV content with UTF-8 BOM
-            var csvContent = ['\uFEFF'];
-
-            // Add the additional information to specific cells
-            csvContent.push('"' + filiereInfo + '","' + semesterInfo + '"');
-
-            // Initialize the CSV content with UTF-8 BOM and additional information
-
-            // Loop through rows and columns to populate the CSV array
-            table.querySelectorAll('tr').forEach(function(row) {
-                var rowData = [];
-                row.querySelectorAll('td').forEach(function(cell) {
-                    rowData.push('"' + cell.innerText.replace(/"/g, '""') + '"');
+                // Update the dropdown options
+                var optionsHtml = '<option value="%">All</option>';
+                $.each(modules, function(index, module) {
+                    optionsHtml += '<option value="' + module.id + '">' + module.NomModule + '</option>';
                 });
-                csvContent.push(rowData.join(','));
-            });
 
-            // Combine rows into a CSV string
-            var csvString = csvContent.join('\n');
+                // Set the updated options HTML to the dropdown
+                $('#moduleDropdown').html(optionsHtml);
+            }
+        });
+    }
+    function change_professeurs(selectedmodule) {
 
-            // Create a Blob containing the CSV data
-            var blob = new Blob([csvString], {
-                type: 'text/csv;charset=utf-8;'
-            });
+        $.ajax({
+            url: '/fetch-professeur/' + selectedmodule,
+            type: 'GET',
+            success: function(data) {
+                // Assuming the data structure is { "modules": [...] }
+                var professeurs = data.professeurs;
+                var optionsHtml = '';
 
-            // Create a download link and trigger a click to download the file
-            var link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'module_data.csv';
-            link.click();
-        }
+                // Update the dropdown options
+                $.each(professeurs, function(index, professeur) {
+                    optionsHtml += '<option value="' + professeur.id + '">' + professeur.Nom + ' ' + professeur.Prenom + '</option>';
+                });
+                optionsHtml = '<option value="%">All</option>' + optionsHtml;
+
+                // Set the updated options HTML to the dropdown
+                $('#professeurDropdown').html(optionsHtml);
+            }
+        });
+    }
+
+
+        
+
 
         // Attach the tableToCsv function to the "Save csv" button click event
         // document.getElementById('saveCsvButton').addEventListener('click', tableToCsv);
