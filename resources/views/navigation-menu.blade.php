@@ -39,7 +39,9 @@
                         </x-nav-link>
                     </ul>
                 </li>
-
+                <x-nav-link href="{{ route('Reclamation_form') }}" :active="request()->routeIs('Reclamation_form')">
+                    {{ __('Reclamation') }}
+                </x-nav-link>
 
 
 

@@ -123,6 +123,10 @@ Route::post('/admin/detail_modules', [DetailModuleController::class, 'processDet
 
 Route::get('/admin/Filier_modules', [AdminController::class, 'showFiliermodules'])->name('Filier_modules_form');
 Route::post('/admin/Filier_modules', [AdminController::class, 'processFiliermodules'])->name('Filier_modules_process');
+
+// admin/Reclamation
+Route::get('/admin/Reclamation', [TrackingReclamationController::class,'index'] )->name('Reclamation_form');
+Route::post('/admin/Reclamation', [TrackingReclamationController::class, 'processFiliermodules'])->name('Reclamation_process');
 // admin/bulk_professeurs
 
 Route::get('/admin/bulk_professeurs', [ProfesseurController::class, 'index'])->name('bulk_professeurs_form');

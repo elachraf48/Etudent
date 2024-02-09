@@ -32,55 +32,55 @@
 
     <div class="container-fluid d-flex align-items-center justify-content-center bg-cool   p-3">
 
-        <form action="{{ route('reclamationpost') }}" method="post" >
-             @csrf
+        <form action="{{ route('reclamationpost') }}" method="post">
+            @csrf
 
             <div id="liveAlertPlaceholder"></div>
 
             <!-- Display the current date -->
 
-            
+
             @if ($studentuniue && count($studentuniue) > 0)
-                @php
-                    $Nom = $studentuniue[0]->Nom;
-                    $Prenom = $studentuniue[0]->Prenom;
-                @endphp
+            @php
+            $Nom = $studentuniue[0]->Nom;
+            $Prenom = $studentuniue[0]->Prenom;
+            @endphp
             @else
-                @php
-                    $Nom = '';
-                    $Prenom = '';
-                @endphp
+            @php
+            $Nom = '';
+            $Prenom = '';
+            @endphp
             @endif
 
             @if ($student && count($student) > 0)
-                @foreach ($student as $key => $students)
-                    @if ($key === count($student) - 1)
-                        @php
-                            
-                            $NomGroupe=$students->NomGroupe;
-                            $Lieu=$students->Lieu;
-                            $NumeroExamen=$students->NumeroExamen;
-                            $idexam=$students->idexam;
-                        @endphp
-                    @endif
-                @endforeach
-                @else
-                    @php
-                        $NomGroupe = '';
-                        $Lieu='';
-                        $NumeroExamen='';
-                        $idexam='';
-                    @endphp
+            @foreach ($student as $key => $students)
+            @if ($key === count($student) - 1)
+            @php
+
+            $NomGroupe=$students->NomGroupe;
+            $Lieu=$students->Lieu;
+            $NumeroExamen=$students->NumeroExamen;
+            $idexam=$students->idexam;
+            @endphp
+            @endif
+            @endforeach
+            @else
+            @php
+            $NomGroupe = '';
+            $Lieu='';
+            $NumeroExamen='';
+            $idexam='';
+            @endphp
             @endif
             <input type="hidden" name="idexam" value="<?= $idexam ?>" />
             @if (!$student || count($student) === 0)
             <div class="alert alert-danger" role="alert">
-               
-                        <h5 class="contactserv">Veuillez contacter le service des affaires étudiantes pour résoudre votre situation.</h5>
-                        <h5 class="contactserv">المرجو التوجه لمصلحة شؤون الطلبة  لتسوية وضعكم</h5>
-                        <hr>
 
-                        .اسمك غير مدرج في قائمة الامتحانات المرجو ملئ الاستمارة كاملة
+                <h5 class="contactserv">Veuillez contacter le service des affaires étudiantes pour résoudre votre situation.</h5>
+                <h5 class="contactserv">المرجو التوجه لمصلحة شؤون الطلبة لتسوية وضعكم</h5>
+                <hr>
+
+                .اسمك غير مدرج في قائمة الامتحانات المرجو ملئ الاستمارة كاملة
                 <br>
                 Votre nom ne figure pas sur la liste d'examen, veuillez remplir complètement le formulaire.
             </div>
@@ -93,7 +93,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                    <input type="text" name="nom" @if($Nom != '') value="{{ $Nom }}" readonly @endif placeholder="" class="form-control" required>
+                        <input type="text" name="nom" @if($Nom !='' ) value="{{ $Nom }}" readonly @endif placeholder="" class="form-control" required>
                         <label for="floatingSelectGrid">Nom de famille</label>
                     </div>
                 </div>
@@ -115,12 +115,12 @@
 
             <div class="row g-2 mt-1  pt-2">
                 <label for="number" class="clearfix">
-                        <span class="float-start">Numéro d'inscription Apogée <span class="text-danger">*</span></span>
+                    <span class="float-start">Numéro d'inscription Apogée <span class="text-danger">*</span></span>
                     <span class="float-end"><span class="text-danger">*</span> رقم التسجيل أبوجي</span>
                 </label>
                 <div class="col-md" alt="madirch 0">
                     <div class="form-floating">
-                        <input type="number" value="{{ $codeApogee }}" readonly  placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                        <input type="number" value="{{ $codeApogee }}" readonly placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
                         <label for="floatingSelectGrid">Code Apogée</label>
 
                     </div>
@@ -135,7 +135,7 @@
                 </label>
                 <div class="col-md" alt="madirch 0">
                     <div class="form-floating">
-                        <input type="date"  value=""   placeholder="" name="datenes"  class="form-control" required>
+                        <input type="date" value="" placeholder="" name="datenes" class="form-control" required>
                         <label for="floatingSelectGrid">Date de naissance</label>
 
                     </div>
@@ -150,7 +150,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                    
+
                         <input type="text" value="{{$semester}}" readonly placeholder="" name="semester" id="semester" class="form-control" required>
                         <label for="floatingSelectGrid">Semester</label>
                     </div>
@@ -211,11 +211,11 @@
                 <label for="ndexamen" class="clearfix">
                     <span class="float-start">N d'examen </span>
                     <span class="float-end"> رقم الامتحان</span>
-                    
+
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="number" @if($NumeroExamen!='' ) value="{{ $NumeroExamen }}" readonly @endif name="ndexamen" oninput="removeLeadingZeros(this)"  class="form-control" >
+                        <input type="number" @if($NumeroExamen!='' ) value="{{ $NumeroExamen }}" readonly @endif name="ndexamen" oninput="removeLeadingZeros(this)" class="form-control">
                         <label for="floatingSelectGrid">N d'examen</label>
 
                     </div>
@@ -316,7 +316,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                    <textarea required class="form-control" placeholder="Leave a comment here" name="couse" id="floatingTextarea2" style="height: 100px"></textarea>
+                        <textarea required class="form-control" placeholder="Leave a comment here" name="couse" id="floatingTextarea2" style="height: 100px"></textarea>
                         <label for="floatingTextarea2">observations</label>
                     </div>
                 </div>
@@ -326,14 +326,14 @@
                 <input class="form-check-input " type="checkbox" id="flexSwitchCheckDefault" required>
                 <label class="form-check-label clearfix" for="flexSwitchCheckDefault">
                     <span class="float-start">Vous avez confirmé que les informations ont été collectées et qu'elles sont correctes | </span>
-                    <span class="float-end">  لقد قمت بتأكيد من جمع المعلومات وهي صحيحة </span>
+                    <span class="float-end"> لقد قمت بتأكيد من جمع المعلومات وهي صحيحة </span>
                 </label>
             </div>
             <!-- Submit button -->
             <button onclick='window.location.href = "{{ url("/reclamation/")}}"' class="btn btn-secondary  mt-1  float-start   w-25">Back <br>رجوع</button>
             <button type="submit" class="btn btn-success mt-1 w-25 float-end">Valider<br> تأكيد</button>
-</form>
-<!-- <button onclick="generatePDF()">Generate PDF</button> -->
+        </form>
+        <!-- <button onclick="generatePDF()">Generate PDF</button> -->
 
     </div>
     <button onclick="generatePDF()">Generate PDF</button>
@@ -347,28 +347,29 @@
 
 <script>
     function generatePDF() {
-    const doc = new jsPDF();
-    let y = 10;
-    let lineHeight = 5;
+        const doc = new jsPDF();
+        let y = 10;
+        let lineHeight = 5;
 
-    // Iterate through all input and select elements
-    $('input, select').each(function() {
-        // Get the label associated with this element
-        const label = $('label[for="' + $(this).attr('id') + '"]').text();
-        
-        // Get the value of the element
-        const value = $(this).val();
-        
-        // Add the label and value to the PDF
-        doc.text(label + ': ' + value, 10, y);
-        
-        // Increment the y-coordinate for the next line
-        y += lineHeight;
-    });
+        // Iterate through all input and select elements
+        $('input, select').each(function() {
+            // Get the label associated with this element
+            const label = $('label[for="' + $(this).attr('id') + '"]').text();
 
-    // Save the PDF document
-    doc.save('form_data.pdf');
-}
+            // Get the value of the element
+            const value = $(this).val();
+
+            // Add the label and value to the PDF
+            doc.text(label + ': ' + value, 10, y);
+
+            // Increment the y-coordinate for the next line
+            y += lineHeight;
+        });
+
+        // Save the PDF document
+        doc.save('form_data.pdf');
+    }
+
     function change_module(selectedSemester, selectedFiliere) {
         $.ajax({
             url: '/fetch-modules/' + selectedFiliere,
@@ -388,6 +389,7 @@
             }
         });
     }
+
     function change_professeurs(selectedmodule) {
         $.ajax({
             url: '/fetch-professeur/' + selectedmodule,
@@ -399,7 +401,7 @@
                 // Update the dropdown options
                 var optionsHtml = '';
                 $.each(professeurs, function(index, professeur) {
-                    optionsHtml += '<option value="' + professeur.id + '">' + professeur.Nom+' '+professeur.Prenom + '</option>';
+                    optionsHtml += '<option value="' + professeur.id + '">' + professeur.Nom + ' ' + professeur.Prenom + '</option>';
                 });
 
                 // Set the updated options HTML to the dropdown
@@ -461,9 +463,11 @@
             });
         });
     });
-    function back(){
-        window.location.href = "{{ url("/reclamation+")}}";
+
+    function back() {
+        window.location.href = "{{ url(" / reclamation + ")}}";
     }
+
     function removeLeadingZeros(input) {
         // Remove leading zeros using a regular expression
         input.value = input.value.replace(/^0+/, '');

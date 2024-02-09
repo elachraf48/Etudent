@@ -1,6 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
+
+
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -19,6 +20,11 @@ use Illuminate\Support\Carbon;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Dompdf\Dompdf;
+use Dompdf\Options;
+
+use Illuminate\Support\Facades\View;
+use Mpdf\Mpdf;
+use Spatie\Browsershot\Browsershot;
 
 class ReclamationController extends Controller
 {
@@ -191,20 +197,31 @@ class ReclamationController extends Controller
             'couse' => $couse,
             'code_tracking' => $code_tracking,
         ];
-        $html = view('invoice')->toArabicHTML();
+        $html = View::make('reclamation.showpdf', $data)->render();
 
-        $pdf = PDF::loadHTML($html)->output();
-        
-        $headers = array(
-            "Content-type" => "application/pdf",
-        );
-        
-        // Create a stream response as a file download
-        return response()->streamDownload(
-            fn () => print($pdf), // add the content to the stream
-            "invoice.pdf", // the name of the file/stream
-            $headers
-        );
+        // Capture the HTML content as an image using html2canvas
+        Browsershot::html($html)
+            ->format('png')
+            ->save(public_path('temp/image.png'));
+
+        // Generate PDF using dompdf
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+
+        // Set paper size and orientation
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Get the PDF content
+        $pdfContent = $dompdf->output();
+
+        // Output the PDF (either to the browser or save to a file)
+        return $pdfContent;
         return view('reclamation.showpdf', $data);
 
         return redirect()->route('showpdf', $data);
