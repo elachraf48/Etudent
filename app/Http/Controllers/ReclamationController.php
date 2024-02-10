@@ -197,84 +197,84 @@ class ReclamationController extends Controller
             'couse' => $couse,
             'code_tracking' => $code_tracking,
         ];
-        $html = View::make('reclamation.showpdf', $data)->render();
+//         $html = View::make('reclamation.showpdf', $data)->render();
 
-        // Capture the HTML content as an image using html2canvas
-        Browsershot::html($html)
-            ->format('png')
-            ->save(public_path('temp/image.png'));
+//         // Capture the HTML content as an image using html2canvas
+//         Browsershot::html($html)
+//             ->format('png')
+//             ->save(public_path('temp/image.png'));
 
-        // Generate PDF using dompdf
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
+//         // Generate PDF using dompdf
+//         $options = new Options();
+//         $options->set('isHtml5ParserEnabled', true);
 
-        $dompdf = new Dompdf($options);
-        $dompdf->loadHtml($html);
+//         $dompdf = new Dompdf($options);
+//         $dompdf->loadHtml($html);
 
-        // Set paper size and orientation
-        $dompdf->setPaper('A4', 'portrait');
+//         // Set paper size and orientation
+//         $dompdf->setPaper('A4', 'portrait');
 
-        // Render the HTML as PDF
-        $dompdf->render();
+//         // Render the HTML as PDF
+//         $dompdf->render();
 
-        // Get the PDF content
-        $pdfContent = $dompdf->output();
+//         // Get the PDF content
+//         $pdfContent = $dompdf->output();
 
-        // Output the PDF (either to the browser or save to a file)
-        return $pdfContent;
-        return view('reclamation.showpdf', $data);
+//         // Output the PDF (either to the browser or save to a file)
+//         return $pdfContent;
+//         return view('reclamation.showpdf', $data);
 
-        return redirect()->route('showpdf', $data);
-        $dompdf = new Dompdf();
+//         return redirect()->route('showpdf', $data);
+//         $dompdf = new Dompdf();
 
-        $data = (object)$data;
+//         $data = (object)$data;
 
-        $html = '<div class="container text-center">
-        <div class="row">
-            <div class="continue  bg-light">
-                <div class="col-md-12 bg-light text-center">
-                    <!-- Centered Section with Logo for Mobile -->
-                    <div class="mx-auto w-25">
-                        <img src="https://i.ibb.co/yy8S6Wn/code.png" class="img-fluid w-50" alt="Logo">
-                    </div>
-                </div>
-                <!-- <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>-->
-                <h5 class="link-danger p-2">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
+//         $html = '<div class="container text-center">
+//         <div class="row">
+//             <div class="continue  bg-light">
+//                 <div class="col-md-12 bg-light text-center">
+//                     <!-- Centered Section with Logo for Mobile -->
+//                     <div class="mx-auto w-25">
+//                         <img src="https://i.ibb.co/yy8S6Wn/code.png" class="img-fluid w-50" alt="Logo">
+//                     </div>
+//                 </div>
+//                 <!-- <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>-->
+//                 <h5 class="link-danger p-2">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
 
-                <!-- <h5><span class="title">شكوى</span></h5>
-                <h5><span class="title">Réclamation</span></h5> -->
-            </div>
-        </div>
-    </div>';
+//                 <!-- <h5><span class="title">شكوى</span></h5>
+//                 <h5><span class="title">Réclamation</span></h5> -->
+//             </div>
+//         </div>
+//     </div>';
 
-        $html .= '<table border="1" style="width: 100%"> ';
-        $html .= '<tr><th>Field</th><th>Value</th></tr>';
-        $html .= "<tr><td>Annee Universitaire</td><td>$data->AnneeUniversitaire</td></tr>";
-        $html .= "<tr><td>Code Apogee</td><td>$codeApogee</td></tr>";
-        $html .= "<tr><td>Semester</td><td>$semester</td></tr>";
-        $html .= "<tr><td>Filiere</td><td>$filieres->NomFiliere</td></tr>";
-        $html .= "<tr><td>Nom</td><td>$Nom</td></tr>";
-        $html .= "<tr><td>Prenom</td><td>$Prenom</td></tr>";
-        if($datenes!=''){ $html .= "<tr><td>Date de Naissance</td><td>$datenes</td></tr>";}
-        $html .= "<tr><td>Module</td><td>$modules->NomModule</td></tr>";
-        $html .= "<tr><td>N d'examen</td><td>$ndexamen</td></tr>";
-        $html .= "<tr><td>Lieu</td><td>$lieu</td></tr>";
-        if($Group!=''){        $html .= "<tr><td>Groupe</td><td>$Group</td></tr>";}
-        $html .= "<tr><td>Professeur</td><td>" . $professeurs->Nom . " " . $professeurs->Prenom . "</td></tr>";
-        $html .= "<tr><td>Reclamation</td><td>$reclamation</td></tr>";
-        $html .= "<tr><td>Observations</td><td>$couse</td></tr>";
-        // $html .= "<tr><td>Code Tracking</td><td>$code_tracking</td></tr>";
-        $html .= '</table>';
+//         $html .= '<table border="1" style="width: 100%"> ';
+//         $html .= '<tr><th>Field</th><th>Value</th></tr>';
+//         $html .= "<tr><td>Annee Universitaire</td><td>$data->AnneeUniversitaire</td></tr>";
+//         $html .= "<tr><td>Code Apogee</td><td>$codeApogee</td></tr>";
+//         $html .= "<tr><td>Semester</td><td>$semester</td></tr>";
+//         $html .= "<tr><td>Filiere</td><td>$filieres->NomFiliere</td></tr>";
+//         $html .= "<tr><td>Nom</td><td>$Nom</td></tr>";
+//         $html .= "<tr><td>Prenom</td><td>$Prenom</td></tr>";
+//         if($datenes!=''){ $html .= "<tr><td>Date de Naissance</td><td>$datenes</td></tr>";}
+//         $html .= "<tr><td>Module</td><td>$modules->NomModule</td></tr>";
+//         $html .= "<tr><td>N d'examen</td><td>$ndexamen</td></tr>";
+//         $html .= "<tr><td>Lieu</td><td>$lieu</td></tr>";
+//         if($Group!=''){        $html .= "<tr><td>Groupe</td><td>$Group</td></tr>";}
+//         $html .= "<tr><td>Professeur</td><td>" . $professeurs->Nom . " " . $professeurs->Prenom . "</td></tr>";
+//         $html .= "<tr><td>Reclamation</td><td>$reclamation</td></tr>";
+//         $html .= "<tr><td>Observations</td><td>$couse</td></tr>";
+//         // $html .= "<tr><td>Code Tracking</td><td>$code_tracking</td></tr>";
+//         $html .= '</table>';
         
 
-// Load the HTML into Dompdf
-$dompdf->loadHtml($html);
+// // Load the HTML into Dompdf
+// $dompdf->loadHtml($html);
         
-        // Set paper size and orientation
-        $dompdf->setPaper('A4', 'portrait');
+//         // Set paper size and orientation
+//         $dompdf->setPaper('A4', 'portrait');
         
-        // Render the HTML as PDF
-        $dompdf->render();
+//         // Render the HTML as PDF
+//         $dompdf->render();
         
         // Output the generated PDF to Browser
   
@@ -360,7 +360,7 @@ $dompdf->loadHtml($html);
         } else {
             $reclamationsId=$existingRow->id;
             $code_tracking=$existingRow->code_tracking;
-            return redirect()->route('reclamation.index')>with($dompdf->stream("document.pdf"))->with('error', 'Vous avez déjà déposé une réclamation <br>  لقد قمت بالفعل بتقديم شكوى مسبقا' );
+            return redirect()->route('reclamation.index')->with('error', 'Vous avez déjà déposé une réclamation <br>  لقد قمت بالفعل بتقديم شكوى مسبقا' );
             // Handle the case where a similar row already exists
             // You can log an error, throw an exception, or handle it in any other appropriate way
         }
@@ -379,7 +379,7 @@ $dompdf->loadHtml($html);
             'updated_at' => now()
         ]);}
         // return redirect()->route('reclamation.index')->with('success', 'Votre code de suivi ' . $code_tracking);
-        $dompdf->stream("document.pdf");
+        // $dompdf->stream("document.pdf");
          return redirect()->route('reclamation.index')->with('success', 'Une plainte a été soumise avec succès  <br>  تم تقديم شكوى بالنجاح' );
 
         return $this->index();

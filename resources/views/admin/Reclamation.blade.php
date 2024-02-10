@@ -84,7 +84,9 @@
                 <label for="floatingSelectGrid">Professeur</label>
             </div>
         </div>
+
     </div>
+
     <hr>
     <div class="container">
         <div class="row">
@@ -109,20 +111,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($data as $item)
-                        <tr style="max-height: 100px;overflow: hidden;
-    transition: max-height 0.3s ease;">
-                            <td>{{ $item->prof_nom }} {{ $item->prof_prenom }}</td>
-                            <td>{{ $item->NomModule }}</td>
-                            <td>{{ $item->CodeApogee }}</td>
-                            <td>{{ $item->etudiant_nom }} {{ $item->etudiant_prenom }}</td>
-                            <td>{{ $item->NumeroExamen }}</td>
-                            <td>{{ $item->Lieu }}</td>
-                            <td>{{ $item->nomGroupe }}</td>
-                            <td>{{ $item->Sujet }}</td>
-                            <td>{{ $item->observations }}</td>
-                        </tr>
-                        @endforeach
+
                     </tbody>
                 </table>
             </div>
@@ -147,6 +136,17 @@
 
     <script>
         $(document).ready(function() {
+            $('#professeurDropdown').change(function() {
+                if ($(this).val() === '%') {
+                    $('#downloadByProfesseur').show();
+                } else {
+                    $('#downloadByProfesseur').hide();
+                }
+            });
+            change_reclamations();
+            $('#AnneeUniversitaire, #semesterDropdown, #filiereDropdown, #moduleDropdown, #professeurDropdown').change(function() {
+                change_reclamations();
+            });
             $('#reclamation-table').DataTable({
                 lengthMenu: [
                     [5, 10, 25, 50, -1],
@@ -154,6 +154,8 @@
                 ],
                 // Other DataTables options...
             });
+
+
 
             $('#downloadAll').click(function() {
                 downloadCSV('all');
@@ -262,65 +264,114 @@
                 });
             });
             $('#filiereDropdown').change(function() {
-            var selectedSemester = $('#semesterDropdown').val();
-            var selectedFiliere = $('#filiereDropdown').val();
-            change_module(selectedSemester, selectedFiliere);
-            // Make an Ajax request to fetch modules based on the selected semester and filiere
+                var selectedSemester = $('#semesterDropdown').val();
+                var selectedFiliere = $('#filiereDropdown').val();
+                change_module(selectedSemester, selectedFiliere);
+                // Make an Ajax request to fetch modules based on the selected semester and filiere
 
+
+            });
+            $('#moduleDropdown').change(function() {
+                var selectedmodule = $('#moduleDropdown').val();
+                change_professeurs(selectedmodule);
+                // Make an Ajax request to fetch modules based on the selected semester and filiere
+
+
+            });
 
         });
-        $('#moduleDropdown').change(function() {
-            var selectedmodule = $('#moduleDropdown').val();
-            change_professeurs(selectedmodule);
-            // Make an Ajax request to fetch modules based on the selected semester and filiere
 
-
-        });
-
-        });
         function change_module(selectedSemester, selectedFiliere) {
-        $.ajax({
-            url: '/fetch-modules/' + selectedFiliere,
-            type: 'GET',
-            success: function(data) {
-                // Assuming the data structure is { "modules": [...] }
-                var modules = data.modules;
+            $.ajax({
+                url: '/fetch-modules/' + selectedFiliere,
+                type: 'GET',
+                success: function(data) {
+                    // Assuming the data structure is { "modules": [...] }
+                    var modules = data.modules;
 
-                // Update the dropdown options
-                var optionsHtml = '<option value="%">All</option>';
-                $.each(modules, function(index, module) {
-                    optionsHtml += '<option value="' + module.id + '">' + module.NomModule + '</option>';
-                });
+                    // Update the dropdown options
+                    var optionsHtml = '<option value="%">All</option>';
+                    $.each(modules, function(index, module) {
+                        optionsHtml += '<option value="' + module.id + '">' + module.NomModule + '</option>';
+                    });
 
-                // Set the updated options HTML to the dropdown
-                $('#moduleDropdown').html(optionsHtml);
-            }
-        });
-    }
-    function change_professeurs(selectedmodule) {
+                    // Set the updated options HTML to the dropdown
+                    $('#moduleDropdown').html(optionsHtml);
+                }
+            });
+        }
 
-        $.ajax({
-            url: '/fetch-professeur/' + selectedmodule,
-            type: 'GET',
-            success: function(data) {
-                // Assuming the data structure is { "modules": [...] }
-                var professeurs = data.professeurs;
-                var optionsHtml = '';
+        function change_reclamations() {
+            var AnneeUniversitaire = $('#AnneeUniversitaire').val();
+            var module = $('#moduleDropdown').val();
+            var semester = $('#semesterDropdown').val();
+            var filiere = $('#filiereDropdown').val();
+            var professeur = $('#professeurDropdown').val();
 
-                // Update the dropdown options
-                $.each(professeurs, function(index, professeur) {
-                    optionsHtml += '<option value="' + professeur.id + '">' + professeur.Nom + ' ' + professeur.Prenom + '</option>';
-                });
-                optionsHtml = '<option value="%">All</option>' + optionsHtml;
+            // Add cache buster parameter
+            var cacheBuster = new Date().getTime(); // or any unique value
+            var url = '/fetch-reclamations/' + AnneeUniversitaire + '/' + module + '/' + semester + '/' + filiere + '/' + professeur + '?_=' + cacheBuster;
 
-                // Set the updated options HTML to the dropdown
-                $('#professeurDropdown').html(optionsHtml);
-            }
-        });
-    }
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(data) {
+                    // Clear existing table rows
+
+                    var table = $('#reclamation-table').DataTable();
+                    table.clear().draw();
+
+                    // Assuming the data structure is { "reclamations": [...] }
+                    var reclamations = data.reclamations;
+
+                    // Populate table with reclamations data
+                    $.each(reclamations, function(index, reclamation) {
+                        var rowData = [
+                            reclamation.prof_nom + ' ' + reclamation.prof_prenom,
+                            reclamation.NomModule,
+                            reclamation.CodeApogee,
+                            reclamation.Nom + ' ' + reclamation.Prenom,
+                            reclamation.NumeroExamen,
+                            reclamation.Lieu,   
+                            reclamation.nomGroupe,
+                            reclamation.Sujet,
+                            reclamation.observations
+                        ];
+                        table.row.add(rowData).draw();
+                    });
 
 
-        
+                }
+
+            });
+        }
+
+
+
+        function change_professeurs(selectedmodule) {
+
+            $.ajax({
+                url: '/fetch-professeur/' + selectedmodule,
+                type: 'GET',
+                success: function(data) {
+                    // Assuming the data structure is { "modules": [...] }
+                    var professeurs = data.professeurs;
+                    var optionsHtml = '';
+
+                    // Update the dropdown options
+                    $.each(professeurs, function(index, professeur) {
+                        optionsHtml += '<option value="' + professeur.id + '">' + professeur.Nom + ' ' + professeur.Prenom + '</option>';
+                    });
+                    optionsHtml = '<option value="%">All</option>' + optionsHtml;
+
+                    // Set the updated options HTML to the dropdown
+                    $('#professeurDropdown').html(optionsHtml);
+                }
+            });
+        }
+
+
+
 
 
         // Attach the tableToCsv function to the "Save csv" button click event

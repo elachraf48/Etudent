@@ -2,47 +2,29 @@
 
 @section('content')
 
-<div class="container">
+<div class="container" >
     @if (session('error'))
     <div class="alert alert-danger">
         <p>{!! session('error') !!}</p>
     </div>
     @endif
+
     @if ($student && count($student) > 0)
     @foreach ($student as $key => $students)
     @if ($key === count($student) - 1)
     <div class="container">
+
         <!-- Left Top Section -->
         <header class="row">
-            @if (Agent::isDesktop())
-            <div class="col-md-9 bg-light text">
+            <div class="text-center">
                 <!-- Left Section with Logo -->
-                <div class="mx-auto">
-                    <img src="{{ asset('img/banner.png') }}" class="img-fluid w-25" alt="Logo">
-                </div>
+                    <img src="{{ asset('img/ministry-logo-ar.png') }}" class="img-fluid" alt="Logo">
             </div>
-            @else
-            <div class="col-md-9 bg-light text-center">
-                <!-- Centered Section with Logo for Mobile -->
-                <div class="mx-auto">
-                    <img src="{{ asset('img/banner.png') }}" class="img-fluid w-50" alt="Logo">
-                </div>
-            </div>
-            @endif
+           
 
 
             <!-- Right Top Section -->
-            <div class="col-md-3 position-relative bg-light">
 
-                <div class="mt-5">
-                    <h5>Année universitaire: <span class="text-primary">{{ $students->ExamenAnneeUniversitaire }}</span></h5>
-                    <h5>Filière: <span class="text-primary">{{ $students->NomFiliere }}</span></h5>
-
-                    @if ($students->Parcours != "")
-                    <h5>Parcours: <span class="text-primary">{{ $students->Parcours }}</span></h5>
-                    @endif
-                </div>
-            </div>
 
 
             <nav class="navbar navbar-expand-lg bg-dark">
@@ -57,7 +39,7 @@
                         <button class="btn btn-info m-1" onclick="printPage()">
                             <i class="fa-solid fa-print"></i>
                         </button>
-                        <button class="btn btn-success m-1" onclick="submitReclamation()">
+                        <button class="btn btn-success m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
                             Reclamation
                         </button>
                         <button class="btn btn-danger m-1" onclick='window.location.href = "{{ url("/") }}"'>
@@ -71,10 +53,16 @@
         </header>
 
 
-        <h2 class="text-center m-5">Bonjour <span class="text-danger">{{ $students->Nom }} {{ $students->Prenom }}</span></h2>
-        <div class="printbt">
+        <h2 class="text-center mt-5">Bonjour <span class="text-danger">{{ $students->Nom }} {{ $students->Prenom }}</span></h2>
+        <div class="printbt mt-3">
             <div class="row">
-                <h5 class="col-md-6">Code Apogee: {{ $students->CodeApogee }}</h5>
+                <h5>Année universitaire: <span class="text-primary">{{ $students->ExamenAnneeUniversitaire }}</span></h5>
+                <h5>Filière: <span class="text-primary">{{ $students->NomFiliere }}</span></h5>
+                @if ($students->Parcours != "")
+                <h5>Parcours: <span class="text-primary">{{ $students->Parcours }}</span></h5>
+                @endif
+                <h5 class="col-md-6">Code Apogee: <span class="text-primary">{{ $students->CodeApogee }}</span></h5>
+
             </div>
         </div>
 
@@ -146,16 +134,16 @@
     @else
     <p>No student found with the provided Code Apogee or no semesters found.</p>
     @endif
-    <script>
-        function submitReclamation() {
-            // Implement your reclamation submission logic here, for example, redirect to the reclamation page
-            window.location.href = "{{ route('reclamation.index') }}";
-        }
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-        function printPage() {
-            window.print();
-        }
-    </script>
+<script>
+   
+    function printPage() {
+        window.print();
+    }
+   
+</script>
 
 
-    @endsection
+@endsection

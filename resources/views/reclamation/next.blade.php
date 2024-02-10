@@ -12,22 +12,61 @@
 
 <!-- CSRF token for Laravel security -->
 <section class="text-center">
+    
     <div class="container text-center">
+    <header class="row">
+            <div class="text-center">
+                <!-- Left Section with Logo -->
+                    <img src="{{ asset('img/ministry-logo-ar.png') }}" class="img-fluid " alt="Logo">
+            </div>
+           
+
+
+            <!-- Right Top Section -->
+
+
+
+           
+        </header>
         <div class="row">
             <div class="continue  bg-light">
-                <div class="col-md-12 bg-light text-center">
-                    <!-- Centered Section with Logo for Mobile -->
+                <!-- <div class="col-md-12 bg-light text-center">
+                     Centered Section with Logo for Mobile 
                     <div class="mx-auto w-25">
                         <img src="{{ asset('img/banner.png') }}" class="img-fluid w-50" alt="Logo">
                     </div>
-                </div>
-                <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
+                </div> -->
                 <h5 class="link-danger p-2">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
+                <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
 
                 <!-- <h5><span class="title">شكوى</span></h5>
                 <h5><span class="title">Réclamation</span></h5> -->
             </div>
+            <nav class="navbar navbar-expand-lg bg-dark">
+                <div class="container">
+                    <a class="nav-link active text-white" aria-current="page" href="/">
+                        <i class="fa-solid fa-house"></i> Accueil
+                    </a>
+                    <a class="nav-link text-white m-1">
+                        <i class="fa-solid fa-arrow-right-long"></i> Espace étudiant
+                    </a>
+                    <div class="d-flex ms-auto ">
+                        <button class="btn btn-info m-1" onclick="printPage()">
+                            <i class="fa-solid fa-print"></i>
+                        </button>
+                        <button class="btn btn-success m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
+                           New Reclamation
+                        </button>
+                        <button class="btn btn-danger m-1" onclick='window.location.href = "{{ url("/") }}"'>
+                            Calendrier
+                        </button>
+
+                    </div>
+
+
+            </nav>
         </div>
+        
     </div>
 
     <div class="container-fluid d-flex align-items-center justify-content-center bg-cool   p-3">

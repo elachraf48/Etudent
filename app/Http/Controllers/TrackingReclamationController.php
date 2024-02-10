@@ -10,28 +10,52 @@ class TrackingReclamationController extends Controller
 {
     //
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resoureclamationse.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $data = reclamation::select('pr.Nom as prof_nom', 'pr.Prenom as prof_prenom', 'md.NomModule', 'ie.NumeroExamen', 'ie.Lieu', 'g.nomGroupe', 'et.CodeApogee', 'et.Nom as etudiant_nom', 'et.Prenom as etudiant_prenom', 'reclamations.Sujet', 'reclamations.observations')
+        // $AnneeUniversitaire = (date('Y') - 1) . '-' . date('Y');
+
+        // $data = reclamation::select('pr.Nom as prof_nom', 'pr.Prenom as prof_prenom', 'md.NomModule', 'ie.NumeroExamen', 'ie.Lieu', 'g.nomGroupe', 'et.CodeApogee', 'et.Nom as etudiant_nom', 'et.Prenom as etudiant_prenom', 'reclamations.Sujet', 'reclamations.observations')
+        //     ->join('professeurs as pr', 'pr.id', '=', 'reclamations.idProfesseur')
+        //     ->join('etudiants as et', 'et.id', '=', 'reclamations.idEtudiant')
+        //     ->join('modules as md', 'md.id', '=', 'reclamations.idModule')
+        //     ->join('info_exames as ie', 'ie.id', '=', 'reclamations.idInfo_Exames')
+        //     ->join('groupes as g', 'g.id', '=', 'ie.idGroupe')
+        //     ->where('reclamations.AnneeUniversitaire', $AnneeUniversitaire)
+        //     ->get();
+
+        // //
+        return view('admin.Reclamation');
+
+    }
+    public function reclamations($AnneeUniversitaire, $module, $semester, $filiere, $professeur)
+    {
+            
+        $reclamations = reclamation::select('pr.Nom as prof_nom', 'pr.Prenom as prof_prenom', 'md.NomModule', 'ie.NumeroExamen', 'ie.Lieu', 'g.nomGroupe', 'et.CodeApogee', 'et.Nom', 'et.Prenom', 'reclamations.Sujet', 'reclamations.observations')
             ->join('professeurs as pr', 'pr.id', '=', 'reclamations.idProfesseur')
             ->join('etudiants as et', 'et.id', '=', 'reclamations.idEtudiant')
             ->join('modules as md', 'md.id', '=', 'reclamations.idModule')
             ->join('info_exames as ie', 'ie.id', '=', 'reclamations.idInfo_Exames')
             ->join('groupes as g', 'g.id', '=', 'ie.idGroupe')
-            ->where('reclamations.AnneeUniversitaire', '2023-2024')
+            ->join('filieres as fl', 'fl.id', '=', 'md.idFiliere')
+            ->where('reclamations.AnneeUniversitaire', $AnneeUniversitaire)
+            ->where('pr.id', 'like', $professeur)
+            ->where('md.id', 'like', $module)
+            ->where('fl.id', 'like', $filiere)
+            ->where('md.Semester', 'like', $semester)
             ->get();
-
-        //
-        return view('admin.Reclamation', compact('data'));
-
+    
+        
+    
+        // Return reclamations as JSON
+        return response()->json(['reclamations' => $reclamations]);
     }
-   
+    
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new resoureclamationse.
      *
      * @return \Illuminate\Http\Response
      */
@@ -41,7 +65,7 @@ class TrackingReclamationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created resoureclamationse in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -52,7 +76,7 @@ class TrackingReclamationController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resoureclamationse.
      *
      * @param  \App\Models\TrackingReclamation  $TrackingReclamation
      * @return \Illuminate\Http\Response
@@ -63,7 +87,7 @@ class TrackingReclamationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified resoureclamationse.
      *
      * @param  \App\Models\TrackingReclamation  $TrackingReclamation
      * @return \Illuminate\Http\Response
@@ -74,7 +98,7 @@ class TrackingReclamationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resoureclamationse in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\TrackingReclamation  $TrackingReclamation
@@ -86,7 +110,7 @@ class TrackingReclamationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified resoureclamationse from storage.
      *
      * @param  \App\Models\TrackingReclamation  $TrackingReclamation
      * @return \Illuminate\Http\Response

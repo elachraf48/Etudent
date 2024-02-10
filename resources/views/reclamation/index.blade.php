@@ -7,7 +7,7 @@
 
 <div class="global">
     <!-- CONTENT -->
-
+    
     <div class="loginContent">
         <div class="main">
             <div class="rightSide ">
