@@ -5,6 +5,7 @@ use App\Models\reclamation;
 use Illuminate\Support\Facades\DB;
 use App\Models\TrackingReclamation;
 use Illuminate\Http\Request;
+use App\Models\CalendrierSession;
 
 class TrackingReclamationController extends Controller
 {
@@ -16,6 +17,12 @@ class TrackingReclamationController extends Controller
      */
     public function index()
     {
+        $sessions = CalendrierSession::all();
+        // Retrieve unique values of AnneeUniversitaire
+        $AnneeUniversitaire = Reclamation::distinct()->pluck('AnneeUniversitaire');
+
+        // Now $AnneeUniversitaire contains all unique values of AnneeUniversitaire
+
         // $AnneeUniversitaire = (date('Y') - 1) . '-' . date('Y');
 
         // $data = reclamation::select('pr.Nom as prof_nom', 'pr.Prenom as prof_prenom', 'md.NomModule', 'ie.NumeroExamen', 'ie.Lieu', 'g.nomGroupe', 'et.CodeApogee', 'et.Nom as etudiant_nom', 'et.Prenom as etudiant_prenom', 'reclamations.Sujet', 'reclamations.observations')
@@ -28,10 +35,10 @@ class TrackingReclamationController extends Controller
         //     ->get();
 
         // //
-        return view('admin.Reclamation');
+        return view('admin.Reclamation', compact('sessions','AnneeUniversitaire'));
 
     }
-    public function reclamations($AnneeUniversitaire, $module, $semester, $filiere, $professeur)
+    public function reclamations($AnneeUniversitaire, $module, $semester, $filiere, $professeur,$sessions)
     {
             
         $reclamations = reclamation::select('pr.Nom as prof_nom', 'pr.Prenom as prof_prenom', 'md.NomModule', 'ie.NumeroExamen', 'ie.Lieu', 'g.nomGroupe', 'et.CodeApogee', 'et.Nom', 'et.Prenom', 'reclamations.Sujet', 'reclamations.observations')
@@ -42,6 +49,7 @@ class TrackingReclamationController extends Controller
             ->join('groupes as g', 'g.id', '=', 'ie.idGroupe')
             ->join('filieres as fl', 'fl.id', '=', 'md.idFiliere')
             ->where('reclamations.AnneeUniversitaire', $AnneeUniversitaire)
+            ->where('reclamations.idSESSION', 'like', $sessions)
             ->where('pr.id', 'like', $professeur)
             ->where('md.id', 'like', $module)
             ->where('fl.id', 'like', $filiere)

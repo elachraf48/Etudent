@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('idProfesseur')->constrained('professeurs');
             $table->foreignId('idModule')->constrained('modules');
             $table->foreignId('idInfo_Exames')->constrained('info_exames');
+            $table->foreign('idSESSION')->references('id')->on('calendrier_sessions');
             $table->string('Sujet');
             $table->string('observations');
             $table->integer('code_tracking');

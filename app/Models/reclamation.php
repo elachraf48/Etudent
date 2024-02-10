@@ -8,8 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reclamation extends Model
 {
-    protected $fillable = ['AnneeUniversitaire','idEtudiant', 'idProfesseur', 'idModule', 'idInfo_Exames', 'Sujet', 'observations', 'code_tracking'];
 
+    protected $fillable = ['AnneeUniversitaire','idEtudiant', 'idProfesseur', 'idModule', 'idInfo_Exames','idSESSION', 'Sujet', 'observations', 'code_tracking'];
+    
+    public function session()
+    {
+        return $this->belongsTo(CalendrierSession::class, 'idSESSION');
+    }
     public function etudiant()
     {
         return $this->belongsTo(Etudiant::class, 'idEtudiant');

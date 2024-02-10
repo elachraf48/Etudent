@@ -26,6 +26,8 @@ use Illuminate\Support\Facades\View;
 use Mpdf\Mpdf;
 use Spatie\Browsershot\Browsershot;
 
+use function PHPUnit\Framework\isNull;
+
 class ReclamationController extends Controller
 {
     public function index()
@@ -303,6 +305,46 @@ class ReclamationController extends Controller
                 'insertBy' => 'etudiant',
             ]);
         }
+        if($Group==null ){
+            $Group='0';
+            $maxIdSession = DB::table('calendrier_modules')
+                ->where('AnneeUniversitaire', function ($query) {
+                    $query->select(DB::raw('MAX(AnneeUniversitaire)'))
+                        ->from('calendrier_modules');
+                })
+                ->max('idSESSION');
+
+            $existingGroup = DB::table('groupes')
+            ->where('nomGroupe', $Group)
+            ->where('Semester', $semester)
+            ->where('idSESSION', $maxIdSession)
+            ->where('AnneeUniversitaire', $AnneeUniversitaire)
+            ->first();
+
+        if ($existingGroup) {
+            // Group already exists, no need to insert again
+            $groupeId = $existingGroup->id;
+        } else {
+            // Insert into the groupes table if it doesn't exist and get the ID
+            $groupeId = DB::table('groupes')->insertGetId([
+                'nomGroupe' => $Group,
+                'Semester' => $semester,
+                'idSESSION' => $maxIdSession, 
+                'AnneeUniversitaire' => $AnneeUniversitaire,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
+
+
+        // Insert into Groupe_etudiant table
+        DB::table('groupe_etudiant')->updateOrInsert([
+            'idEtudiant' => $etudiantId,
+            'idGroupe' => $groupeId
+
+        ]);
+
+        }
         if ($idexam == '') {
             $existingidexam = DB::table('info_exames')
             ->where('NumeroExamen', $ndexamen)
@@ -318,7 +360,7 @@ class ReclamationController extends Controller
             // Insert into Info_Exames table
             $idexam = DB::table('info_exames')->insertGetId(
                 ['NumeroExamen' => $ndexamen, 'Semester' => $semester, 'AnneeUniversitaire' =>  $AnneeUniversitaire, 'idEtudiant' => $etudiantId,
-                
+                    'idGroupe' => $groupeId,
                     'Lieu' => $lieu,
                     'created_at' => now(),
                     'updated_at' => now()
@@ -352,6 +394,7 @@ class ReclamationController extends Controller
                 'idInfo_Exames' => $idexams,
                 'AnneeUniversitaire' => $AnneeUniversitaire,
                 'observations' => $couse,
+                'idSESSION'=>$maxIdSession,
                 'Sujet' => $reclamation,
                 'code_tracking' => $code_tracking,
                 'created_at' => now(),

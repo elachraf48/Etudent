@@ -72,7 +72,7 @@ Route::get('/fetch-filieres/{semester}', [CalendrierModuleController::class, 'fe
 Route::get('/fetch-filieres/{semester}', [ReclamationController::class, 'fetchFilieresBySemester']);
 Route::get('/fetch-filieres/{semester}', [DetailModuleController::class, 'fetchFilieresBySemester']);
 Route::get('/fetch-filieres/{semester}', [AdminController::class, 'fetchFilieresBySemester']);
-Route::get('/fetch-reclamations/{AnneeUniversitaire}/{module}/{semester}/{filiere}/{professeur}', [TrackingReclamationController::class, 'reclamations']);
+Route::get('/fetch-reclamations/{AnneeUniversitaire}/{module}/{semester}/{filiere}/{professeur}/{SESSION}', [TrackingReclamationController::class, 'reclamations']);
 
 Route::get('/fetch-professeur/{fetchModules}', [ReclamationController::class, 'fetchProfesseur']);
 

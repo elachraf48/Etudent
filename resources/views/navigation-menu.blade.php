@@ -7,7 +7,7 @@
                     <!-- <x-application-mark class="block h-9 w-auto" /> -->
                     <img class="block h-12 w-auto" src="{{ url('./img/banner.png') }}" />
 
-                </a>    
+                </a>
             </div>
 
             <!-- Navigation Links -->
@@ -129,6 +129,11 @@
                         <x-dropdown-link href="{{ route('profile.show') }}">
                             {{ __('Profile') }}
                         </x-dropdown-link>
+                        @if(Auth::user()->name == "admin")
+                        <x-dropdown-link href="{{ route('register') }}">
+                            {{ __('Register new') }}
+                        </x-dropdown-link>
+                        @endif
 
                         @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                         <x-dropdown-link href="{{ route('api-tokens.index') }}">

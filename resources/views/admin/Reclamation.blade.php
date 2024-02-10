@@ -29,15 +29,10 @@
         <div class="col-md">
             <div class="form-floating">
                 <select name="AnneeUniversitaire" id="AnneeUniversitaire" class="form-control" required>
-                    <?php
-                    $currentYear = date('Y');
-                    for ($i = 1; $i < 4; $i++) {
-                        $startYear = $currentYear - $i;
-                        $endYear = $startYear + 1;
-                        $academicYear = $startYear . '-' . $endYear;
-                    ?>
-                        <option value="<?= $academicYear ?>"><?= $academicYear ?></option>
-                    <?php } ?>
+                    @foreach($AnneeUniversitaire as $AnneeUniversitaires)
+                    <option value="{{ $AnneeUniversitaires }}">{{ $AnneeUniversitaires }}</option>
+                    @endforeach
+
                 </select>
                 <label for="floatingSelectGrid">Annee Universitaire</label>
             </div>
@@ -54,6 +49,17 @@
                     <option value="S6">S6</option>
                 </select>
                 <label for="floatingSelectGrid">Semester</label>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-floating">
+                <select name="sessions" id="sessions" class="form-control" required>
+                    <option value="%" selected>All</option>
+                    @foreach($sessions as $session)
+                    <option value="{{ $session->id }}">Part Semester: {{ $session->part_semester }} - {{ $session->SESSION }} </option>
+                    @endforeach
+                </select>
+                <label for="floatingSelectGrid">Session Universitaire</label>
             </div>
         </div>
         <div class="col-md">
@@ -101,9 +107,9 @@
                         <tr>
                             <th> Professeur</th>
                             <th>Module</th>
-                            <th>Code Apogee</th>
+                            <th>C.Apogee</th>
                             <th> Étudiant</th>
-                            <th>Numéro Examen</th>
+                            <th>N.Examen</th>
                             <th>Lieu</th>
                             <th> Groupe</th>
                             <th>Sujet</th>
@@ -118,7 +124,25 @@
         </div>
     </div>
 
+<style>
+tr td:nth-child(9) {
+    font-size: x-small;
+    height: 5px;
+    overflow: none; /* or overflow-y: auto; */
+}
+tbody tr {
+    line-height: 1.2;
+    height: 50px; /* Set the height to 50px */
+    max-height: 50px; /* Ensure the height doesn't exceed 50px */
+    overflow: hidden; /* Hide any content that exceeds the height */
+}
 
+tbody tr td:hover{
+    font-size:16px;
+}
+
+
+</style>
 
 
     <!-- Add a textarea for pasting data -->
@@ -144,7 +168,7 @@
                 }
             });
             change_reclamations();
-            $('#AnneeUniversitaire, #semesterDropdown, #filiereDropdown, #moduleDropdown, #professeurDropdown').change(function() {
+            $('#AnneeUniversitaire, #semesterDropdown, #filiereDropdown, #moduleDropdown, #professeurDropdown,#sessions').change(function() {
                 change_reclamations();
             });
             $('#reclamation-table').DataTable({
@@ -307,10 +331,10 @@
             var semester = $('#semesterDropdown').val();
             var filiere = $('#filiereDropdown').val();
             var professeur = $('#professeurDropdown').val();
-
+            var sessions = $('#sessions').val();
             // Add cache buster parameter
             var cacheBuster = new Date().getTime(); // or any unique value
-            var url = '/fetch-reclamations/' + AnneeUniversitaire + '/' + module + '/' + semester + '/' + filiere + '/' + professeur + '?_=' + cacheBuster;
+            var url = '/fetch-reclamations/' + AnneeUniversitaire + '/' + module + '/' + semester + '/' + filiere + '/' + professeur + '/' + sessions + '?_=' + cacheBuster;
 
             $.ajax({
                 url: url,
@@ -326,19 +350,23 @@
 
                     // Populate table with reclamations data
                     $.each(reclamations, function(index, reclamation) {
+                        // Check if nomGroupe is equal to 0, if yes, replace it with "Aucun"
+                        var groupe = reclamation.nomGroupe === '0' ? "Aucun" : reclamation.nomGroupe;
+
                         var rowData = [
                             reclamation.prof_nom + ' ' + reclamation.prof_prenom,
                             reclamation.NomModule,
                             reclamation.CodeApogee,
                             reclamation.Nom + ' ' + reclamation.Prenom,
                             reclamation.NumeroExamen,
-                            reclamation.Lieu,   
-                            reclamation.nomGroupe,
+                            reclamation.Lieu,
+                            groupe, // Use the updated value of groupe
                             reclamation.Sujet,
                             reclamation.observations
                         ];
                         table.row.add(rowData).draw();
                     });
+
 
 
                 }
