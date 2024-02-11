@@ -40,6 +40,13 @@
                                 <div class="item">
                                     <button id="btnSubmit" class="submitBtn submitBtn-large" type="submit">Trouver</button>
                                 </div>
+                                <div class="item">
+                                            <a href="/reclamation">
+                                            هل تريد التبليغ عن مشكل في الامتحان ؟
+                                            <br>
+                                            Vous souhaitez signaler un problème lors de l'examen ?
+                                            </a>
+                                        </div>
 
                                 
                                 @if (session('error'))
@@ -51,6 +58,7 @@
                             </div>
                         </div>
                     </form>
+
                     <div class="text-secondary">
                     &copy; 2023 <a style="text-decoration: none" href="http://droit.ump.ma/" class="text-secondary" target="_blank" title="Facult&eacute;des Sciences Juridiques, Économiques - Oujda">Facult&eacute;des Sciences Juridiques, Économiques - Oujda</a>
                 </div>

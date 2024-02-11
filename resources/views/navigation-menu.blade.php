@@ -129,11 +129,7 @@
                         <x-dropdown-link href="{{ route('profile.show') }}">
                             {{ __('Profile') }}
                         </x-dropdown-link>
-                        @if(Auth::user()->name == "admin")
-                        <x-dropdown-link href="{{ route('register') }}">
-                            {{ __('Register new') }}
-                        </x-dropdown-link>
-                        @endif
+                        
 
                         @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                         <x-dropdown-link href="{{ route('api-tokens.index') }}">

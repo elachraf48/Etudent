@@ -202,11 +202,12 @@ body {
     width: -webkit-calc(100% + 50vw - 720px);
     width: -moz-calc(100% + 50vw - 720px);
     width: calc(100% + 50vw - 720px);
-    background: -webkit-linear-gradient(316.36deg,#5c61a3,#105ba6 100%,#09203f 0);
-    background: -moz- oldlinear-gradient(316.36deg,#5c61a3,#105ba6 100%,#09203f 0);
-    background: -o-linear-gradient(316.36deg,#5c61a3,#105ba6 100%,#09203f 0);
-    background: linear-gradient(133.64deg,#5c61a3,#105ba6 100%,#09203f 0)
+    background: -webkit-linear-gradient(316.36deg, #8B4513, #8B4513 100%, #8B4513 0); /* Brown color */
+    background: -moz- oldlinear-gradient(316.36deg, #8B4513, #8B4513 100%, #8B4513 0); /* Brown color */
+    background: -o-linear-gradient(316.36deg, #8B4513, #8B4513 100%, #8B4513 0); /* Brown color */
+    background: linear-gradient(133.64deg, #8B4513, #8B4513 100%, #8B4513 0); /* Brown color */
 }
+
 
 [dir=rtl] .loginContent .rightSide:before {
     right: 0;
@@ -296,7 +297,7 @@ body {
     right: 0;
     top: 0;
     bottom: 0;
-    background: url(../img/welcome-bg.png) center bottom 10% no-repeat
+    background: url(../img/welcome-bg3.png) center bottom 10% no-repeat
 }
 
 [dir=rtl] .loginContent .rightSide .welcome:before {
@@ -545,4 +546,4 @@ body {
     color: #505f86
 }
 
-/*# sourceMappingURL=login.css.map */
+

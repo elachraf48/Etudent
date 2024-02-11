@@ -8,7 +8,7 @@
 <!-- DataTables CSS -->
 <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 
-<div class="container p-3">
+<div class="container-fluid p-3">
     <div class="text-center">
         <h2 text-center>Les Réclamations</h2>
 
@@ -94,7 +94,7 @@
     </div>
 
     <hr>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <button id="downloadAll" class="btn btn-primary mb-3 float-start">Tout télécharger</button>
@@ -126,19 +126,17 @@
 
 <style>
 tr td:nth-child(9) {
-    font-size: x-small;
-    height: 5px;
-    overflow: none; /* or overflow-y: auto; */
-}
-tbody tr {
-    line-height: 1.2;
-    height: 50px; /* Set the height to 50px */
-    max-height: 50px; /* Ensure the height doesn't exceed 50px */
-    overflow: hidden; /* Hide any content that exceeds the height */
-}
+    max-width: 200px; /* Set your desired max-width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
 
+}
 tbody tr td:hover{
-    font-size:16px;
+    white-space: normal;
+    overflow: visible;
+
 }
 
 

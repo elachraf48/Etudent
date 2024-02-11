@@ -45,7 +45,11 @@ class ReclamationController extends Controller
     }
     public function show(Request $request)
     {
-
+        $maxIdSession = DB::table('calendrier_modules')
+            ->where('AnneeUniversitaire', function ($query) {
+                $query->select(DB::raw('MAX(AnneeUniversitaire)'))
+                    ->from('calendrier_modules');
+            })->max('idSESSION');
         $AnneeUniversitaire = (date('Y') - 1) . '-' . date('Y');
         $codeApogee = $request->input('CodeApogee');
         $semester = $request->input('semester');
@@ -53,7 +57,8 @@ class ReclamationController extends Controller
         $filieres = Filiere::where('id', $filiere)->get(['id', 'NomFiliere', 'Parcours']);
         $studentuniue = Etudiant::where('CodeApogee', $codeApogee)->get(['CodeApogee', 'Nom', 'Prenom']);
         $Modules = Module::where('idFiliere', $filiere)->get(['id', 'NomModule', 'CodeModule']);
-        $Groups = Groupe::where('Semester', $semester)->where('AnneeUniversitaire', $AnneeUniversitaire)->get(['id', 'nomGroupe']);
+        $Groups = Groupe::where('Semester', $semester)->where('AnneeUniversitaire', $AnneeUniversitaire)
+        ->where('idSESSION', $maxIdSession)->get(['id', 'nomGroupe']);
 
         $validator = Validator::make(['CodeApogee' => $codeApogee], [
             'CodeApogee' => 'required|integer', // Add any additional validation rules

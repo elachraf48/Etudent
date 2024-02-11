@@ -9,67 +9,109 @@
     <!-- Include your other <head> elements here -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
+<style>
+    body {
+        width: 100vw;
+    }
 
+    /* Styles for the container */
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Styles for left and right text */
+    .text {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    /* Styles for Arabic text */
+    .text.arabic {
+        direction: rtl;
+    }
+
+    .text-white {
+        display: flex;
+        align-items: center;
+    }
+
+    .text-white a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .text-white a i {
+        margin-right: 5px;
+        /* Adjust as needed */
+    }
+</style>
 <!-- CSRF token for Laravel security -->
-<section class="text-center">
-    
-    <div class="container text-center">
-    <header class="row">
-            <div class="text-center">
-                <!-- Left Section with Logo -->
-                    <img src="{{ asset('img/ministry-logo-ar.png') }}" class="img-fluid " alt="Logo">
+<section class="text-center  bg-light">
+
+    <div class="container-fluid w-75   text-center">
+        <header class="container">
+            <!-- <div class="text-center">
+                    <img src="{{ asset('img/ministry-logo-ar.png') }}" class="img-fluid w-100 h-75" alt="Logo">
+            </div> -->
+            <div class="text">
+                <!-- English text on the left -->
+                Université Mohammed Premier<br>
+                Faculté des Sciences Juridiques,<br>
+                Economique et Sociales
             </div>
-           
-
-
-            <!-- Right Top Section -->
-
-
-
-           
+            <img src="/img/banner.png" alt="University Image" width="150" height="150">
+            <div class="text arabic">
+                <!-- Arabic text on the right -->
+                جامعة محمد الأول بوجدة<br>
+                كلية العلوم القانونية <br>والاقتصادية والاجتماعية
+            </div>
         </header>
         <div class="row">
-            <div class="continue  bg-light">
-                <!-- <div class="col-md-12 bg-light text-center">
-                     Centered Section with Logo for Mobile 
-                    <div class="mx-auto w-25">
-                        <img src="{{ asset('img/banner.png') }}" class="img-fluid w-50" alt="Logo">
+
+            <nav class="navbar navbar-expand-lg bg-dark mt-3" >
+                <div class="container ">
+                    <button class="navbar-toggler bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <p class="text-white">
+                                    <a class="nav-link active text-white" aria-current="page" href="/">
+                                        <i class="fa-solid fa-house"></i> Accueil
+                                    </a>
+                                    <i class="fa-solid fa-arrow-right-long"></i> Espace étudiant
+                                </p>
+
+                            </li>
+                        </ul>
+                            <button class="btn btn-info m-1" onclick="printPage()">
+                                <i class="fa-solid fa-print"></i>
+                            </button>
+                            <button class="btn btn-success m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
+                                New Reclamation
+                            </button>
+                            <button class="btn btn-danger m-1" onclick='window.location.href = "{{ url("/") }}"'>
+                                Calendrier
+                            </button>
                     </div>
-                </div> -->
-                <h5 class="link-danger p-2">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
-                <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
-
-                <!-- <h5><span class="title">شكوى</span></h5>
-                <h5><span class="title">Réclamation</span></h5> -->
-            </div>
-            <nav class="navbar navbar-expand-lg bg-dark">
-                <div class="container">
-                    <a class="nav-link active text-white" aria-current="page" href="/">
-                        <i class="fa-solid fa-house"></i> Accueil
-                    </a>
-                    <a class="nav-link text-white m-1">
-                        <i class="fa-solid fa-arrow-right-long"></i> Espace étudiant
-                    </a>
-                    <div class="d-flex ms-auto ">
-                        <button class="btn btn-info m-1" onclick="printPage()">
-                            <i class="fa-solid fa-print"></i>
-                        </button>
-                        <button class="btn btn-success m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
-                           New Reclamation
-                        </button>
-                        <button class="btn btn-danger m-1" onclick='window.location.href = "{{ url("/") }}"'>
-                            Calendrier
-                        </button>
-
-                    </div>
-
-
+                </div>
             </nav>
+            <div class="continue-fluid "style="background:#CD853F; ">
+
+                <h5 class="link-danger mt-5">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
+                <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
+            </div>
+
         </div>
-        
+
     </div>
 
-    <div class="container-fluid d-flex align-items-center justify-content-center bg-cool   p-3">
+    <div class="container-fluid d-flex align-items-center justify-content-center    p-3" >
 
         <form action="{{ route('reclamationpost') }}" method="post">
             @csrf
@@ -272,7 +314,6 @@
                     </div>
                 </div>
             </div>
-            @if( count($Groups)>1 )
             <div class="row g-2 mt-1  pt-2">
                 <label for="option" class="clearfix">
                     <span class="float-start">Group</span>
@@ -280,18 +321,20 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <!-- <input type="text" value="{{$students->NomGroupe}}" name="option" placeholder="" readonly class="form-control"> -->
 
                         <select name="Group" id="GroupDropdown" class="form-control" required>
                             @foreach($Groups as $Group)
-                            <option value="{{ $Group->id }}">{{ $Group->nomGroupe }}</option>
+                            @php
+                            $Groupe = ($Group->nomGroupe === "0") ? 'Aucun' : $Group->nomGroupe;
+                            @endphp
+                            <option value="{{ $Group->id }}">{{ $Groupe }}</option>
                             @endforeach
+
                         </select>
                         <label for="floatingSelectGrid">Group</label>
                     </div>
                 </div>
             </div>
-            @endif
             <!-- Input field for professeur -->
             <div class="row g-2 mt-1">
                 <label for="professeurv" class="clearfix">
@@ -301,7 +344,12 @@
                 <div class="col-md">
                     <div class="form-floating">
                         <select name="professeur" id="professeurDropdown" class="form-control" required>
-
+                            <option value="">
+                                <label class="clearfix">
+                                    <span class="float-start">Choisissez d'abord module </span>
+                                    <span class="float-end">اختر الوحدة اولا </span>
+                                </label>
+                            </option>
                         </select>
                         <label for="floatingSelectGrid">Professeur</label>
                     </div>
@@ -371,11 +419,19 @@
             <!-- Submit button -->
             <button onclick='window.location.href = "{{ url("/reclamation/")}}"' class="btn btn-secondary  mt-1  float-start   w-25">Back <br>رجوع</button>
             <button type="submit" class="btn btn-success mt-1 w-25 float-end">Valider<br> تأكيد</button>
+
         </form>
         <!-- <button onclick="generatePDF()">Generate PDF</button> -->
+        
 
     </div>
-    <button onclick="generatePDF()">Generate PDF</button>
+    <div class="row" style="background: #8B4513; color:antiquewhite" id="paper-footer">
+            <p class="page-footer-text">Faculté des sciences juridiques économiques et sociales Université Mohammed Premier, BV Mohammed VI B.P. 724 Oujda 60000 Maroc.</p>
+            <p class="page-footer-text">كلية العلوم القانونية والاقتصادية والاجتماعية جامعة محمد الأول، شارع محمد الخامس، ص.ب, 724 وجدة 60000 المغرب</p>
+            <p class="page-footer-text">00212536500597</p>
+        </div>
+
+    <!-- <button onclick="generatePDF()">Generate PDF</button> -->
 
 </section>
 
