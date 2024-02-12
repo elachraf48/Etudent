@@ -10,24 +10,54 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <style>
-    body {
-        width: 100vw;
+    /* Add this CSS to your existing styles */
+    .container-fluid-wrapper {
+        width: 100%;
     }
 
     /* Styles for the container */
+    .container-fluid {
+        width: 100vw;
+        /* Adjust as needed */
+        margin: 0 auto;
+        /* Center the container horizontally */
+    }
+
+    /* Adjust padding and margin for smaller screens */
+    @media screen and (max-width: 768px) {
+
+        .container-fluid-wrapper {
+            padding: 0 15px;
+            /* Add padding for better spacing */
+        }
+
+        .container-fluid {
+
+            width: 100%;
+        }
+    }
+
+    /* Styles for header */
     header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        /* Allow items to wrap on smaller screens */
     }
 
     /* Styles for left and right text */
     .text {
         font-family: Arial, sans-serif;
         text-align: center;
+        flex: 1;
+        /* Take up equal space */
+        margin: 10px;
+        /* Adjust as needed */
+        font-size: 18px;
+        /* Default font size */
     }
 
-    /* Styles for Arabic text */
     .text.arabic {
         direction: rtl;
     }
@@ -35,6 +65,8 @@
     .text-white {
         display: flex;
         align-items: center;
+        color: #fff;
+        /* Specify text color */
     }
 
     .text-white a {
@@ -42,53 +74,97 @@
         align-items: center;
         text-decoration: none;
         color: inherit;
-    }
-
-    .text-white a i {
-        margin-right: 5px;
+        margin-right: 10px;
         /* Adjust as needed */
     }
+
+    /* Media query for smaller screens */
+    @media screen and (max-width: 768px) {
+        .text {
+            font-size: 14px;
+            /* Adjust font size for smaller screens */
+        }
+
+        section .container-fluid:nth-child(1) {
+            width: 100vw;
+        }
+    }
+
+    .navbar {
+        margin-top: 10px;
+        /* Adjust as needed */
+    }
+
+    /* Additional styles for the footer */
+    #paper-footer {
+        padding: 10px;
+        text-align: center;
+        color: antiquewhite;
+    }
+    #desktop-nav {
+    display: block; /* Display the list by default */
+}
+
+#mobile-button {
+    display: none; /* Hide the button by default */
+}
+
+/* Media query for laptops and larger screens */
+@media screen and (max-width: 1024px) {
+    #desktop-nav {
+        display: none; /* Hide the list on laptops and larger screens */
+    }
+
+    #mobile-button {
+        display: block; /* Display the button on laptops and larger screens */
+    }
+}
 </style>
 <!-- CSRF token for Laravel security -->
 <section class="text-center  bg-light">
+    <div class="container-fluid-wrapper p-0">
 
-    <div class="container-fluid w-75   text-center">
-        <header class="container">
-            <!-- <div class="text-center">
+        <div class="container-fluid  text-center">
+            <header class="container">
+                <!-- <div class="text-center">
                     <img src="{{ asset('img/ministry-logo-ar.png') }}" class="img-fluid w-100 h-75" alt="Logo">
             </div> -->
-            <div class="text">
-                <!-- English text on the left -->
-                Université Mohammed Premier<br>
-                Faculté des Sciences Juridiques,<br>
-                Economique et Sociales
-            </div>
-            <img src="/img/banner.png" alt="University Image" width="150" height="150">
-            <div class="text arabic">
-                <!-- Arabic text on the right -->
-                جامعة محمد الأول بوجدة<br>
-                كلية العلوم القانونية <br>والاقتصادية والاجتماعية
-            </div>
-        </header>
-        <div class="row">
+                <div class="text">
+                    <!-- English text on the left -->
+                    Université Mohammed Premier<br>
+                    Faculté des Sciences Juridiques,<br>
+                    Economique et Sociales
+                </div>
+                <img src="/img/banner.png" alt="University Image" width="150" height="150">
+                <div class="text arabic">
+                    <!-- Arabic text on the right -->
+                    جامعة محمد الأول بوجدة<br>
+                    كلية العلوم القانونية <br>والاقتصادية والاجتماعية
+                </div>
+            </header>
+            <div class="row">
 
-            <nav class="navbar navbar-expand-lg bg-dark mt-3" >
-                <div class="container ">
-                    <button class="navbar-toggler bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <p class="text-white">
-                                    <a class="nav-link active text-white" aria-current="page" href="/">
-                                        <i class="fa-solid fa-house"></i> Accueil
-                                    </a>
-                                    <i class="fa-solid fa-arrow-right-long"></i> Espace étudiant
-                                </p>
+                <nav class="navbar navbar-expand-lg bg-dark mt-3">
+                    <div class="container ">
+                        <button class="navbar-toggler bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="desktop-nav">
+                                <li class="nav-item">
+                                    <p class="text-white">
+                                        <a class="nav-link active text-white" aria-current="page" href="/reclamation/">
+                                            <i class="fa-solid fa-house"></i> Reclamation
+                                        </a>
+                                        <i class="fa-solid fa-arrow-right-long"></i> Espace étudiant
+                                    </p>
+                                </li>
+                            </ul>
 
-                            </li>
-                        </ul>
+                            <button class="btn btn-light" id="mobile-button" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
+                                <i class="fa-solid fa-house"></i>
+                            </button>
+
                             <button class="btn btn-info m-1" onclick="printPage()">
                                 <i class="fa-solid fa-print"></i>
                             </button>
@@ -98,20 +174,21 @@
                             <button class="btn btn-danger m-1" onclick='window.location.href = "{{ url("/") }}"'>
                                 Calendrier
                             </button>
+                        </div>
                     </div>
-                </div>
-            </nav>
-            <div class="continue-fluid "style="background:#CD853F; ">
+                </nav>
+                <div class="continue-fluid bg-gray" style="background:#CD853F; ">
 
-                <h5 class="link-danger mt-5">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
-                <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
+                    <h5 class="link-danger mt-5">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
+                    <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
+                </div>
+
             </div>
 
         </div>
-
     </div>
 
-    <div class="container-fluid d-flex align-items-center justify-content-center    p-3" >
+    <div class="container-fluid d-flex align-items-center justify-content-center    p-3">
 
         <form action="{{ route('reclamationpost') }}" method="post">
             @csrf
@@ -422,14 +499,14 @@
 
         </form>
         <!-- <button onclick="generatePDF()">Generate PDF</button> -->
-        
+
 
     </div>
     <div class="row" style="background: #8B4513; color:antiquewhite" id="paper-footer">
-            <p class="page-footer-text">Faculté des sciences juridiques économiques et sociales Université Mohammed Premier, BV Mohammed VI B.P. 724 Oujda 60000 Maroc.</p>
-            <p class="page-footer-text">كلية العلوم القانونية والاقتصادية والاجتماعية جامعة محمد الأول، شارع محمد الخامس، ص.ب, 724 وجدة 60000 المغرب</p>
-            <p class="page-footer-text">00212536500597</p>
-        </div>
+        <p class="page-footer-text">Faculté des sciences juridiques économiques et sociales Université Mohammed Premier, BV Mohammed VI B.P. 724 Oujda 60000 Maroc.</p>
+        <p class="page-footer-text">كلية العلوم القانونية والاقتصادية والاجتماعية جامعة محمد الأول، شارع محمد الخامس، ص.ب, 724 وجدة 60000 المغرب</p>
+        <p class="page-footer-text">00212536500597</p>
+    </div>
 
     <!-- <button onclick="generatePDF()">Generate PDF</button> -->
 
