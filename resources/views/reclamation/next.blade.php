@@ -8,118 +8,10 @@
 <head>
     <!-- Include your other <head> elements here -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/reclamation.css') }}">
+
 </head>
-<style>
-    /* Add this CSS to your existing styles */
-    .container-fluid-wrapper {
-        width: 100%;
-    }
 
-    /* Styles for the container */
-    .container-fluid {
-        width: 100vw;
-        /* Adjust as needed */
-        margin: 0 auto;
-        /* Center the container horizontally */
-    }
-
-    /* Adjust padding and margin for smaller screens */
-    @media screen and (max-width: 768px) {
-
-        .container-fluid-wrapper {
-            padding: 0 15px;
-            /* Add padding for better spacing */
-        }
-
-        .container-fluid {
-
-            width: 100%;
-        }
-    }
-
-    /* Styles for header */
-    header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        /* Allow items to wrap on smaller screens */
-    }
-
-    /* Styles for left and right text */
-    .text {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        flex: 1;
-        /* Take up equal space */
-        margin: 10px;
-        /* Adjust as needed */
-        font-size: 18px;
-        /* Default font size */
-    }
-
-    .text.arabic {
-        direction: rtl;
-    }
-
-    .text-white {
-        display: flex;
-        align-items: center;
-        color: #fff;
-        /* Specify text color */
-    }
-
-    .text-white a {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        color: inherit;
-        margin-right: 10px;
-        /* Adjust as needed */
-    }
-
-    /* Media query for smaller screens */
-    @media screen and (max-width: 768px) {
-        .text {
-            font-size: 14px;
-            /* Adjust font size for smaller screens */
-        }
-
-        section .container-fluid:nth-child(1) {
-            width: 100vw;
-        }
-    }
-
-    .navbar {
-        margin-top: 10px;
-        /* Adjust as needed */
-    }
-
-    /* Additional styles for the footer */
-    #paper-footer {
-        padding: 10px;
-        text-align: center;
-        color: antiquewhite;
-    }
-    #desktop-nav {
-    display: block; /* Display the list by default */
-}
-
-#mobile-button {
-    display: none; /* Hide the button by default */
-}
-
-/* Media query for laptops and larger screens */
-@media screen and (max-width: 1024px) {
-    #desktop-nav {
-        display: none; /* Hide the list on laptops and larger screens */
-    }
-
-    #mobile-button {
-        display: block; /* Display the button on laptops and larger screens */
-    }
-}
-</style>
 <!-- CSRF token for Laravel security -->
 <section class="text-center  bg-light">
     <div class="container-fluid-wrapper p-0">
@@ -144,7 +36,7 @@
             </header>
             <div class="row">
 
-                <nav class="navbar navbar-expand-lg bg-dark mt-3">
+                <nav class="navbar navbar-expand-lg mt-3" style="background: #8B4513;">
                     <div class="container ">
                         <button class="navbar-toggler bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
@@ -165,9 +57,9 @@
                                 <i class="fa-solid fa-house"></i>
                             </button>
 
-                            <button class="btn btn-info m-1" onclick="printPage()">
+                            <!-- <button class="btn btn-info m-1" onclick="printPage()">
                                 <i class="fa-solid fa-print"></i>
-                            </button>
+                            </button> -->
                             <button class="btn btn-success m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
                                 New Reclamation
                             </button>
@@ -190,7 +82,7 @@
 
     <div class="container-fluid d-flex align-items-center justify-content-center    p-3">
 
-        <form action="{{ route('reclamationpost') }}" method="post">
+    <form id="reclamation-form" action="{{ route('reclamationpost') }}" method="post">
             @csrf
 
             <div id="liveAlertPlaceholder"></div>
@@ -495,7 +387,7 @@
             </div>
             <!-- Submit button -->
             <button onclick='window.location.href = "{{ url("/reclamation/")}}"' class="btn btn-secondary  mt-1  float-start   w-25">Back <br>رجوع</button>
-            <button type="submit" class="btn btn-success mt-1 w-25 float-end">Valider<br> تأكيد</button>
+            <button type="button" class="btn btn-success mt-1 w-25 float-end" id="submit-btn">Valider<br> تأكيد</button>
 
         </form>
         <!-- <button onclick="generatePDF()">Generate PDF</button> -->
@@ -507,7 +399,26 @@
         <p class="page-footer-text">كلية العلوم القانونية والاقتصادية والاجتماعية جامعة محمد الأول، شارع محمد الخامس، ص.ب, 724 وجدة 60000 المغرب</p>
         <p class="page-footer-text">00212536500597</p>
     </div>
-
+    <div class="modal" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <label class="form-check-label clearfix" for="flexSwitchCheckDefault">
+                    <span class="float-start">Toutes les informations sont-elles correctes ? </span><br>
+                    <span class="float-end"> هل جميع المعلومات صحيحة ؟</span>
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">annuler <br>الغاء</button>
+                <button type="button" class="btn btn-success" id="confirm-submit-btn">Valider<br> تأكيد</button>
+            </div>
+        </div>
+    </div>
+</div>
     <!-- <button onclick="generatePDF()">Generate PDF</button> -->
 
 </section>
@@ -518,6 +429,27 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var submitButton = document.getElementById('submit-btn');
+    var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+    var confirmSubmitBtn = document.getElementById('confirm-submit-btn');
+    var reclamationForm = document.getElementById('reclamation-form');
+
+    // Event listener for submit button click
+    submitButton.addEventListener('click', function () {
+        // Show the confirmation modal
+        confirmationModal.show();
+    });
+
+    // Event listener for confirm submit button click
+    confirmSubmitBtn.addEventListener('click', function () {
+        // Hide the confirmation modal
+        confirmationModal.hide();
+        // Submit the form
+        reclamationForm.submit();
+    });
+});
+
     function generatePDF() {
         const doc = new jsPDF();
         let y = 10;

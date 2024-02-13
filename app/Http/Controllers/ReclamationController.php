@@ -43,6 +43,12 @@ class ReclamationController extends Controller
         // Pass the data to the view
 
     }
+    public function last($reclamationId)
+    {
+        return view('reclamation.last');
+        // Pass the data to the view
+
+    }
     public function show(Request $request)
     {
         $maxIdSession = DB::table('calendrier_modules')
@@ -408,7 +414,7 @@ class ReclamationController extends Controller
         } else {
             $reclamationsId=$existingRow->id;
             $code_tracking=$existingRow->code_tracking;
-            return redirect()->route('reclamation.index')->with('error', 'Vous avez déjà déposé une réclamation <br>  لقد قمت بالفعل بتقديم شكوى مسبقا' );
+            return redirect()->route('reclamationlast', ['reclamationId' => $reclamationsId])->with('error', 'Vous avez déjà déposé une réclamation <br>  لقد قمت بالفعل بتقديم شكوى مسبقا');
             // Handle the case where a similar row already exists
             // You can log an error, throw an exception, or handle it in any other appropriate way
         }
@@ -428,7 +434,7 @@ class ReclamationController extends Controller
         ]);}
         // return redirect()->route('reclamation.index')->with('success', 'Votre code de suivi ' . $code_tracking);
         // $dompdf->stream("document.pdf");
-         return redirect()->route('reclamation.index')->with('success', 'Une plainte a été soumise avec succès  <br>  تم تقديم شكوى بالنجاح' );
+         return redirect()->route('reclamationlast')->with('success', 'Une plainte a été soumise avec succès  <br>  تم تقديم شكوى بالنجاح' );
 
         return $this->index();
         // Add any necessary logic here

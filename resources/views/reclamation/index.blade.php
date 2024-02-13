@@ -7,7 +7,7 @@
 
 <div class="global">
     <!-- CONTENT -->
-    
+
     <div class="loginContent">
         <div class="main">
             <div class="rightSide ">
@@ -24,7 +24,7 @@
                     <div class="ministryLogo">
                         <img src="/img/ministry-logo-ar.png" alt="" />
                     </div>
-                    <form action="{{ route('reclamation') }}" method="GET" class="" onsubmit="return validateForm()">
+                    <form action="{{ route('reclamation.next') }}" method="GET" class="" onsubmit="return validateForm()">
                         <div class="formLogin">
                             <div class="massarLogo">
                                 <img src="/img/banner.png" alt="" />
