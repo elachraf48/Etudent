@@ -378,13 +378,7 @@
                 </div>
             </div>
 
-            <div class="form-check form-switch " id="formswitch">
-                <input class="form-check-input " type="checkbox" id="flexSwitchCheckDefault" required>
-                <label class="form-check-label clearfix" for="flexSwitchCheckDefault">
-                    <span class="float-start">Vous avez confirmé que les informations ont été collectées et qu'elles sont correctes | </span>
-                    <span class="float-end"> لقد قمت بتأكيد من جمع المعلومات وهي صحيحة </span>
-                </label>
-            </div>
+          
             <!-- Submit button -->
             <button onclick='window.location.href = "{{ url("/reclamation/")}}"' class="btn btn-secondary  mt-1  float-start   w-25">Back <br>رجوع</button>
             <button type="button" class="btn btn-success mt-1 w-25 float-end" id="submit-btn">Valider<br> تأكيد</button>
@@ -394,11 +388,7 @@
 
 
     </div>
-    <div class="row" style="background: #8B4513; color:antiquewhite" id="paper-footer">
-        <p class="page-footer-text">Faculté des sciences juridiques économiques et sociales Université Mohammed Premier, BV Mohammed VI B.P. 724 Oujda 60000 Maroc.</p>
-        <p class="page-footer-text">كلية العلوم القانونية والاقتصادية والاجتماعية جامعة محمد الأول، شارع محمد الخامس، ص.ب, 724 وجدة 60000 المغرب</p>
-        <p class="page-footer-text">00212536500597</p>
-    </div>
+   
     <div class="modal" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -422,7 +412,11 @@
     <!-- <button onclick="generatePDF()">Generate PDF</button> -->
 
 </section>
-
+<div class="row text-center p-3" style="background: #8B4513; color:antiquewhite" >
+        <p class="page-footer-text">Faculté des sciences juridiques économiques et sociales Université Mohammed Premier, BV Mohammed VI B.P. 724 Oujda 60000 Maroc.</p>
+        <p class="page-footer-text">كلية العلوم القانونية والاقتصادية والاجتماعية جامعة محمد الأول، شارع محمد الخامس، ص.ب, 724 وجدة 60000 المغرب</p>
+        <p class="page-footer-text">00212536500597</p>
+    </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 

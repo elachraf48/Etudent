@@ -2,16 +2,17 @@
 namespace App\Http\Controllers;
 
 
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-
 use App\Models\InfoExame;
 use App\Models\Etudiant;
 use App\Models\Filiere;
 use App\Models\Module;
 use App\Models\Groupe;
 use App\Models\Professeur;
+use App\Models\Reclamation;
 use App\Models\InsertBy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -21,12 +22,16 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Barryvdh\Snappy\Facades\SnappyImage;
+use Barryvdh\Snappy\Facades\SnappyPdf;
+use PDF;
 
 use Illuminate\Support\Facades\View;
 use Mpdf\Mpdf;
 use Spatie\Browsershot\Browsershot;
 
 use function PHPUnit\Framework\isNull;
+use Intervention\Image\Facades\Image;
 
 class ReclamationController extends Controller
 {
@@ -43,9 +48,107 @@ class ReclamationController extends Controller
         // Pass the data to the view
 
     }
+
+public function convertHtmlToPdf(Request $request, $reclamationId)
+{  $reclamationId = $request->validate(['reclamationId' => 'required|integer']);
+
+    $reclamationId = $request->input('reclamationId');
+
+    // Retrieve data for the reclamation
+    $result = Reclamation::select(
+        'reclamations.AnneeUniversitaire',
+        'etudiants.CodeApogee',
+        'etudiants.Nom',
+        'etudiants.Prenom',
+        'modules.Semester',
+        'modules.NomModule',
+        'filieres.NomFiliere',
+        'filieres.Parcours',
+        'info_exames.Lieu',
+        'info_exames.NumeroExamen',
+        'groupes.nomGroupe',
+        'professeurs.Nom as ProfNom',
+        'professeurs.Prenom as ProfPrenom',
+        'reclamations.Sujet',
+        'reclamations.observations',
+        'reclamations.code_tracking'
+    )
+        ->join('modules', 'modules.id', '=', 'reclamations.idModule')
+        ->join('filieres', 'filieres.id', '=', 'modules.idFiliere')
+        ->join('professeurs', 'professeurs.id', '=', 'reclamations.idProfesseur')
+        ->join('etudiants', 'etudiants.id', '=', 'reclamations.idEtudiant')
+        ->join('info_exames', 'info_exames.id', '=', 'reclamations.idInfo_Exames')
+        ->join('groupe_etudiant', 'groupe_etudiant.idEtudiant', '=', 'etudiants.id')
+        ->join('groupes', 'groupes.id', '=', 'groupe_etudiant.idGroupe')
+        ->where('reclamations.id', '=', $reclamationId)
+        ->firstOrFail();
+        $view = View::make('reclamation.showpdf', compact('result'));
+        $htmlContent = $view->render();
+        
+       
+        $html = view('reclamation.showpdf', ['result' => $result])->render();
+        $pdf = SnappyPDF::loadHtml($html);
+        $pdf->setPaper('A4');
+        $pdf->setOption('margin-top', '0');
+        $pdf->setOption('margin-right', '0');
+        $pdf->setOption('margin-bottom', '0');
+        $pdf->setOption('margin-left', '0');
+        $pdfContent = $pdf->output();
+
+    // Render HTML content
+    $htmlContent = view('reclamation.showpdf', compact('result'))->render();
+
+    // Save HTML to image
+    $imagePath = public_path('temp/image.png');
+    SnappyImage::loadHTML($htmlContent)->save($imagePath);
+
+    // Convert image to PDF
+    $pdfPath = public_path('temp/pdf.pdf');
+    SnappyPdf::loadImage($imagePath)->save($pdfPath);
+
+    // Optionally, you may delete the image after PDF conversion
+    if (file_exists($imagePath)) {
+        unlink($imagePath);
+    }
+
+    return 'PDF saved successfully!';
+
+}
+
     public function last($reclamationId)
     {
-        return view('reclamation.last');
+        $result = Reclamation::select(
+            'reclamations.AnneeUniversitaire',
+            'reclamations.created_at',
+            'etudiants.CodeApogee',
+            'etudiants.Nom',
+            'etudiants.Prenom',
+            'modules.Semester',
+            'modules.NomModule',
+            'filieres.NomFiliere',
+            'filieres.Parcours',
+            'info_exames.Lieu',
+            'info_exames.NumeroExamen',
+            'groupes.nomGroupe',
+            'professeurs.Nom as ProfNom',
+            'professeurs.Prenom as ProfPrenom',
+            'reclamations.Sujet',
+            'reclamations.observations',
+            'reclamations.code_tracking'
+        )
+            ->join('modules', 'modules.id', '=', 'reclamations.idModule')
+            ->join('filieres', 'filieres.id', '=', 'modules.idFiliere')
+            ->join('professeurs', 'professeurs.id', '=', 'reclamations.idProfesseur')
+            ->join('etudiants', 'etudiants.id', '=', 'reclamations.idEtudiant')
+            ->join('info_exames', 'info_exames.id', '=', 'reclamations.idInfo_Exames')
+            ->join('groupe_etudiant', 'groupe_etudiant.idEtudiant', '=', 'etudiants.id')
+            ->join('groupes', 'groupes.id', '=', 'groupe_etudiant.idGroupe')
+            ->where('reclamations.id', '=', $reclamationId)
+            ->first();
+
+        
+        
+        return view('reclamation.last', compact('result'));
         // Pass the data to the view
 
     }
@@ -316,14 +419,15 @@ class ReclamationController extends Controller
                 'insertBy' => 'etudiant',
             ]);
         }
-        if($Group==null ){
-            $Group='0';
-            $maxIdSession = DB::table('calendrier_modules')
+        $maxIdSession = DB::table('calendrier_modules')
                 ->where('AnneeUniversitaire', function ($query) {
                     $query->select(DB::raw('MAX(AnneeUniversitaire)'))
                         ->from('calendrier_modules');
                 })
                 ->max('idSESSION');
+        if($Group==null ){
+            $Group='0';
+            
 
             $existingGroup = DB::table('groupes')
             ->where('nomGroupe', $Group)
@@ -434,7 +538,7 @@ class ReclamationController extends Controller
         ]);}
         // return redirect()->route('reclamation.index')->with('success', 'Votre code de suivi ' . $code_tracking);
         // $dompdf->stream("document.pdf");
-         return redirect()->route('reclamationlast')->with('success', 'Une plainte a été soumise avec succès  <br>  تم تقديم شكوى بالنجاح' );
+         return redirect()->route('reclamationlast', ['reclamationId' => $reclamationsId])->with('success', 'Une plainte a été soumise avec succès  <br>  تم تقديم شكوى بالنجاح' );
 
         return $this->index();
         // Add any necessary logic here

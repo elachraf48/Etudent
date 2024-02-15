@@ -171,8 +171,8 @@ tbody tr td:hover{
             });
             $('#reclamation-table').DataTable({
                 lengthMenu: [
-                    [5, 10, 25, 50, -1],
-                    [5, 10, 25, 50, "All"]
+                    [-1, 10, 25, 50, 100],
+                    ["All", 10, 25, 50, 100]
                 ],
                 // Other DataTables options...
             });
@@ -188,71 +188,73 @@ tbody tr td:hover{
             });
 
             function downloadCSV(type) {
-                var zip = new JSZip();
+                var currentDate = new Date().toISOString().slice(0,10); // Get current date in YYYY-MM-DD format
 
-                // Construct CSV data based on type
-                if (type === 'all') {
-                    var csvContent = '';
-                    csvContent += '\uFEFFProfesseur,Module,Code Apogee, Étudiant,Numéro Examen,Lieu, Groupe,Sujet,Observations\n';
-                    $('#reclamation-table tbody tr').each(function() {
+    var zip = new JSZip();
 
-                        $(this).find('td').each(function() {
-                            csvContent += $(this).text() + ',';
-                        });
-                        csvContent += '\n';
-                    });
-                    var blob = new Blob([csvContent], {
-                        type: 'text/csv;charset=utf-8;'
-                    });
-                    var link = document.createElement('a');
-                    if (link.download !== undefined) { // feature detection
-                        var url = URL.createObjectURL(blob);
-                        link.setAttribute('href', url);
-                        link.setAttribute('download', 'all-reclamations.csv');
-                        link.style.visibility = 'hidden';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    }
-                } else if (type === 'professeur') {
+    // Construct CSV data based on type
+    if (type === 'all') {
+        var csvContent = '';
+        csvContent += '\uFEFF"Professeur","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
 
-                    var headerRow = "\uFEFFModule,Code Apogee, Étudiant,Numéro Examen,Lieu, Groupe,Sujet,Observations\n";
-                    var columnIndex = [];
-                    $('#reclamation-table thead tr th').each(function(index) {
-                        var columnName = $(this).text();
-                        if (columnName !== 'Professeur') {
-                            columnIndex.push(index);
-                        }
-                    });
+        $('#reclamation-table tbody tr').each(function() {
+            $(this).find('td').each(function() {
+                csvContent += '"' + $(this).text().replace(/"/g, '""') + '",'; // Wrap data in quotes to handle special characters and escape quotes
+            });
+            csvContent += '\n';
+        });
 
-                    var professeurs = {};
-                    $('#reclamation-table tbody tr').each(function() {
-                        var professeur = $(this).find('td:eq(0)').text();
-                        if (!professeurs[professeur]) {
-                            professeurs[professeur] = [];
-                        }
-                        var rowData = [];
-                        $(this).find('td').slice(1).each(function(index) {
-                            if (columnIndex.includes(index)) {
-                                rowData.push($(this).text());
-                            }
-                        });
-                        professeurs[professeur].push(rowData.join(','));
-                    });
+        var blob = new Blob([csvContent], {
+            type: 'text/csv;charset=utf-8;'
+        });
+        var link = document.createElement('a');
+        if (link.download !== undefined) { // feature detection
+            var url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'all-reclamations-'+currentDate+'.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    } else if (type === 'professeur') {
+        var headerRow = '\uFEFF"Professeur","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
 
-                    for (var prof in professeurs) {
-                        zip.file(prof.replace(/\s+/g, '-') + '.csv', headerRow + professeurs[prof].join('\n'));
-                    }
-                    zip.generateAsync({
-                        type: 'blob'
-                    }).then(function(content) {
-                        saveAs(content, 'reclamations.zip');
-                    });
-                }
-
-
+        var columnIndex = [];
+        $('#reclamation-table thead tr th').each(function(index) {
+            var columnName = $(this).text();
+            if (columnName !== 'Professeur') {
+                columnIndex.push(index);
             }
-            //filier show after change semester
+        });
+
+        var professeurs = {};
+        $('#reclamation-table tbody tr').each(function() {
+            var professeur = $(this).find('td:eq(0)').text();
+            if (!professeurs[professeur]) {
+                professeurs[professeur] = [];
+            }
+            var rowData = [];
+            $(this).find('td').slice(0).each(function(index) {
+                if (columnIndex.includes(index)) {
+                    rowData.push('"' + $(this).text().replace(/"/g, '""') + '"'); // Wrap data in quotes to handle special characters and escape quotes
+                }
+            });
+            professeurs[professeur].push(rowData.join(','));
+        });
+
+        for (var prof in professeurs) {
+            zip.file(prof.replace(/\s+/g, '-') + '.csv', headerRow + professeurs[prof].join('\n'));
+        }
+
+        zip.generateAsync({
+            type: 'blob'
+        }).then(function(content) {
+            saveAs(content, 'reclamations'+currentDate+'.zip');
+        });
+    }
+}
+   //filier show after change semester
             $('#semesterDropdown').change(function() {
                 var selectedSemester = $(this).val();
                 // Make an Ajax request to fetch filieres based on the selected semester

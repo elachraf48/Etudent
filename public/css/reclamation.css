@@ -88,8 +88,11 @@ header {
 #paper-footer {
     padding: 10px;
     text-align: center;
-    color: antiquewhite;
+    background: #8B4513; 
+    color:antiquewhite; /* Add background color */
+   
 }
+
 #desktop-nav {
 display: block; /* Display the list by default */
 }
@@ -130,7 +133,7 @@ display: none; /* Hide the button by default */
   }
   
   .cssbuttons-io-button:hover {
-    border-color: white;
+    border-color: rgb(74, 245, 31);
     box-shadow: 0 0.5em 1.5em -0.5em #bf5800;
   }
   

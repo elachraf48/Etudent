@@ -42,10 +42,14 @@ use App\Http\Controllers\InfoExameController;
 use App\Http\Controllers\CalendrierModuleController;
 use App\Http\Controllers\CalendrierModuleGroupeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PDFController;
+
 use App\Http\Controllers\ReclamationController;
 use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\DetailProfesseurController;
 use App\Http\Controllers\TrackingReclamationController;
+use FontLib\Table\Type\name;
+
 // Routes for Filiere
 Route::resource('filieres', FiliereController::class);
 
@@ -61,8 +65,12 @@ Route::resource('/reclamation', ReclamationController::class);
 Route::get('/reclamation/next', [ReclamationController::class, 'show'])->name('reclamation.next');
 Route::post('/reclamation/next', [ReclamationController::class, 'reclamationpost'])->name('reclamationpost');
 Route::get('/reclamation/last/{reclamationId}', [ReclamationController::class, 'last'])->name('reclamationlast');
-Route::get('/reclamation/showpdf', 'PDFController@showPDF')->name('showpdf');
-
+Route::get('/reclamation/next/last/showpdf', [PDFController::class, 'showPDF'])->name('showpdf');
+    Route::get('/reclamation/pdf/{reclamationId}', [ReclamationController::class, 'convertHtmlToPdf']);
+    Route::get('/reclamation/convert-to-pdf/{reclamationId}', [ReclamationController::class, 'convertHtmlToPdf']);
+    Route::get('/convertHtmlToPdf/{reclamationId}', [ReclamationController::class, 'convertHtmlToPdf']);
+    Route::post('/reclamation/convert-to-pdf/{reclamationId}', [ReclamationController::class, 'convertHtmlToPdf']);
+    
 // Add a custom route for the 'next' method
 
 // Add a custom route for the 'getParcours' method
