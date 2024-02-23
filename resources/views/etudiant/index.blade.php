@@ -11,7 +11,7 @@
     <div class="loginContent">
         <div class="main">
             <div class="rightSide ">
-                <div class="welcome">
+                <div class="welcome welcomecl">
                     <div class="inner">
                         <h1 class="welcomeTitle">Bienvenue sur la plateforme de planification des examens <br><br>مرحبًا بك في منصة الاطلاع على جدولة الامتحان الزمنية</h1>
                         <p class="welcomeDesc">Le calendrier des examens comporte la date, l’heure et le lieu de chaque épreuve</p>

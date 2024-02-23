@@ -1,5 +1,7 @@
+@if(Auth::user()->role == 0)
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
+
         <div class="flex">
             <!-- Logo -->
             <div class="shrink-0 flex items-center">
@@ -129,7 +131,7 @@
                         <x-dropdown-link href="{{ route('profile.show') }}">
                             {{ __('Profile') }}
                         </x-dropdown-link>
-                        
+
 
                         @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                         <x-dropdown-link href="{{ route('api-tokens.index') }}">
@@ -242,3 +244,115 @@
     </div>
 </div>
 </nav>
+@elseif(Auth::user()->role == 3)
+<!-- resources/views/Professeur/index.blade.php -->
+
+
+<header class="container">
+    <!-- <div class="text-center">
+                    <img src="{{ asset('img/ministry-logo-ar.png') }}" class="img-fluid w-100 h-75" alt="Logo">
+            </div> -->
+    <div class="text">
+        <!-- English text on the left -->
+        Université Mohammed Premier<br>
+        Faculté des Sciences Juridiques,<br>
+        Economique et Sociales
+    </div>
+    <img src="/img/banner.png" alt="University Image" width="150" height="150">
+    <div class="text arabic">
+        <!-- Arabic text on the right -->
+        جامعة محمد الأول بوجدة<br>
+        كلية العلوم القانونية <br>والاقتصادية والاجتماعية
+    </div>
+</header>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+    <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ Auth::user()->name }}
+
+            </button>
+        <ul class="dropdown-menu">
+            <div class="block px-4 py-2 text-xs text-gray-400">
+                {{ __('Manage Account') }}
+            </div>
+
+            <x-dropdown-link href="{{ route('profile.show') }}">
+                {{ __('Profile') }}
+            </x-dropdown-link>
+
+
+            @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
+            <x-dropdown-link href="{{ route('api-tokens.index') }}">
+                {{ __('API Tokens') }}
+            </x-dropdown-link>
+            @endif
+
+            <div class="border-t border-gray-200"></div>
+
+            <!-- Authentication -->
+            <form method="POST" action="{{ route('logout') }}" x-data>
+                @csrf
+
+                <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                    {{ __('Log Out') }}
+                </x-dropdown-link>
+            </form>
+        </ul>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav p-2">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/Professeur">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="#">Reclamation
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="reclamationsCount">
+0
+                            <span class="visually-hidden">unread messages</span>
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item dropdown">
+
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+<link rel="stylesheet" href="{{ asset('css/reclamation.css') }}">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    // Fetch the count of reclamations using AJAX
+    function updateReclamationsCount() {
+        $.ajax({
+            url: "{{ route('reclamations.count') }}",
+            method: 'GET',
+            success: function(response) {
+                // Update the count in the navigation menu
+                $('#reclamationsCount').text(response.count > 0 ? response.count : '0');
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    // Call the function initially to update the count
+    updateReclamationsCount();
+
+    // Optionally, you can set up a timer to periodically update the count
+    setInterval(updateReclamationsCount, 60000); // Update every minute (adjust as needed)
+</script>
+
+
+
+
+
+@endif

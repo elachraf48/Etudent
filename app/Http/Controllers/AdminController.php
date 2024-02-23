@@ -7,8 +7,7 @@ use App\Models\CalendrierSession;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
-
-
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -20,8 +19,15 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $sessions = CalendrierSession::all();
-        return view('admin.Calendrier_modules', compact('sessions'));
+        $role=Auth::user()->role;
+        if($role=='0'){
+            return redirect()->route('Reclamation_form');
+
+        }
+        elseif($role=='3'){
+            return view('etudiant.index');
+        }
+
 
 
     }

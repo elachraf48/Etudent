@@ -297,9 +297,15 @@ body {
     right: 0;
     top: 0;
     bottom: 0;
+}
+.loginContent .rightSide .welcomecl:before {
+    
     background: url(../img/welcome-bg3.png) center bottom 10% no-repeat
 }
+.loginContent .rightSide .welcomere:before {
+    background: url(../img/welcome-bg4.png) center bottom 10% no-repeat
 
+}
 [dir=rtl] .loginContent .rightSide .welcome:before {
     -webkit-transform: scaleX(-1);
     -moz-transform: scaleX(-1);

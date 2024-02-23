@@ -11,7 +11,7 @@
     <div class="loginContent">
         <div class="main">
             <div class="rightSide ">
-                <div class="welcome">
+                <div class="welcome welcomere" >
                     <div class="inner">
                         <p class="welcomeTitle">Demande de correction de faute matérielle concernant les résultats des examens.</p>
                         <h1 class="welcomeTitle">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h1>

@@ -51,7 +51,7 @@
 
             </nav>
         </header>
-
+       
 
         <h2 class="text-center mt-5">Bonjour <span class="text-danger">{{ $students->Nom }} {{ $students->Prenom }}</span></h2>
         <div class="printbt mt-3">

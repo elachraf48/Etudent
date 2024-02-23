@@ -381,7 +381,7 @@
           
             <!-- Submit button -->
             <button onclick='window.location.href = "{{ url("/reclamation/")}}"' class="btn btn-secondary  mt-1  float-start   w-25">Back <br>رجوع</button>
-            <button type="button" class="btn btn-success mt-1 w-25 float-end" id="submit-btn">Valider<br> تأكيد</button>
+            <button type="submit" class="btn btn-success mt-1 w-25 float-end" id="submit-btn">Valider<br> تأكيد</button>
 
         </form>
         <!-- <button onclick="generatePDF()">Generate PDF</button> -->

@@ -41,7 +41,7 @@ class TrackingReclamationController extends Controller
     public function reclamations($AnneeUniversitaire, $module, $semester, $filiere, $professeur,$sessions)
     {
             
-        $reclamations = reclamation::select('pr.Nom as prof_nom', 'pr.Prenom as prof_prenom', 'md.NomModule', 'ie.NumeroExamen', 'ie.Lieu', 'g.nomGroupe', 'et.CodeApogee', 'et.Nom', 'et.Prenom', 'reclamations.Sujet', 'reclamations.observations')
+        $reclamations = reclamation::select('pr.Nom as prof_nom', 'pr.Prenom as prof_prenom','md.Semester', 'md.NomModule', 'ie.NumeroExamen', 'ie.Lieu', 'g.nomGroupe', 'et.CodeApogee', 'et.Nom', 'et.Prenom', 'reclamations.Sujet', 'reclamations.observations')
             ->join('professeurs as pr', 'pr.id', '=', 'reclamations.idProfesseur')
             ->join('etudiants as et', 'et.id', '=', 'reclamations.idEtudiant')
             ->join('modules as md', 'md.id', '=', 'reclamations.idModule')

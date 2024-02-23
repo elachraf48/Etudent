@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 
@@ -25,6 +26,7 @@ use Dompdf\Options;
 use Barryvdh\Snappy\Facades\SnappyImage;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use PDF;
+use AlSelwi\ArabicHTML\Facades\ArabicHTML;
 
 use Illuminate\Support\Facades\View;
 use Mpdf\Mpdf;
@@ -49,43 +51,46 @@ class ReclamationController extends Controller
 
     }
 
-public function convertHtmlToPdf(Request $request, $reclamationId)
-{  $reclamationId = $request->validate(['reclamationId' => 'required|integer']);
 
-    $reclamationId = $request->input('reclamationId');
 
-    // Retrieve data for the reclamation
-    $result = Reclamation::select(
-        'reclamations.AnneeUniversitaire',
-        'etudiants.CodeApogee',
-        'etudiants.Nom',
-        'etudiants.Prenom',
-        'modules.Semester',
-        'modules.NomModule',
-        'filieres.NomFiliere',
-        'filieres.Parcours',
-        'info_exames.Lieu',
-        'info_exames.NumeroExamen',
-        'groupes.nomGroupe',
-        'professeurs.Nom as ProfNom',
-        'professeurs.Prenom as ProfPrenom',
-        'reclamations.Sujet',
-        'reclamations.observations',
-        'reclamations.code_tracking'
-    )
-        ->join('modules', 'modules.id', '=', 'reclamations.idModule')
-        ->join('filieres', 'filieres.id', '=', 'modules.idFiliere')
-        ->join('professeurs', 'professeurs.id', '=', 'reclamations.idProfesseur')
-        ->join('etudiants', 'etudiants.id', '=', 'reclamations.idEtudiant')
-        ->join('info_exames', 'info_exames.id', '=', 'reclamations.idInfo_Exames')
-        ->join('groupe_etudiant', 'groupe_etudiant.idEtudiant', '=', 'etudiants.id')
-        ->join('groupes', 'groupes.id', '=', 'groupe_etudiant.idGroupe')
-        ->where('reclamations.id', '=', $reclamationId)
-        ->firstOrFail();
+    public function convertHtmlToPdf(Request $request, $reclamationId)
+    {
+        $reclamationId = $request->validate(['reclamationId' => 'required|integer']);
+
+        $reclamationId = $request->input('reclamationId');
+
+        // Retrieve data for the reclamation
+        $result = Reclamation::select(
+            'reclamations.AnneeUniversitaire',
+            'etudiants.CodeApogee',
+            'etudiants.Nom',
+            'etudiants.Prenom',
+            'modules.Semester',
+            'modules.NomModule',
+            'filieres.NomFiliere',
+            'filieres.Parcours',
+            'info_exames.Lieu',
+            'info_exames.NumeroExamen',
+            'groupes.nomGroupe',
+            'professeurs.Nom as ProfNom',
+            'professeurs.Prenom as ProfPrenom',
+            'reclamations.Sujet',
+            'reclamations.observations',
+            'reclamations.code_tracking'
+        )
+            ->join('modules', 'modules.id', '=', 'reclamations.idModule')
+            ->join('filieres', 'filieres.id', '=', 'modules.idFiliere')
+            ->join('professeurs', 'professeurs.id', '=', 'reclamations.idProfesseur')
+            ->join('etudiants', 'etudiants.id', '=', 'reclamations.idEtudiant')
+            ->join('info_exames', 'info_exames.id', '=', 'reclamations.idInfo_Exames')
+            ->join('groupe_etudiant', 'groupe_etudiant.idEtudiant', '=', 'etudiants.id')
+            ->join('groupes', 'groupes.id', '=', 'groupe_etudiant.idGroupe')
+            ->where('reclamations.id', '=', $reclamationId)
+            ->firstOrFail();
         $view = View::make('reclamation.showpdf', compact('result'));
         $htmlContent = $view->render();
-        
-       
+
+
         $html = view('reclamation.showpdf', ['result' => $result])->render();
         $pdf = SnappyPDF::loadHtml($html);
         $pdf->setPaper('A4');
@@ -95,25 +100,24 @@ public function convertHtmlToPdf(Request $request, $reclamationId)
         $pdf->setOption('margin-left', '0');
         $pdfContent = $pdf->output();
 
-    // Render HTML content
-    $htmlContent = view('reclamation.showpdf', compact('result'))->render();
+        // Render HTML content
+        $htmlContent = view('reclamation.showpdf', compact('result'))->render();
 
-    // Save HTML to image
-    $imagePath = public_path('temp/image.png');
-    SnappyImage::loadHTML($htmlContent)->save($imagePath);
+        // Save HTML to image
+        $imagePath = public_path('temp/image.png');
+        SnappyImage::loadHTML($htmlContent)->save($imagePath);
 
-    // Convert image to PDF
-    $pdfPath = public_path('temp/pdf.pdf');
-    SnappyPdf::loadImage($imagePath)->save($pdfPath);
+        // Convert image to PDF
+        $pdfPath = public_path('temp/pdf.pdf');
+        SnappyPdf::loadImage($imagePath)->save($pdfPath);
 
-    // Optionally, you may delete the image after PDF conversion
-    if (file_exists($imagePath)) {
-        unlink($imagePath);
+        // Optionally, you may delete the image after PDF conversion
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+
+        return 'PDF saved successfully!';
     }
-
-    return 'PDF saved successfully!';
-
-}
 
     public function last($reclamationId)
     {
@@ -146,8 +150,8 @@ public function convertHtmlToPdf(Request $request, $reclamationId)
             ->where('reclamations.id', '=', $reclamationId)
             ->first();
 
-        
-        
+
+
         return view('reclamation.last', compact('result'));
         // Pass the data to the view
 
@@ -167,7 +171,7 @@ public function convertHtmlToPdf(Request $request, $reclamationId)
         $studentuniue = Etudiant::where('CodeApogee', $codeApogee)->get(['CodeApogee', 'Nom', 'Prenom']);
         $Modules = Module::where('idFiliere', $filiere)->get(['id', 'NomModule', 'CodeModule']);
         $Groups = Groupe::where('Semester', $semester)->where('AnneeUniversitaire', $AnneeUniversitaire)
-        ->where('idSESSION', $maxIdSession)->get(['id', 'nomGroupe']);
+            ->where('idSESSION', $maxIdSession)->get(['id', 'nomGroupe']);
 
         $validator = Validator::make(['CodeApogee' => $codeApogee], [
             'CodeApogee' => 'required|integer', // Add any additional validation rules
@@ -227,7 +231,7 @@ public function convertHtmlToPdf(Request $request, $reclamationId)
         }
 
 
-        return view('reclamation.next', compact('filieres', 'Modules', 'student', 'semester', 'Groups', 'studentuniue','codeApogee'));
+        return view('reclamation.next', compact('filieres', 'Modules', 'student', 'semester', 'Groups', 'studentuniue', 'codeApogee'));
     }
 
     public function fetchFilieresBySemester($semester)
@@ -295,106 +299,7 @@ public function convertHtmlToPdf(Request $request, $reclamationId)
         $filieres = Filiere::where('id', $filiere)->get(['id', 'NomFiliere', 'Parcours'])->first();
         $professeurs = professeur::where('id', $professeur)->get(['id', 'Nom', 'Prenom'])->first();
         $modules = module::where('id', $module)->get(['id', 'NomModule'])->first();
-        $data = [
-            'AnneeUniversitaire' => $AnneeUniversitaire,
-            'codeApogee' => $codeApogee,
-            'semester' => $semester,
-            'filiere' => $filieres->NomFiliere, // Assuming 'NomFiliere' is the field name for the filiere name
-            'Nom' => $Nom,
-            'Prenom' => $Prenom,
-            'idexam' => $idexam,
-            'datenes' => $datenes,
-            'module' => $modules->NomModule, // Assuming 'NomModule' is the field name for the module name
-            'ndexamen' => $ndexamen,
-            'lieu' => $lieu,
-            'Group' => $Group,
-            'professeur' => $professeurs->Nom . ' ' . $professeurs->Prenom, // Assuming 'Nom' and 'Prenom' are the field names for professor's name
-            'reclamation' => $reclamation,
-            'couse' => $couse,
-            'code_tracking' => $code_tracking,
-        ];
-//         $html = View::make('reclamation.showpdf', $data)->render();
 
-//         // Capture the HTML content as an image using html2canvas
-//         Browsershot::html($html)
-//             ->format('png')
-//             ->save(public_path('temp/image.png'));
-
-//         // Generate PDF using dompdf
-//         $options = new Options();
-//         $options->set('isHtml5ParserEnabled', true);
-
-//         $dompdf = new Dompdf($options);
-//         $dompdf->loadHtml($html);
-
-//         // Set paper size and orientation
-//         $dompdf->setPaper('A4', 'portrait');
-
-//         // Render the HTML as PDF
-//         $dompdf->render();
-
-//         // Get the PDF content
-//         $pdfContent = $dompdf->output();
-
-//         // Output the PDF (either to the browser or save to a file)
-//         return $pdfContent;
-//         return view('reclamation.showpdf', $data);
-
-//         return redirect()->route('showpdf', $data);
-//         $dompdf = new Dompdf();
-
-//         $data = (object)$data;
-
-//         $html = '<div class="container text-center">
-//         <div class="row">
-//             <div class="continue  bg-light">
-//                 <div class="col-md-12 bg-light text-center">
-//                     <!-- Centered Section with Logo for Mobile -->
-//                     <div class="mx-auto w-25">
-//                         <img src="https://i.ibb.co/yy8S6Wn/code.png" class="img-fluid w-50" alt="Logo">
-//                     </div>
-//                 </div>
-//                 <!-- <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>-->
-//                 <h5 class="link-danger p-2">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
-
-//                 <!-- <h5><span class="title">شكوى</span></h5>
-//                 <h5><span class="title">Réclamation</span></h5> -->
-//             </div>
-//         </div>
-//     </div>';
-
-//         $html .= '<table border="1" style="width: 100%"> ';
-//         $html .= '<tr><th>Field</th><th>Value</th></tr>';
-//         $html .= "<tr><td>Annee Universitaire</td><td>$data->AnneeUniversitaire</td></tr>";
-//         $html .= "<tr><td>Code Apogee</td><td>$codeApogee</td></tr>";
-//         $html .= "<tr><td>Semester</td><td>$semester</td></tr>";
-//         $html .= "<tr><td>Filiere</td><td>$filieres->NomFiliere</td></tr>";
-//         $html .= "<tr><td>Nom</td><td>$Nom</td></tr>";
-//         $html .= "<tr><td>Prenom</td><td>$Prenom</td></tr>";
-//         if($datenes!=''){ $html .= "<tr><td>Date de Naissance</td><td>$datenes</td></tr>";}
-//         $html .= "<tr><td>Module</td><td>$modules->NomModule</td></tr>";
-//         $html .= "<tr><td>N d'examen</td><td>$ndexamen</td></tr>";
-//         $html .= "<tr><td>Lieu</td><td>$lieu</td></tr>";
-//         if($Group!=''){        $html .= "<tr><td>Groupe</td><td>$Group</td></tr>";}
-//         $html .= "<tr><td>Professeur</td><td>" . $professeurs->Nom . " " . $professeurs->Prenom . "</td></tr>";
-//         $html .= "<tr><td>Reclamation</td><td>$reclamation</td></tr>";
-//         $html .= "<tr><td>Observations</td><td>$couse</td></tr>";
-//         // $html .= "<tr><td>Code Tracking</td><td>$code_tracking</td></tr>";
-//         $html .= '</table>';
-        
-
-// // Load the HTML into Dompdf
-// $dompdf->loadHtml($html);
-        
-//         // Set paper size and orientation
-//         $dompdf->setPaper('A4', 'portrait');
-        
-//         // Render the HTML as PDF
-//         $dompdf->render();
-        
-        // Output the generated PDF to Browser
-  
-//insert  Student
         $existingStudent = DB::table('etudiants')
             ->where('CodeApogee', $codeApogee)
             ->first();
@@ -420,75 +325,78 @@ public function convertHtmlToPdf(Request $request, $reclamationId)
             ]);
         }
         $maxIdSession = DB::table('calendrier_modules')
-                ->where('AnneeUniversitaire', function ($query) {
-                    $query->select(DB::raw('MAX(AnneeUniversitaire)'))
-                        ->from('calendrier_modules');
-                })
-                ->max('idSESSION');
-        if($Group==null ){
-            $Group='0';
-            
+            ->where('AnneeUniversitaire', function ($query) {
+                $query->select(DB::raw('MAX(AnneeUniversitaire)'))
+                    ->from('calendrier_modules');
+            })
+            ->max('idSESSION');
+
+            if ($Group == null) {
+                $Group = '0';
+            }
 
             $existingGroup = DB::table('groupes')
-            ->where('nomGroupe', $Group)
-            ->where('Semester', $semester)
-            ->where('idSESSION', $maxIdSession)
-            ->where('AnneeUniversitaire', $AnneeUniversitaire)
-            ->first();
+                ->where('nomGroupe', $Group)
+                ->where('Semester', $semester)
+                ->where('idSESSION', $maxIdSession)
+                ->where('AnneeUniversitaire', $AnneeUniversitaire)
+                ->first();
 
-        if ($existingGroup) {
-            // Group already exists, no need to insert again
-            $groupeId = $existingGroup->id;
-        } else {
-            // Insert into the groupes table if it doesn't exist and get the ID
-            $groupeId = DB::table('groupes')->insertGetId([
-                'nomGroupe' => $Group,
-                'Semester' => $semester,
-                'idSESSION' => $maxIdSession, 
-                'AnneeUniversitaire' => $AnneeUniversitaire,
-                'created_at' => now(),
-                'updated_at' => now()
+            if ($existingGroup) {
+                // Group already exists, no need to insert again
+                $groupeId = $existingGroup->id;
+            } 
+            else {
+                // Insert into the groupes table if it doesn't exist and get the ID
+                $groupeId = DB::table('groupes')->insertGetId([
+                    'nomGroupe' => $Group,
+                    'Semester' => $semester,
+                    'idSESSION' => $maxIdSession,
+                    'AnneeUniversitaire' => $AnneeUniversitaire,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+
+
+            // Insert into Groupe_etudiant table
+            DB::table('groupe_etudiant')->updateOrInsert([
+                'idEtudiant' => $etudiantId,
+                'idGroupe' => $groupeId
+
             ]);
-        }
-
-
-        // Insert into Groupe_etudiant table
-        DB::table('groupe_etudiant')->updateOrInsert([
-            'idEtudiant' => $etudiantId,
-            'idGroupe' => $groupeId
-
-        ]);
-
-        }
+        
+       
         if ($idexam == '') {
             $existingidexam = DB::table('info_exames')
-            ->where('NumeroExamen', $ndexamen)
-            ->where('Semester', $semester)
-            ->where('idEtudiant', $etudiantId)
-            ->where('Lieu', $lieu)
-            ->where('AnneeUniversitaire', $AnneeUniversitaire)
-            ->first();
+                ->where('NumeroExamen', $ndexamen)
+                ->where('Semester', $semester)
+                ->where('idEtudiant', $etudiantId)
+                ->where('Lieu', $lieu)
+                ->where('AnneeUniversitaire', $AnneeUniversitaire)
+                ->first();
             if ($existingidexam) {
                 // If student exists, get the existing student's ID
                 $idexams = $existingidexam->id;
             } else {
-            // Insert into Info_Exames table
-            $idexam = DB::table('info_exames')->insertGetId(
-                ['NumeroExamen' => $ndexamen, 'Semester' => $semester, 'AnneeUniversitaire' =>  $AnneeUniversitaire, 'idEtudiant' => $etudiantId,
-                    'idGroupe' => $groupeId,
-                    'Lieu' => $lieu,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]
-            );
-            $idexams = $idexam;
-            InsertBy::create([
-                'NameTable' => 'info_exames',
-                'idTable' => $idexam,
-                'insertBy' => 'etudiant',
-            ]);}
-        } 
-        else {
+                // Insert into Info_Exames table
+                $idexam = DB::table('info_exames')->insertGetId(
+                    [
+                        'NumeroExamen' => $ndexamen, 'Semester' => $semester, 'AnneeUniversitaire' =>  $AnneeUniversitaire, 'idEtudiant' => $etudiantId,
+                        'idGroupe' => $groupeId,
+                        'Lieu' => $lieu,
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]
+                );
+                $idexams = $idexam;
+                InsertBy::create([
+                    'NameTable' => 'info_exames',
+                    'idTable' => $idexam,
+                    'insertBy' => 'etudiant',
+                ]);
+            }
+        } else {
             $idexams = $idexam;
         }
 
@@ -509,36 +417,37 @@ public function convertHtmlToPdf(Request $request, $reclamationId)
                 'idInfo_Exames' => $idexams,
                 'AnneeUniversitaire' => $AnneeUniversitaire,
                 'observations' => $couse,
-                'idSESSION'=>$maxIdSession,
+                'idSESSION' => $maxIdSession,
                 'Sujet' => $reclamation,
                 'code_tracking' => $code_tracking,
                 'created_at' => now(),
                 'updated_at' => now()
             ]);
         } else {
-            $reclamationsId=$existingRow->id;
-            $code_tracking=$existingRow->code_tracking;
+            $reclamationsId = $existingRow->id;
+            $code_tracking = $existingRow->code_tracking;
             return redirect()->route('reclamationlast', ['reclamationId' => $reclamationsId])->with('error', 'Vous avez déjà déposé une réclamation <br>  لقد قمت بالفعل بتقديم شكوى مسبقا');
             // Handle the case where a similar row already exists
             // You can log an error, throw an exception, or handle it in any other appropriate way
         }
 
         $existingtracking_reclamations = DB::table('tracking_reclamations')
-        ->where('idReclamation', $reclamationsId)
-        ->where('idProfesseur', $professeur)
-        ->first();
+            ->where('idReclamation', $reclamationsId)
+            ->where('idProfesseur', $professeur)
+            ->first();
         if (!$existingtracking_reclamations) {
-        DB::table('tracking_reclamations')->insertGetId([
-            'idReclamation' => $reclamationsId,
-            'idProfesseur' => $professeur,
-            'stratu' => 'Encours',
-            'Repense' => '',
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);}
+            DB::table('tracking_reclamations')->insertGetId([
+                'idReclamation' => $reclamationsId,
+                'idProfesseur' => $professeur,
+                'stratu' => 'Encours',
+                'Repense' => '',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
         // return redirect()->route('reclamation.index')->with('success', 'Votre code de suivi ' . $code_tracking);
         // $dompdf->stream("document.pdf");
-         return redirect()->route('reclamationlast', ['reclamationId' => $reclamationsId])->with('success', 'Une plainte a été soumise avec succès  <br>  تم تقديم شكوى بالنجاح' );
+        return redirect()->route('reclamationlast', ['reclamationId' => $reclamationsId])->with('success', 'Une plainte a été soumise avec succès  <br>  تم تقديم شكوى بالنجاح');
 
         return $this->index();
         // Add any necessary logic here

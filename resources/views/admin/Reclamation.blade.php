@@ -106,6 +106,7 @@
                     <thead>
                         <tr>
                             <th> Professeur</th>
+                            <th>Semester</th>
                             <th>Module</th>
                             <th>C.Apogee</th>
                             <th> Étudiant</th>
@@ -125,13 +126,16 @@
     </div>
 
 <style>
-tr td:nth-child(9) {
+tr td:nth-child(10) {
     max-width: 200px; /* Set your desired max-width */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
 
+}
+tr td:nth-child(2) ,tr th:nth-child(2){
+    display: none;
 }
 tbody tr td:hover{
     white-space: normal;
@@ -195,7 +199,7 @@ tbody tr td:hover{
     // Construct CSV data based on type
     if (type === 'all') {
         var csvContent = '';
-        csvContent += '\uFEFF"Professeur","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
+        csvContent += '\uFEFF"Professeur","Semester","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
 
         $('#reclamation-table tbody tr').each(function() {
             $(this).find('td').each(function() {
@@ -218,7 +222,7 @@ tbody tr td:hover{
             document.body.removeChild(link);
         }
     } else if (type === 'professeur') {
-        var headerRow = '\uFEFF"Professeur","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
+        var headerRow = '\uFEFF"Professeur","Semester","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
 
         var columnIndex = [];
         $('#reclamation-table thead tr th').each(function(index) {
@@ -355,6 +359,7 @@ tbody tr td:hover{
 
                         var rowData = [
                             reclamation.prof_nom + ' ' + reclamation.prof_prenom,
+                            reclamation.Semester,
                             reclamation.NomModule,
                             reclamation.CodeApogee,
                             reclamation.Nom + ' ' + reclamation.Prenom,
