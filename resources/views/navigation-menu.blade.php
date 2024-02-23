@@ -1,3 +1,4 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 @if(Auth::user()->role == 0)
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
@@ -265,12 +266,17 @@
         كلية العلوم القانونية <br>والاقتصادية والاجتماعية
     </div>
 </header>
+<style>
+    .btn-primary{
+        width: 10em;
+    }
+</style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-    <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             {{ Auth::user()->name }}
 
-            </button>
+        </button>
         <ul class="dropdown-menu">
             <div class="block px-4 py-2 text-xs text-gray-400">
                 {{ __('Manage Account') }}
@@ -298,24 +304,33 @@
                 </x-dropdown-link>
             </form>
         </ul>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav p-2">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/Professeur">Home</a>
+            <ul class="navbar-nav ">
+                <li class="nav-item ">
+                    <a class="nav-link active " aria-current="page" href="/Professeur"> <button type="button" class="btn btn-primary position-relative">
+                            Home </button>
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link position-relative" href="#">Reclamation
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="reclamationsCount">
-0
-                            <span class="visually-hidden">unread messages</span>
-                        </span>
+                <li class="nav-item" >
+                    <a class="nav-link position-relative" href="{{ route('Reclamationpr') }}">
+                        <button type="button" class="btn btn-primary position-relative" >
+                            Reclamation
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="reclamationsCount">
+                                0
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
+
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
+                    <a class="nav-link" href="#">
+                        <button type="button" class="btn btn-primary position-relative">
+                            Pricing </button>
+                    </a>
                 </li>
                 <li class="nav-item dropdown">
 
@@ -348,7 +363,7 @@
     updateReclamationsCount();
 
     // Optionally, you can set up a timer to periodically update the count
-    setInterval(updateReclamationsCount, 60000); // Update every minute (adjust as needed)
+    setInterval(updateReclamationsCount, 6000); // Update every minute (adjust as needed)
 </script>
 
 

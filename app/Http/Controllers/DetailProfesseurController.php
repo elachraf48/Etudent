@@ -29,9 +29,11 @@ class DetailProfesseurController extends Controller
 
         return response()->json(['count' => $reclamationsCount]);
     }
-    public function Reclamation()
+    public function show(Request $request)
     {
 
-        return view('Reclamationpr');
+        return view('Professeur.index');
     }
+    
+
 }

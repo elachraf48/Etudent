@@ -113,7 +113,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:3'])->group(function () {
         Route::resource('/Professeur', DetailProfesseurController::class);
         Route::get('/reclamations/count', [DetailProfesseurController::class,'getReclamationsCount'])->name('reclamations.count');
-        Route::get('/Professeur/Reclamation', [DetailProfesseurController::class, 'Reclamation'])->name('Reclamationpr');
+        Route::get('/Professeur/Reclamation', [DetailProfesseurController::class, 'show'])->name('Reclamationpr');
 
     
     });

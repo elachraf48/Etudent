@@ -125,26 +125,28 @@
         </div>
     </div>
 
-<style>
-tr td:nth-child(10) {
-    max-width: 200px; /* Set your desired max-width */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
+    <style>
+        tr td:nth-child(10) {
+            max-width: 200px;
+            /* Set your desired max-width */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
 
-}
-tr td:nth-child(2) ,tr th:nth-child(2){
-    display: none;
-}
-tbody tr td:hover{
-    white-space: normal;
-    overflow: visible;
+        }
 
-}
+        tr td:nth-child(2),
+        tr th:nth-child(2) {
+            display: none;
+        }
 
+        tbody tr td:hover {
+            white-space: normal;
+            overflow: visible;
 
-</style>
+        }
+    </style>
 
 
     <!-- Add a textarea for pasting data -->
@@ -192,73 +194,73 @@ tbody tr td:hover{
             });
 
             function downloadCSV(type) {
-                var currentDate = new Date().toISOString().slice(0,10); // Get current date in YYYY-MM-DD format
+                var currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
 
-    var zip = new JSZip();
+                var zip = new JSZip();
 
-    // Construct CSV data based on type
-    if (type === 'all') {
-        var csvContent = '';
-        csvContent += '\uFEFF"Professeur","Semester","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
+                // Construct CSV data based on type
+                if (type === 'all') {
+                    var csvContent = '';
+                    csvContent += '\uFEFF"Professeur","Semester","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
 
-        $('#reclamation-table tbody tr').each(function() {
-            $(this).find('td').each(function() {
-                csvContent += '"' + $(this).text().replace(/"/g, '""') + '",'; // Wrap data in quotes to handle special characters and escape quotes
-            });
-            csvContent += '\n';
-        });
+                    $('#reclamation-table tbody tr').each(function() {
+                        $(this).find('td').each(function() {
+                            csvContent += '"' + $(this).text().replace(/"/g, '""') + '",'; // Wrap data in quotes to handle special characters and escape quotes
+                        });
+                        csvContent += '\n';
+                    });
 
-        var blob = new Blob([csvContent], {
-            type: 'text/csv;charset=utf-8;'
-        });
-        var link = document.createElement('a');
-        if (link.download !== undefined) { // feature detection
-            var url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', 'all-reclamations-'+currentDate+'.csv');
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    } else if (type === 'professeur') {
-        var headerRow = '\uFEFF"Professeur","Semester","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
+                    var blob = new Blob([csvContent], {
+                        type: 'text/csv;charset=utf-8;'
+                    });
+                    var link = document.createElement('a');
+                    if (link.download !== undefined) { // feature detection
+                        var url = URL.createObjectURL(blob);
+                        link.setAttribute('href', url);
+                        link.setAttribute('download', 'all-reclamations-' + currentDate + '.csv');
+                        link.style.visibility = 'hidden';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                } else if (type === 'professeur') {
+                    var headerRow = '\uFEFF"Professeur","Semester","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
 
-        var columnIndex = [];
-        $('#reclamation-table thead tr th').each(function(index) {
-            var columnName = $(this).text();
-            if (columnName !== 'Professeur') {
-                columnIndex.push(index);
-            }
-        });
+                    var columnIndex = [];
+                    $('#reclamation-table thead tr th').each(function(index) {
+                        var columnName = $(this).text();
+                        if (columnName !== 'Professeur') {
+                            columnIndex.push(index);
+                        }
+                    });
 
-        var professeurs = {};
-        $('#reclamation-table tbody tr').each(function() {
-            var professeur = $(this).find('td:eq(0)').text();
-            if (!professeurs[professeur]) {
-                professeurs[professeur] = [];
-            }
-            var rowData = [];
-            $(this).find('td').slice(0).each(function(index) {
-                if (columnIndex.includes(index)) {
-                    rowData.push('"' + $(this).text().replace(/"/g, '""') + '"'); // Wrap data in quotes to handle special characters and escape quotes
+                    var professeurs = {};
+                    $('#reclamation-table tbody tr').each(function() {
+                        var professeur = $(this).find('td:eq(0)').text();
+                        if (!professeurs[professeur]) {
+                            professeurs[professeur] = [];
+                        }
+                        var rowData = [];
+                        $(this).find('td').slice(0).each(function(index) {
+                            if (columnIndex.includes(index)) {
+                                rowData.push('"' + $(this).text().replace(/"/g, '""') + '"'); // Wrap data in quotes to handle special characters and escape quotes
+                            }
+                        });
+                        professeurs[professeur].push(rowData.join(','));
+                    });
+
+                    for (var prof in professeurs) {
+                        zip.file(prof.replace(/\s+/g, '-') + '.csv', headerRow + professeurs[prof].join('\n'));
+                    }
+
+                    zip.generateAsync({
+                        type: 'blob'
+                    }).then(function(content) {
+                        saveAs(content, 'reclamations' + currentDate + '.zip');
+                    });
                 }
-            });
-            professeurs[professeur].push(rowData.join(','));
-        });
-
-        for (var prof in professeurs) {
-            zip.file(prof.replace(/\s+/g, '-') + '.csv', headerRow + professeurs[prof].join('\n'));
-        }
-
-        zip.generateAsync({
-            type: 'blob'
-        }).then(function(content) {
-            saveAs(content, 'reclamations'+currentDate+'.zip');
-        });
-    }
-}
-   //filier show after change semester
+            }
+            //filier show after change semester
             $('#semesterDropdown').change(function() {
                 var selectedSemester = $(this).val();
                 // Make an Ajax request to fetch filieres based on the selected semester
