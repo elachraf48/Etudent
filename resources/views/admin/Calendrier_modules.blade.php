@@ -88,7 +88,7 @@
         </div>
 
         <button style="background: gray;" type="submit" class="btn btn-primary">Insert Data</button>
-        <button type="button" style="color:green;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal()">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal()">
             Show model
         </button>
 
@@ -104,7 +104,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" style="color:red;" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" style="color:green;" class="btn btn-primary" id="saveCsvButton">Save csv</button>
+                        <button type="button"  class="btn btn-primary" id="saveCsvButton">Save csv</button>
                     </div>
                 </div>
             </div>
