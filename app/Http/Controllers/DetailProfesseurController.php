@@ -48,7 +48,35 @@ class DetailProfesseurController extends Controller
                 
         return view('Professeur.index', compact('sessions','AnneeUniversitaire','semester'));
     }
+    public function detailsReclamation($idreq)
+    {
+        $reclamationData = Reclamation::select(
+            'r.Sujet',
+            'r.observations',
+            'r.idSESSION',
+            'r.AnneeUniversitaire',
+            'tr.stratu',
+            'r.created_at',
+            'tr.Repense',
+            'm.NomModule',
+            'm.Semester',
+            'e.Nom',
+            'e.Prenom',
+            'e.CodeApogee',
+            'ie.NumeroExamen',
+            'ie.Lieu',
+            'g.nomGroupe'
+        )
+            ->join('tracking_reclamations AS tr', 'tr.idReclamation', '=', 'r.id')
+            ->join('modules AS m', 'm.id', '=', 'r.idModule')
+            ->join('etudiants AS e', 'e.id', '=', 'r.idEtudiant')
+            ->join('info_exames AS ie', 'ie.id', '=', 'r.idInfo_Exames')
+            ->join('groupes AS g', 'g.id', '=', 'ie.idGroupe')
+            ->where('r.id', $idreq)
+            ->first();
     
+        return response()->json(['reclamationData' => $reclamationData]);
+    }
     public function reclamations($AnneeUniversitaire, $statu, $semester,$sessions)
     {
             
