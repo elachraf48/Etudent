@@ -3,9 +3,25 @@
 @extends('dashboard')
 
 @section('content')
+<!-- Add DataTables CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- DataTables CSS -->
+<link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<style>
+  @media screen and (max-width: 768px) {
 
+  table{
+    font-size: .7em;
+  }
+  #reclamation-table tbody :nth-child(4) {
+    display: none;
+  }
+  #reclamation-table thead :nth-child(4) {
+    display: none;
+  }}
+</style>
 
-<div class="row g-2 mt-1 mb-2">
+<div class="row g-2  m-2">
   <div class="col-md">
     <div class="form-floating">
       <select name="AnneeUniversitaire" id="AnneeUniversitaire" class="form-control" required>
@@ -42,6 +58,7 @@
   <div class="col-md">
     <div class="form-floating">
       <select name="Statu" id="StatuDropdown" class="form-control" required>
+      <option value="%">All</option>
         <option value="nv" selected>invisible</option>
         <option value="Trituration">Sous traitement </option>
         <option value="Encours">Encours </option>
@@ -89,47 +106,40 @@
       </div>
       <div class="modal-body">
         <form id="response-form">
-          <!-- <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Étudiant:</label>
-                        <input type="text" class="form-control" id="recipient-name" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Étudiant:</label>
-                        <input type="text" class="form-control" id="recipient-name" readonly>
-                    </div> -->
 
-          <!-- HTML Structure -->
-          <input type="text" name="test" id="">
-          <table id="reclamationTable" class="table table-success table-striped text-center">
-            <tr>
+          <table id="reclamationTable" class="table table-bordered border-primary text-center">
+          <tr>
+            <th colspan='3' class="table-primary" id="Date"></th>
+          </tr>
+          <tr class="table-primary">
               <th colspan='2'>Étudiant</th>
               <th>Code apogee</th>
             </tr>
             <tr>
-              <th colspan='2'></th>
-              <th></th>
+              <th colspan='2' id="name"></th>
+              <th id="apogee"></th>
             </tr>
-            <tr>
+            <tr class="table-primary">
               <th>N.Examen</th>
               <th>Lieu</th>
               <th>Groupe</th>
             </tr>
             <tr>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th id="Examen"></th>
+              <th id="Lieu"></th>
+              <th id="Groupe"></th>
             </tr>
-            <tr>
+            <tr class="table-primary">
               <th colspan='3'>Sujet</th>
             </tr>
             <tr>
-              <th colspan='3'></th>
+              <th colspan='3' id="Sujet"></th>
             </tr>
-            <tr>
+            <tr class="table-primary">
               <th colspan='3'>Observations</th>
             </tr>
             <tr>
-              <th colspan='3'></th>
+              <th colspan='3' id="Observations"></th>
             </tr>
           </table>
           <div class="mb-3">
@@ -141,16 +151,17 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-            <button type="button" id="saveResponseButton" class="btn btn-primary">Save Response</button>
+            <button type="submit" id="saveResponseButton" class="btn btn-primary">Save Response</button>
           </div>
-
+        </form>
       </div>
     </div>
   </div>
+</div>
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-  <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <!-- FileSaver.js -->
 
   <script>
     change_reclamations();
@@ -179,13 +190,16 @@
           // Populate table with reclamations data
           $.each(reclamations, function(index, reclamation) {
             // Check if nomGroupe is equal to 0, if yes, replace it with "Aucun"
+            var buttonClass = reclamation.stratu == 'Valide' ? 'btn-danger' : 'btn-primary';
+            var buttonLabel = reclamation.stratu == 'Valide' ? 'Modifier' : 'Réponse';
+            var buttonHtml = '<button class="btn ' + buttonClass + ' response-btn w-100" data-toggle="modal" data-target="#exampleModal" data-reclamation-id="' + reclamation.id + '">' + buttonLabel + '</button>';
+
             var rowData = [
               reclamation.NomModule,
               reclamation.CodeApogee,
               reclamation.Nom + ' ' + reclamation.Prenom,
               reclamation.created_at,
-              '<button class="btn btn-primary response-btn" data-toggle="modal" data-target="#exampleModal" data-reclamation-id="' + reclamation.id + '">Réponse</button>'
-            ];
+              buttonHtml             ];
             table.row.add(rowData).draw();
           });
 
@@ -196,28 +210,27 @@
 
 
     $(document).ready(function() {
+      $('#AnneeUniversitaire, #semesterDropdown, #StatuDropdown, #sessions').change(function() {
+                change_reclamations();
+            });
       // Function to populate the table with reclamation data
       function populateReclamationTable(reclamationData) {
-        $('#sessions').val(reclamationData.Nom + ' ' + reclamationData.Prenom)
-        $('#reclamationTable th:nth-child(2)').text(reclamationData.Nom + ' ' + reclamationData.Prenom);
-        $('#reclamationTable th:nth-child(3)').text(reclamationData.CodeApogee);
-        $('#reclamationTable th:nth-child(5)').text(reclamationData.NumeroExamen);
-        $('#reclamationTable th:nth-child(6)').text(reclamationData.Lieu);
-        $('#reclamationTable th:nth-child(7)').text(reclamationData.nomGroupe);
-        $('#reclamationTable th:nth-child(9)').text(reclamationData.Sujet);
-        $('#reclamationTable th:nth-child(11)').text(reclamationData.observations);
-      }
+        $('#reclamation-id').text(reclamationData.id);
+        $('#name').text(reclamationData.Nom + ' ' + reclamationData.Prenom);
+        $('#apogee').text(reclamationData.CodeApogee || "aucan");
+        $('#Examen').text(reclamationData.NumeroExamen || "aucan");
+        $('#Lieu').text(reclamationData.Lieu || "aucan");
+        $('#Groupe').text(reclamationData.nomGroupe !=='0' ? reclamationData.nomGroupe : "aucan");
+        $('#Sujet').text(reclamationData.Sujet || "aucan");
+        $('#Observations').text(reclamationData.observations || "aucan");
+        $('#message-text').text(reclamationData.Repense);
+        $('#Date').text('Date de réclamation: '+reclamationData.created_at);
+
+    }
+
 
       // Add event listener for the response button
       $(document).on('click', '.response-btn', function() {
-        var reclamationId = $(this).data('reclamation-id');
-        $('#reclamation-id-input').val(reclamationId);
-        $('#exampleModal').modal('show');
-      });
-
-      // Function to fetch reclamation details and populate the table
-      // Add event listener for the response button
-      $('.response-btn').click(function() {
         var reclamationId = $(this).data('reclamation-id');
 
         // Use the reclamation-id as idreq in the AJAX call
@@ -226,6 +239,7 @@
           method: 'GET',
           success: function(response) {
             var reclamationData = response.reclamationData;
+
             populateReclamationTable(reclamationData);
           },
           error: function(xhr, status, error) {
@@ -237,13 +251,48 @@
         $('#exampleModal').modal('show');
       });
 
+      // Function to fetch reclamation details and populate the table
+     
+
 
       // Function to handle saving response
-      $('#saveResponseButton').click(function() {
-        var responseText = $('#message-text').val();
-        var reclamationId = $('#reclamation-id-input').val();
-        // Code to save the response
-      });
+    
+      $('#saveResponseButton').click(function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        var reponse = $('#message-text').val();
+        var reclamationId = $('#reclamation-id').text();
+        var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtain CSRF token value
+        $.ajax({
+            url: '/update-tracking-reclamations',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
+            },
+            data: {
+                reclamation_id: reclamationId,
+                reponse: reponse
+            },
+            success: function(response) {
+                // Update table row with response
+                $('#exampleModal').modal('hide');
+                // Assuming you have a function to update the table row with response
+                updateTableRow(response);
+                $('#message-text').val('');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating tracking reclamation:', error);
+                // Handle error if necessary
+            }
+        });
+    });
+
+    function updateTableRow(response) {
+      change_reclamations();
+        // Update table row with response data
+        // This function should update the relevant elements in the table row with the new response data
+        // You can use the response data to update the table row accordingly
+    }
 
     });
   </script>

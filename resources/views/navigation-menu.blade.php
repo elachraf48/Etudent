@@ -1,4 +1,22 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ asset('css/reclamation.css') }}">
+<header class="container">
+    <!-- <div class="text-center">
+                    <img src="{{ asset('img/ministry-logo-ar.png') }}" class="img-fluid w-100 h-75" alt="Logo">
+            </div> -->
+    <div class="text">
+        <!-- English text on the left -->
+        Université Mohammed Premier<br>
+        Faculté des Sciences Juridiques,<br>
+        Economique et Sociales
+    </div>
+    <img src="/img/banner.png" alt="University Image" width="150" height="150">
+    <div class="text arabic">
+        <!-- Arabic text on the right -->
+        جامعة محمد الأول بوجدة<br>
+        كلية العلوم القانونية <br>والاقتصادية والاجتماعية
+    </div>
+</header>
 @if(Auth::user()->role == 0)
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
@@ -18,30 +36,32 @@
                 <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                     {{ __('Dashboard') }}
                 </x-nav-link>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle w-25" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ __('insert multiple') }}
-                    </a>
-                    <ul class="dropdown-menu">
-                        <x-nav-link href="{{ route('Filier_modules_form') }}" :active="request()->routeIs('dashboard')">
-                            {{ __('moudel and filier') }}
-                        </x-nav-link>
+                <x-nav-link class="m-0" :active="request()->routeIs('dashboard')">
+                    <ul class="nav-item dropdown m-0">
+                        <a class="nav-link dropdown-toggle w-25" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ __('insert multiple') }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <x-nav-link href="{{ route('Filier_modules_form') }}" :active="request()->routeIs('dashboard')">
+                                {{ __('moudel and filier') }}
+                            </x-nav-link>
 
-                        <x-nav-link style="width: 200px;" href="{{ route('insert_student_form') }}" :active="request()->routeIs('dashboard')">
-                            {{ __('student group infoExam') }}
-                        </x-nav-link>
-                        <x-nav-link href="{{ route('Calendrier_modules_form') }}" :active="request()->routeIs('dashboard')">
-                            {{ __('Calendrier modules') }}
-                        </x-nav-link>
-                        <x-nav-link href="{{ route('detail_modules_form') }}" :active="request()->routeIs('dashboard')">
-                            {{ __('Detail Modules') }}
-                        </x-nav-link>
-                        <br>
-                        <x-nav-link href="{{ route('bulk_professeurs_process') }}" :active="request()->routeIs('dashboard')">
-                            {{ __('Professeurs') }}
-                        </x-nav-link>
+                            <x-nav-link style="width: 200px;" href="{{ route('insert_student_form') }}" :active="request()->routeIs('dashboard')">
+                                {{ __('student group infoExam') }}
+                            </x-nav-link>
+                            <x-nav-link href="{{ route('Calendrier_modules_form') }}" :active="request()->routeIs('dashboard')">
+                                {{ __('Calendrier modules') }}
+                            </x-nav-link>
+                            <x-nav-link href="{{ route('detail_modules_form') }}" :active="request()->routeIs('dashboard')">
+                                {{ __('Detail Modules') }}
+                            </x-nav-link>
+                            <br>
+                            <x-nav-link href="{{ route('bulk_professeurs_process') }}" :active="request()->routeIs('dashboard')">
+                                {{ __('Professeurs') }}
+                            </x-nav-link>
+                        </ul>
                     </ul>
-                </li>
+                </x-nav-link>
                 <x-nav-link href="{{ route('Reclamation_form') }}" :active="request()->routeIs('Reclamation_form')">
                     {{ __('Reclamation') }}
                 </x-nav-link>
@@ -249,25 +269,9 @@
 <!-- resources/views/Professeur/index.blade.php -->
 
 
-<header class="container">
-    <!-- <div class="text-center">
-                    <img src="{{ asset('img/ministry-logo-ar.png') }}" class="img-fluid w-100 h-75" alt="Logo">
-            </div> -->
-    <div class="text">
-        <!-- English text on the left -->
-        Université Mohammed Premier<br>
-        Faculté des Sciences Juridiques,<br>
-        Economique et Sociales
-    </div>
-    <img src="/img/banner.png" alt="University Image" width="150" height="150">
-    <div class="text arabic">
-        <!-- Arabic text on the right -->
-        جامعة محمد الأول بوجدة<br>
-        كلية العلوم القانونية <br>والاقتصادية والاجتماعية
-    </div>
-</header>
+
 <style>
-    .btn-primary{
+    .btn-primary {
         width: 10em;
     }
 </style>
@@ -314,9 +318,9 @@
                             Home </button>
                     </a>
                 </li>
-                <li class="nav-item" >
+                <li class="nav-item">
                     <a class="nav-link position-relative" href="{{ route('Reclamationpr') }}">
-                        <button type="button" class="btn btn-primary position-relative" >
+                        <button type="button" class="btn btn-primary position-relative">
                             Reclamation
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="reclamationsCount">
                                 0
@@ -326,21 +330,12 @@
 
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-primary position-relative">
-                            Pricing </button>
-                    </a>
-                </li>
-                <li class="nav-item dropdown">
 
-                </li>
 
             </ul>
         </div>
     </div>
 </nav>
-<link rel="stylesheet" href="{{ asset('css/reclamation.css') }}">
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <script>

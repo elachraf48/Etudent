@@ -237,7 +237,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <select name="module" id="moduleDropdown" class="form-control" required>
+                        <select name="module" id="moduleDropdown" class="form-control required" required>
                             <option value="" readonly selected>Select Module</option>
                             @if ($student && count($student) > 0)
 
@@ -278,7 +278,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <input type="text" name="lieu" @if($Lieu!='' ) value="{{ $Lieu }}" readonly @endif placeholder="" class="form-control" required>
+                        <input type="text" name="lieu" @if($Lieu!='' ) value="{{ $Lieu }}" readonly @endif placeholder="" class="form-control required" required>
                         <label for="floatingSelectGrid">Salle ou Aphhi</label>
                     </div>
                 </div>
@@ -291,7 +291,7 @@
                 <div class="col-md">
                     <div class="form-floating">
 
-                        <select name="Group" id="GroupDropdown" class="form-control" required>
+                        <select name="Group" id="GroupDropdown" class="form-control required" required>
                             @foreach($Groups as $Group)
                             @php
                             $Groupe = ($Group->nomGroupe === "0") ? 'Aucun' : $Group->nomGroupe;
@@ -312,7 +312,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <select name="professeur" id="professeurDropdown" class="form-control" required>
+                        <select name="professeur" id="professeurDropdown" class="form-control required" required>
                             <option value="">
                                 <label class="clearfix">
                                     <span class="float-start">Choisissez d'abord module </span>
@@ -331,7 +331,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <select name="reclamation" id="idreclamation" class="form-control" required>
+                        <select name="reclamation" id="idreclamation" class="form-control required" required>
                             <option disabled value="" selected>
                                 <label class="clearfix">
                                     <span class="float-start">Sujet de la réclamation</span>
@@ -372,7 +372,7 @@
                 </label>
                 <div class="col-md">
                     <div class="form-floating">
-                        <textarea required class="form-control" placeholder="Leave a comment here" name="couse" id="floatingTextarea2" style="height: 100px"></textarea>
+                        <textarea required class="form-control required" placeholder="Leave a comment here" name="couse" id="floatingTextarea2" style="height: 100px"></textarea>
                         <label for="floatingTextarea2">observations</label>
                     </div>
                 </div>
@@ -416,23 +416,46 @@
         <p class="page-footer-text">Faculté des sciences juridiques économiques et sociales Université Mohammed Premier, BV Mohammed VI B.P. 724 Oujda 60000 Maroc.</p>
         <p class="page-footer-text">كلية العلوم القانونية والاقتصادية والاجتماعية جامعة محمد الأول، شارع محمد الخامس، ص.ب, 724 وجدة 60000 المغرب</p>
         <p class="page-footer-text">00212536500597</p>
-    </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     var submitButton = document.getElementById('submit-btn');
     var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
     var confirmSubmitBtn = document.getElementById('confirm-submit-btn');
+    var cancelSubmitBtn = document.getElementById('cancel-submit-btn');
     var reclamationForm = document.getElementById('reclamation-form');
 
     // Event listener for submit button click
-    submitButton.addEventListener('click', function () {
-        // Show the confirmation modal
-        confirmationModal.show();
+    submitButton.addEventListener('click', function (event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+        // Check if the form is complete
+        if (isFormComplete()) {
+            // Show the confirmation modal
+            confirmationModal.show();
+        } else {
+            // Form is incomplete, do not show the modal
+            // You can provide feedback to the user that the form is incomplete
+            var errorMessage = document.createElement('div');
+            errorMessage.classList.add('alert', 'alert-danger');
+            errorMessage.textContent = `Veuillez remplir tous les champs requis.
+             يرجى ملء جميع الحقول المطلوبة.`;
+            liveAlertPlaceholder.innerHTML = ''; // Clear previous messages
+            liveAlertPlaceholder.appendChild(errorMessage);
+            var inputFields = document.querySelectorAll('.required');
+            inputFields.forEach(function (input) {
+                if (input.value.trim() === '') {
+                    input.classList.add('border-danger');
+                } else {
+                    input.classList.remove('border-danger');
+                }
+            });
+        }
     });
 
     // Event listener for confirm submit button click
@@ -442,31 +465,34 @@
         // Submit the form
         reclamationForm.submit();
     });
+
+    // Event listener for cancel submit button click
+    cancelSubmitBtn.addEventListener('click', function () {
+        // Hide the confirmation modal
+        confirmationModal.hide();
+        // You may provide feedback to the user that the action was canceled
+        console.log("Form submission canceled.");
+    });
+
+    // Function to check if the form is complete
+    function isFormComplete() {
+        // You can customize this function based on your form fields
+        // For example, check if all required fields have values
+        // Here, we assume all inputs with class 'required' are required fields
+        var requiredFields = document.querySelectorAll('.required');
+        for (var i = 0; i < requiredFields.length; i++) {
+            if (requiredFields[i].value.trim() === '') {
+                return false; // Return false if any required field is empty
+            }
+        }
+        return true; // Return true if all required fields are filled
+    }
 });
 
-    function generatePDF() {
-        const doc = new jsPDF();
-        let y = 10;
-        let lineHeight = 5;
 
-        // Iterate through all input and select elements
-        $('input, select').each(function() {
-            // Get the label associated with this element
-            const label = $('label[for="' + $(this).attr('id') + '"]').text();
 
-            // Get the value of the element
-            const value = $(this).val();
 
-            // Add the label and value to the PDF
-            doc.text(label + ': ' + value, 10, y);
-
-            // Increment the y-coordinate for the next line
-            y += lineHeight;
-        });
-
-        // Save the PDF document
-        doc.save('form_data.pdf');
-    }
+   
 
     function change_module(selectedSemester, selectedFiliere) {
         $.ajax({
@@ -562,9 +588,7 @@
         });
     });
 
-    function back() {
-        window.location.href = "{{ url(" / reclamation + ")}}";
-    }
+
 
     function removeLeadingZeros(input) {
         // Remove leading zeros using a regular expression
@@ -575,60 +599,8 @@
             input.value = input.value.slice(0, input.maxLength);
         }
     }
-    //    $(document).ready(function() {
-    //         $('#sub').click(function() {
-    //             if ($('#flexSwitchCheckDefault').is(':checked')) {
-    //                 // Checkbox is checked, perform your actions here
-    //                 // For example, submit the form or execute some other logic
-    //             } else {
-    //                 // Checkbox is not checked, show a Bootstrap alert
-    //                 $('#bootstrapAlert').html(`
-    //                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    //                         Please check the checkbox before submitting.
-    //                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //                             <span aria-hidden="true">&times;</span>
-    //                         </button>
-    //                     </div>
-    //                 `);
-    //             }
-    //         });
-    //     });
-    const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
-    const formswitch = document.getElementById('formswitch');
 
-    const alert = (message, type) => {
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = [
-            `<div class="alert alert-${type} alert-dismissible" role="alert">`,
-            `   <div>${message}</div>`,
-            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-            '</div>'
-        ].join('');
-
-        alertPlaceholder.innerHTML = ''; // Clear previous alerts
-        alertPlaceholder.append(wrapper);
-        formswitch.classList.add('text-danger');
-        // Hide the alert after 6 seconds (6000 milliseconds)
-        setTimeout(() => {
-            alertPlaceholder.innerHTML = ''; // Clear the alert after 6 seconds
-        }, 10000);
-    };
-
-    const alertTrigger = document.getElementById('sub');
-
-    if (alertTrigger) {
-        alertTrigger.addEventListener('click', () => {
-            if ($('#flexSwitchCheckDefault').is(':checked')) {
-                // Checkbox is checked, perform your actions here
-                // For example, submit the form or execute some other logic
-            } else {
-
-                alert(`Toutes les informations sont-elles correctes ? Cliquez sur le bouton en fin de page pour accepter<br>
-            هل كل المعلومات صحيحة؟ انقر على الزر الموجود في نهاية الصفحة للقبول 
-            `, 'danger');
-            }
-        });
-    }
+   
 </script>
 
 @endsection

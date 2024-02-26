@@ -69,6 +69,7 @@ Route::get('/fetch-reclamations/{AnneeUniversitaire}/{module}/{semester}/{filier
 Route::get('/fetch-reclamations/{AnneeUniversitaire}/{statu}/{semester}/{sessions}', [DetailProfesseurController::class, 'reclamations']);
 Route::get('/detailsreqlamation/{id}', [DetailProfesseurController::class, 'detailsReclamation']);
 Route::post('/save-response', [DetailProfesseurController::class, 'saveResponse'])->name('save-response');
+Route::post('/update-tracking-reclamations', [DetailProfesseurController::class, 'updateTrackingReclamations']);
 
 Route::get('/fetch-professeur/{fetchModules}', [ReclamationController::class, 'fetchProfesseur']);
 

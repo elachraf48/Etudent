@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Reclamation;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\CalendrierSession;
 use App\Models\TrackingReclamation;
+use App\Models\Professeur;
 
 class DetailProfesseurController extends Controller
 {
@@ -23,15 +25,18 @@ class DetailProfesseurController extends Controller
     }
     public function getReclamationsCount(Request $request)
     {
+        $idproof =  Professeur::where('user_id', Auth::id())->pluck('id')->first();
         $reclamationsCount = Reclamation::join('tracking_reclamations as tr', 'tr.idReclamation', '=', 'reclamations.id')
             ->where('tr.stratu', '!=', 'Valide')
-            ->where('reclamations.idProfesseur', 1)
+            ->where('reclamations.idProfesseur', $idproof)
             ->count();
 
         return response()->json(['count' => $reclamationsCount]);
     }
     public function show(Request $request)
     {
+        $idproof =  Professeur::where('user_id', Auth::id())->pluck('id')->first();
+
         $sessions = CalendrierSession::all();
         // Retrieve unique values of AnneeUniversitaire
         $AnneeUniversitaire = Reclamation::distinct()->pluck('AnneeUniversitaire');
@@ -42,7 +47,7 @@ class DetailProfesseurController extends Controller
                 $query->select(DB::raw('MAX(AnneeUniversitaire)'))
                     ->from('info_exames');
             })
-            ->where('df.idProfesseur', 1)
+            ->where('df.idProfesseur', $idproof)
             ->pluck('m.Semester')
             ->toArray();
                 
@@ -50,12 +55,15 @@ class DetailProfesseurController extends Controller
     }
     public function detailsReclamation($idreq)
     {
-        $reclamationData = Reclamation::select(
+        $reclamationData =  DB::table('reclamations as r')
+        ->select(
+            'r.id',
             'r.Sujet',
             'r.observations',
             'r.idSESSION',
             'r.AnneeUniversitaire',
             'tr.stratu',
+            'tr.Repense',
             'r.created_at',
             'tr.Repense',
             'm.NomModule',
@@ -79,40 +87,31 @@ class DetailProfesseurController extends Controller
     }
     public function reclamations($AnneeUniversitaire, $statu, $semester,$sessions)
     {
-            
+
+        $idproof =  Professeur::where('user_id', Auth::id())->pluck('id')->first();
+
         $reclamations = DB::table('reclamations as r')
         ->select(
             'r.id',
-            'r.Sujet',
-            'r.observations',
-            'r.idSESSION',
-            'r.AnneeUniversitaire',
             'tr.stratu',
             'r.created_at',
-            'tr.Repense',
             'm.NomModule',
-            'm.Semester',
             'e.Nom',
             'e.Prenom',
-            'e.CodeApogee',
-            'ie.NumeroExamen',
-            'ie.Lieu',
-            'g.nomGroupe'
+            'e.CodeApogee'
+           
         )
         ->join('tracking_reclamations as tr', 'tr.idReclamation', '=', 'r.id')
         ->join('modules as m', 'm.id', '=', 'r.idModule')
         ->join('etudiants as e', 'e.id', '=', 'r.idEtudiant')
-        ->join('info_exames as ie', 'ie.id', '=', 'r.idInfo_Exames')
-        ->join('groupes as g', 'g.id', '=', 'ie.idGroupe')
         ->when($statu === 'nv', function ($query) {
             return $query->where('tr.stratu', 'NOT LIKE', 'Valide');
         }, function ($query) use ($statu) {
             return $query->where('tr.stratu', 'LIKE', $statu);
         })
-        ->where('r.idProfesseur', 1)
+        ->where('r.idProfesseur', $idproof)
         ->where('r.AnneeUniversitaire', 'LIKE', $AnneeUniversitaire)
         ->where('r.idSESSION', 'LIKE', $sessions)
-        ->where('m.Semester', 'LIKE', $semester)
 
         ->get();
     
@@ -136,6 +135,24 @@ class DetailProfesseurController extends Controller
     ]);
 
     // Return a success response (you can customize the response as needed)
+    return response()->json(['success' => true]);
+}
+
+public function updateTrackingReclamations(Request $request)
+{
+    // Validate request data if necessary
+   
+    $reclamationId = $request->input('reclamation_id');
+    $reponse = $request->input('reponse');
+    // Update tracking reclamations table
+    TrackingReclamation::where('idReclamation', $reclamationId)
+        ->update([
+            'Repense' => $reponse,
+            'stratu' => 'Valide',
+            'updated_at' => now() // Update updated_at timestamp
+        ]);
+
+    // Return updated data if necessary
     return response()->json(['success' => true]);
 }
 }
