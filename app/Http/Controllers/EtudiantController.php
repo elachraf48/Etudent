@@ -147,26 +147,52 @@ class EtudiantController extends Controller
             ->get();
 
 
-      
+
         $groupedModules = $student->groupBy('ExamenSemester');
 
-        if ($student && count($groupedModules)>0) {
+        if ($student && count($groupedModules) > 0) {
             return view('etudiant.search', compact('student', 'groupedModules'));
         } else {
             return redirect()->route('index')->with('error', 'Aucun étudiant trouvé <br>avec le Code Apogee fourni.');
         }
     }
+    public function Repense(Request $request)
+    {
+        $CodeApogee = $_GET['CodeApogee'];
+        $maxIdSession = DB::table('calendrier_modules')
+            ->where('AnneeUniversitaire', function ($query) {
+                $query->select(DB::raw('MAX(AnneeUniversitaire)'))
+                    ->from('calendrier_modules');
+            })->max('idSESSION');
+        $AnneeUniversitaire = (date('Y') - 1) . '-' . date('Y');
+        $student = Etudiant::where('CodeApogee', $CodeApogee)->first();
 
+        $results = Reclamation::select('m.NomModule', 'reclamations.Sujet', 'reclamations.observations', 'reclamations.idSESSION', 'reclamations.AnneeUniversitaire', 'tr.stratu', 'reclamations.created_at', 'tr.Repense', 'e.Nom', 'e.Prenom', 'e.CodeApogee', 'ie.NumeroExamen', 'ie.Lieu', 'g.nomGroupe')
+            ->join('tracking_reclamations AS tr', 'tr.idReclamation', '=', 'reclamations.id')
+            ->join('etudiants AS e', 'e.id', '=', 'reclamations.idEtudiant')
+            ->join('info_exames AS ie', 'ie.id', '=', 'reclamations.idInfo_Exames')
+            ->join('groupes AS g', 'g.id', '=', 'ie.idGroupe')
+            ->join('modules AS m', 'm.id', '=', 'reclamations.idModule')
+            ->whereHas('etudiant', function ($query) use ($CodeApogee) {
+                $query->where('CodeApogee', $CodeApogee);
+            })
+            ->where('tr.Repense', '!=', 'valide')
+            ->where('reclamations.idSESSION', $maxIdSession)
+            ->where('reclamations.AnneeUniversitaire', $AnneeUniversitaire)
+            ->get();
+
+        return view('etudiant.Repense', compact('CodeApogee','student','results'));
+    }
     public function getReclamationsCount($etudiantCodeApogee)
     {
-       
-       
-        $sessionId =1;
+
+
+        $sessionId = 1;
         $sessionId = DB::table('calendrier_modules')
-        ->where('AnneeUniversitaire', function ($query) {
-            $query->select(DB::raw('MAX(AnneeUniversitaire)'))
-                ->from('calendrier_modules');
-        })->max('idSESSION');
+            ->where('AnneeUniversitaire', function ($query) {
+                $query->select(DB::raw('MAX(AnneeUniversitaire)'))
+                    ->from('calendrier_modules');
+            })->max('idSESSION');
         $academicYear = (date('Y') - 1) . '-' . date('Y');
         $reclamationsCount = Reclamation::join('tracking_reclamations', 'tracking_reclamations.idReclamation', '=', 'reclamations.id')
             ->whereHas('etudiant', function ($query) use ($etudiantCodeApogee) {

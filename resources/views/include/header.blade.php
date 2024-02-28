@@ -2,8 +2,9 @@
 <link rel="stylesheet" href="{{ asset('css/reclamation.css') }}">
 <style>
     .btn {
-        width: 8em;
-        height: 2.5em;
+        width: 10em;
+        
+
     }
 
    
@@ -27,7 +28,7 @@
         كلية العلوم القانونية <br>والاقتصادية والاجتماعية
     </div>
 </header>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark m-0">
+<nav class="navbar navbar-expand-lg navbar-dark m-0" style="background: #8B4513;">
     <div class="container-fluid ">
         <a class="nav-link active text-white m-6" aria-current="page" href="/">
             <i class="fa-solid fa-house"></i> Accueil
@@ -38,30 +39,55 @@
         <div class="collapse navbar-collapse text-centre" id="navbarTogglerDemo02">
             <ul class="navbar-nav me-auto ">
                 <li class="nav-item">
-                    <button class="btn btn-success m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
-                        Reclamation
+                    <button class="btn btn-primary m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
+                    Réclamation <br> شكاية
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="btn btn-primary position-relative m-1">
-                        Repense
+                    <button type="button" class="btn btn-primary position-relative m-1"  data-apogee="">
+                    Réponses <br>اجوبة
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="reclamationsCount">
                             0
                             <span class="visually-hidden">unread messages</span>
                         </span>
                     </button>
                 </li>
+                <button class="btn btn-primary m-1" onclick='window.location.href = "{{ url("/") }}"' >
+                Calendrier examen <br>جدول الامتحانات
+                            </button>
                 <!-- <li class="nav-item">
                     <button class="btn btn-info m-1" onclick="printPage()">
                         <i class="fa-solid fa-print"></i>
                     </button>
                 </li> -->
             </ul>
+            <!-- <div class="hstack gap-3">
+  <div class="p-2">First item</div>
+  <div class="p-2 ms-auto">Second item</div>
+  <div class="vr"></div>
+  <div class="p-2">Third item</div>
+</div> -->
             <div class="d-flex">
                 <button class="btn btn-danger m-1" onclick='window.location.href = "{{ url("/") }}"'>
-                    Déconnexion
+                    Déconnexion <br>خروج
                 </button>
             </div>
         </div>
     </div>
 </nav>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+    // Click event handler for the "Repense" button
+    $('.btn-primary').click(function() {
+        // Get the value of data-apogee attribute
+        var CodeApogee = $(this).data('apogee');
+        
+        // Navigate to the repense page with CodeApogee as a query parameter
+        window.location.href = "/etudiant/Repense?CodeApogee=" + CodeApogee;
+    });
+});
+
+</script>

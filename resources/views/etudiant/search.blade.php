@@ -19,7 +19,7 @@
 
         <h2 class="text-center mt-5">Bonjour <span class="text-danger">{{ $students->Nom }} {{ $students->Prenom }}</span></h2>
         <div class="printbt mt-3">
-            <div class="row">
+                <div class="row">
                 <h5>Année universitaire: <span class="text-primary">{{ $students->ExamenAnneeUniversitaire }}</span></h5>
                 <h5>Filière: <span class="text-primary">{{ $students->NomFiliere }}</span></h5>
                 @if ($students->Parcours != "")
@@ -108,6 +108,8 @@
 
     function updateReclamationsCount() {
         var CodeApogee = $('#CodeApogee').text();
+        $('.btn-primary').attr('data-apogee', CodeApogee);
+
         $.ajax({
             url: "/reclamations/etudiant/" + CodeApogee,
             method: 'GET',

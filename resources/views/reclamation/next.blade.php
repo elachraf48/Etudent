@@ -1,4 +1,5 @@
 <!-- resources/views/students/index.blade.php -->
+@include('include.header')
 
 @extends('layouts.apps')
 
@@ -12,74 +13,18 @@
 
 </head>
 
+
 <!-- CSRF token for Laravel security -->
 <section class="text-center  bg-light">
-    <div class="container-fluid-wrapper p-0">
+<div class="container-fluid m-0 text-center">
+            
+            <div class="continue bg-gray m-0" >
 
-        <div class="container-fluid  text-center">
-            <header class="container">
-                <!-- <div class="text-center">
-                    <img src="{{ asset('img/ministry-logo-ar.png') }}" class="img-fluid w-100 h-75" alt="Logo">
-            </div> -->
-                <div class="text">
-                    <!-- English text on the left -->
-                    Université Mohammed Premier<br>
-                    Faculté des Sciences Juridiques,<br>
-                    Economique et Sociales
-                </div>
-                <img src="/img/banner.png" alt="University Image" width="150" height="150">
-                <div class="text arabic">
-                    <!-- Arabic text on the right -->
-                    جامعة محمد الأول بوجدة<br>
-                    كلية العلوم القانونية <br>والاقتصادية والاجتماعية
-                </div>
-            </header>
-            <div class="row">
-
-                <nav class="navbar navbar-expand-lg mt-3" style="background: #8B4513;">
-                    <div class="container ">
-                        <button class="navbar-toggler bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="desktop-nav">
-                                <li class="nav-item">
-                                    <p class="text-white">
-                                        <a class="nav-link active text-white" aria-current="page" href="/reclamation/">
-                                            <i class="fa-solid fa-house"></i> Reclamation
-                                        </a>
-                                        <i class="fa-solid fa-arrow-right-long"></i> Espace étudiant
-                                    </p>
-                                </li>
-                            </ul>
-
-                            <button class="btn btn-light" id="mobile-button" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
-                                <i class="fa-solid fa-house"></i>
-                            </button>
-
-                            <!-- <button class="btn btn-info m-1" onclick="printPage()">
-                                <i class="fa-solid fa-print"></i>
-                            </button> -->
-                            <button class="btn btn-success m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
-                                New Reclamation
-                            </button>
-                            <button class="btn btn-danger m-1" onclick='window.location.href = "{{ url("/") }}"'>
-                                Calendrier
-                            </button>
-                        </div>
-                    </div>
-                </nav>
-                <div class="continue-fluid bg-gray" style="background:#CD853F; ">
-
-                    <h5 class="link-danger mt-5">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
-                    <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
-                </div>
-
+                <h5 class="link-danger mt-5">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
+                <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
             </div>
 
         </div>
-    </div>
-
     <div class="container-fluid d-flex align-items-center justify-content-center    p-3">
 
     <form id="reclamation-form" action="{{ route('reclamationpost') }}" method="post">
@@ -170,7 +115,7 @@
                 </label>
                 <div class="col-md" alt="madirch 0">
                     <div class="form-floating">
-                        <input type="number" value="{{ $codeApogee }}" readonly placeholder="" name="napogee" oninput="removeLeadingZeros(this)" maxlength="7" class="form-control" required>
+                        <input type="number" value="{{ $codeApogee }}" id="CodeApogee" readonly placeholder="" name="napogee"  class="form-control" required>
                         <label for="floatingSelectGrid">Code Apogée</label>
 
                     </div>
@@ -600,7 +545,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-   
+  
+
+    function updateReclamationsCount() {
+        var CodeApogee = $('#CodeApogee').val();
+        $('.btn-primary').attr('data-apogee', CodeApogee);
+
+        $.ajax({
+            url: "/reclamations/etudiant/" + CodeApogee,
+            method: 'GET',
+            success: function(response) {
+                // Update the count in the navigation menu
+                $('#reclamationsCount').text(response.count > 0 ? response.count : '0');
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    // Call the function initially to update the count
+    updateReclamationsCount();
+
+    // Optionally, you can set up a timer to periodically update the count
+    setInterval(updateReclamationsCount, 6000);
 </script>
 
 @endsection

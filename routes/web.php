@@ -113,6 +113,7 @@ Route::get('/reclamations/etudiant/{filiere}', [EtudiantController::class,'getRe
 // routes/web.php
 Route::resource('/', EtudiantController::class);
 Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('search');
+Route::get('/etudiant/Repense', [EtudiantController::class, 'Repense'])->name('Repense');
 
 Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:3'])->group(function () {
