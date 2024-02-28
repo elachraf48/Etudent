@@ -12,7 +12,8 @@
 
 
 
-    <title>Calendrier des examens</title>
+    <title>@yield('title','Calendrier des examens')</title>
+
     <!-- Add your stylesheets, scripts, or other head elements here -->
 </head>
 <body>

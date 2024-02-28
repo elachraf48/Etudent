@@ -107,6 +107,7 @@ Route::resource('calendrier-module-groupes', CalendrierModuleGroupeController::c
 
 
 // admin/Filier_modules
+Route::get('/reclamations/etudiant/{filiere}', [EtudiantController::class,'getReclamationsCount'])->name('reclamations.etudiant');
 
 
 // routes/web.php

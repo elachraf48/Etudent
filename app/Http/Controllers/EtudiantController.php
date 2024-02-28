@@ -16,6 +16,8 @@ use App\Models\GroupeEtudiant;
 use App\Models\Groupe;
 use App\Models\InfoExames;
 use App\Models\CalendrierModule;
+use App\Models\Reclamation;
+
 //------
 class EtudiantController extends Controller
 {
@@ -155,7 +157,28 @@ class EtudiantController extends Controller
         }
     }
 
+    public function getReclamationsCount($etudiantCodeApogee)
+    {
+       
+       
+        $sessionId =1;
+        $sessionId = DB::table('calendrier_modules')
+        ->where('AnneeUniversitaire', function ($query) {
+            $query->select(DB::raw('MAX(AnneeUniversitaire)'))
+                ->from('calendrier_modules');
+        })->max('idSESSION');
+        $academicYear = (date('Y') - 1) . '-' . date('Y');
+        $reclamationsCount = Reclamation::join('tracking_reclamations', 'tracking_reclamations.idReclamation', '=', 'reclamations.id')
+            ->whereHas('etudiant', function ($query) use ($etudiantCodeApogee) {
+                $query->where('CodeApogee', $etudiantCodeApogee);
+            })
+            ->where('tracking_reclamations.Repense', '!=', 'valide')
+            ->where('reclamations.idSESSION', $sessionId)
+            ->where('reclamations.AnneeUniversitaire', $academicYear)
+            ->count();
 
+        return response()->json(['count' => $reclamationsCount]);
+    }
 
 
     /**

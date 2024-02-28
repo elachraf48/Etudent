@@ -1,8 +1,11 @@
+@include('include.header')
 @extends('layouts.apps')
-
 @section('content')
 
-<div class="container" >
+<link rel="stylesheet" href="{{ asset('css/reclamation.css') }}">
+
+
+<div class="container home ">
     @if (session('error'))
     <div class="alert alert-danger">
         <p>{!! session('error') !!}</p>
@@ -12,46 +15,7 @@
     @if ($student && count($student) > 0)
     @foreach ($student as $key => $students)
     @if ($key === count($student) - 1)
-    <div class="container">
-
-        <!-- Left Top Section -->
-        <header class="row">
-            <div class="text-center">
-                <!-- Left Section with Logo -->
-                    <img src="{{ asset('img/ministry-logo-ar.png') }}" class="img-fluid" alt="Logo">
-            </div>
-           
-
-
-            <!-- Right Top Section -->
-
-
-
-            <nav class="navbar navbar-expand-lg bg-dark">
-                <div class="container">
-                    <a class="nav-link active text-white" aria-current="page" href="/">
-                        <i class="fa-solid fa-house"></i> Accueil
-                    </a>
-                    <a class="nav-link text-white m-1">
-                        <i class="fa-solid fa-arrow-right-long"></i> Espace étudiant
-                    </a>
-                    <div class="d-flex ms-auto ">
-                        <button class="btn btn-info m-1" onclick="printPage()">
-                            <i class="fa-solid fa-print"></i>
-                        </button>
-                        <button class="btn btn-success m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
-                            Reclamation
-                        </button>
-                        <button class="btn btn-danger m-1" onclick='window.location.href = "{{ url("/") }}"'>
-                            Déconnexion
-                        </button>
-
-                    </div>
-
-
-            </nav>
-        </header>
-       
+    <div class="container-fleux p-0">
 
         <h2 class="text-center mt-5">Bonjour <span class="text-danger">{{ $students->Nom }} {{ $students->Prenom }}</span></h2>
         <div class="printbt mt-3">
@@ -61,7 +25,7 @@
                 @if ($students->Parcours != "")
                 <h5>Parcours: <span class="text-primary">{{ $students->Parcours }}</span></h5>
                 @endif
-                <h5 class="col-md-6">Code Apogee: <span class="text-primary">{{ $students->CodeApogee }}</span></h5>
+                <h5 class="col-md-6">Code Apogee: <span class="text-primary" id="CodeApogee">{{ $students->CodeApogee }}</span></h5>
 
             </div>
         </div>
@@ -138,11 +102,30 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <script>
-   
     function printPage() {
         window.print();
     }
-   
+
+    function updateReclamationsCount() {
+        var CodeApogee = $('#CodeApogee').text();
+        $.ajax({
+            url: "/reclamations/etudiant/" + CodeApogee,
+            method: 'GET',
+            success: function(response) {
+                // Update the count in the navigation menu
+                $('#reclamationsCount').text(response.count > 0 ? response.count : '0');
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    // Call the function initially to update the count
+    updateReclamationsCount();
+
+    // Optionally, you can set up a timer to periodically update the count
+    setInterval(updateReclamationsCount, 6000);
 </script>
 
 
