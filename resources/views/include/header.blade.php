@@ -1,13 +1,12 @@
-
 <link rel="stylesheet" href="{{ asset('css/reclamation.css') }}">
 <style>
     .btn {
         width: 10em;
-        
+
 
     }
 
-   
+
 
     .home {
         background-color: white;
@@ -30,31 +29,35 @@
 </header>
 <nav class="navbar navbar-expand-lg navbar-dark m-0" style="background: #8B4513;">
     <div class="container-fluid ">
-        <a class="nav-link active text-white m-6" aria-current="page" href="/">
+        <a class="nav-link active text-white mx-5" aria-current="page" href="/">
             <i class="fa-solid fa-house"></i> Accueil
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse text-centre" id="navbarTogglerDemo02">
-            <ul class="navbar-nav me-auto ">
+            <ul class="navbar-nav me-auto  ">
                 <li class="nav-item">
                     <button class="btn btn-primary m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
-                    Réclamation <br> شكاية
+                        Réclamation <br> شكاية
                     </button>
                 </li>
+                <li>
+                    <button class="btn btn-primary m-1" onclick='window.location.href ="{{ url("/") }}"'>
+                        Calendrier examen <br>جدول الامتحانات
+                    </button>
+                </li>
+                
+
                 <li class="nav-item">
-                    <button type="button" class="btn btn-primary position-relative m-1"  data-apogee="">
-                    Réponses <br>اجوبة
+                    <button type="button" class="btn btn-primary position-relative m-1" id="rp" data-apogee="">
+                        Réponses <br>اجوبة
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="reclamationsCount">
                             0
                             <span class="visually-hidden">unread messages</span>
                         </span>
                     </button>
                 </li>
-                <button class="btn btn-primary m-1" onclick='window.location.href = "{{ url("/") }}"' >
-                Calendrier examen <br>جدول الامتحانات
-                            </button>
                 <!-- <li class="nav-item">
                     <button class="btn btn-info m-1" onclick="printPage()">
                         <i class="fa-solid fa-print"></i>
@@ -80,14 +83,13 @@
 
 <script>
     $(document).ready(function() {
-    // Click event handler for the "Repense" button
-    $('.btn-primary').click(function() {
-        // Get the value of data-apogee attribute
-        var CodeApogee = $(this).data('apogee');
-        
-        // Navigate to the repense page with CodeApogee as a query parameter
-        window.location.href = "/etudiant/Repense?CodeApogee=" + CodeApogee;
-    });
-});
+        // Click event handler for the "Repense" button
+        $('#rp').click(function() {
+            // Get the value of data-apogee attribute
+            var CodeApogee = $(this).data('apogee');
 
+            // Navigate to the repense page with CodeApogee as a query parameter
+            window.location.href = "/etudiant/Repense?CodeApogee=" + CodeApogee;
+        });
+    });
 </script>

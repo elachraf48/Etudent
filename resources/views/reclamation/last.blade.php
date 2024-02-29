@@ -1,4 +1,5 @@
 <!-- resources/views/reclamation/last.blade.php -->
+@include('include.header')
 
 @extends('layouts.apps')
 
@@ -43,94 +44,51 @@
         /* Adjust as needed */
     }
 
-  
-    #reclamatinshow {
-    width: 35vw; /* Set width to 50% of the viewport width */
-    margin: 100px auto; /* Center the element horizontally */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Apply box shadow */
-    padding:0;
-    /* Add any additional styling here */
-}
-@media screen and (max-width: 768px) {
-    #reclamatinshow {
-    width: 100vw; /* Set width to 50% of the viewport width */
-    /* Add any additional styling here */
-}
-.custom-table td,
-    .custom-table th {
-        padding: 0;
-        font-size: 10px;
 
+    #reclamatinshow {
+        width: 50vw;
+        /* Set width to 50% of the viewport width */
+        margin: 50px auto;
+        /* Center the element horizontally */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        /* Apply box shadow */
+        padding: 10px;
+        /* Add any additional styling here */
     }
-    .info{
-        font-size: 5px;
+
+    @media screen and (max-width: 768px) {
+        #reclamatinshow {
+            width: 100vw;
+            /* Set width to 50% of the viewport width */
+            /* Add any additional styling here */
+        }
+
+        .custom-table td,
+        .custom-table th {
+            padding: 0;
+            font-size: 10px;
+
+        }
+
+        .info {
+            font-size: 5px;
+        }
     }
-}
 </style>
+
+
 <!-- CSRF token for Laravel security -->
-<section id="section" class="text-center    bg-gray">
-    <div class="container-fluid-wrapper p-0">
-        <div class="container-fluid  text-center">
-            <header class="container ">
-                <div class="text">
-                    <!-- English text on the left -->
-                    Université Mohammed Premier<br>
-                    Faculté des Sciences Juridiques,<br>
-                    Economique et Sociales
-                </div>
-                <img src="/img/banner.png" alt="University Image" width="150" height="150">
-                <div class="text arabic">
-                    <!-- Arabic text on the right -->
-                    جامعة محمد الأول بوجدة<br>
-                    كلية العلوم القانونية <br>والاقتصادية والاجتماعية
-                </div>
-            </header>
-            <div class="row">
-
-                <nav class="navbar navbar-expand-lg mt-3" style="background: #8B4513;">
-                    <div class="container ">
-                        <button class="navbar-toggler bg-primary" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="desktop-nav">
-                                <li class="nav-item">
-                                    <p class="text-white">
-                                        <a class="nav-link active text-white" aria-current="page" href="/reclamation/">
-                                            <i class="fa-solid fa-house"></i> Reclamation
-                                        </a>
-                                        <i class="fa-solid fa-arrow-right-long"></i> Espace étudiant
-                                    </p>
-                                </li>
-                            </ul>
-
-                            <button class="btn btn-light" id="mobile-button" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
-                                <i class="fa-solid fa-house"></i>
-                            </button>
-
-                            <!-- <button class="btn btn-info m-1" onclick="printPage()">
-                                <i class="fa-solid fa-print"></i>
-                            </button> -->
-                            <button class="btn btn-success m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
-                                New Reclamation
-                            </button>
-                            <button class="btn btn-danger m-1" onclick='window.location.href = "{{ url("/") }}"'>
-                                Calendrier
-                            </button>
-                        </div>
-                    </div>
-                </nav>
-                <div class="continue-fluid bg-gray" style="background:#CD853F; ">
-
-                    <h5 class="link-danger mt-5">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
-                    <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
-                </div>
-
-            </div>
-
+<section id="section" class="text-center m-0   bg-gray">
+    <div class="container-fluid-wrapper ">
+        <div class="continue-fluid p-5 bg-light">
+            <h5 class="link-danger ">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
+            <h5 class="link-success ">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
         </div>
+
+
+
     </div>
-    <center class="m-5 " >
+    <center class="m-5 ">
         @if (session('error'))
         <div class="alert alert-danger ">
             <h4>{!! session('error') !!}</h4>
@@ -150,113 +108,113 @@
     </center>
 
 </section>
-<div id="reclamatinshow" >
-<section id="reclamation">
-    <div class="container  text-center">
-        <header class="container ">
-            <div class="text">
-                <!-- English text on the left -->
-                Université Mohammed Premier<br>
-                Faculté des Sciences Juridiques,<br>
-                Economique et Sociales
+<div id="reclamatinshow">
+    <section id="reclamation">
+        <!-- <div class="container  text-center">
+            <header class="container ">
+                <div class="text">
+                    <!-- English text on the left --
+                    Université Mohammed Premier<br>
+                    Faculté des Sciences Juridiques,<br>
+                    Economique et Sociales
+                </div>
+                <img src="/img/banner.png" alt="University Image" width="150" height="150">
+                <div class="text arabic">
+                    <!-- Arabic text on the right --
+                    جامعة محمد الأول بوجدة<br>
+                    كلية العلوم القانونية <br>والاقتصادية والاجتماعية
+                </div>
+            </header>
+        </div> -->
+        <center>
+
+
+            <div class="continue info" style="margin: 30px 0;">
+                <!-- Centered Section with Logo for Mobile -->
+                <h6 class="custom-link-success custom-p-2">تم تقديم شكوى بالنجاح</h5>
+                    <h6 class="custom-link-danger custom-p-2">Une plainte a été soumise avec succès.</h5>
+                        <h5>Annee Universitaire: {{ $result->AnneeUniversitaire }}</h5>
+                        <h5>Date de réclamation: {{ $result->created_at }}</h5>
+
             </div>
-            <img src="/img/banner.png" alt="University Image" width="150" height="150">
-            <div class="text arabic">
-                <!-- Arabic text on the right -->
-                جامعة محمد الأول بوجدة<br>
-                كلية العلوم القانونية <br>والاقتصادية والاجتماعية
-            </div>
-        </header>
-    </div>
-    <center>
-
-
-        <div class="continue info" style="margin: 30px 0;">
-            <!-- Centered Section with Logo for Mobile -->
-            <h6 class="custom-link-success custom-p-2">تم تقديم شكوى بالنجاح</h5>
-            <h6 class="custom-link-danger custom-p-2">Une plainte a été soumise avec succès.</h5>
-            <h5>Annee Universitaire: {{ $result->AnneeUniversitaire }}</h5>
-            <h5>Date de réclamation: {{ $result->created_at }}</h5>
-
-        </div>
-        <table class="custom-table">
-            <thead class="custom-table-header">
-                <tr>
-                    <th scope="col" class="custom-table-col">Nom</th>
-                    <th colspan="2" class="custom-table-col">
-                        {{ $result->Nom }} {{ $result->Prenom }}
-                    </th>
-                    <th scope="col" class="custom-table-col">اسم</th>
-                </tr>
-                <tr>
-                    <th scope="row" class="custom-table-row">Numéro Apogée</th>
-                    <th colspan="2" class="custom-table-row">
-                        {{ $result->CodeApogee }}
-                    </th>
-                    <th class="custom-table-row">رقم أبوجي</th>
-                </tr>
-            </thead>
-            <tbody class="custom-table-body">
-                <tr>
-                    <th scope="row"> <span class="float-start">Semestre </span></th>
-                    <td colspan="2">{{ $result->Semester }}</td>
-                    <th> <span class="float-end"> السداسي</span></th>
-                </tr>
-                <tr>
-                    <th scope="row"> <span class="float-start">Filiere </span></th>
-                    <td colspan="2">{{ $result->NomFiliere }}</td>
-                    <th scope="row"> <span class="float-end"> المسلك</span></th>
-                </tr>
-                <tr>
-                    <th scope="row"> <span class="float-start">Module </span></th>
-                    <td colspan="2">{{ $result->NomModule }}</td>
-                    <th scope="row"> <span class="float-end"> الوحدة</span></th>
-                </tr>
-                @if ($result->NumeroExamen)
-                <tr>
-                    <th scope="row"> <span class="float-start">N d'examen </span></th>
-                    <td colspan="2">{{ $result->NumeroExamen }}</td>
-                    <th scope="row"> <span class="float-end"> رقم الامتحان</span></th>
-                </tr>
-                @endif
-                @if ($result->Lieu)
-                <tr>
-                    <th scope="row"> <span class="float-start">Salle ou Aphhi </span></th>
-                    <td colspan="2">{{ $result->Lieu }}</td>
-                    <th scope="row"> <span class="float-end"> مكان اجتياز الامتحان</span></th>
-                </tr>
-                @endif
-
-                <tr>
-                    @if ($result->nomGroupe)
-                    <th scope="row"><span class="float-start">Group</span></th>
-                    <td colspan="2">{{ $result->nomGroupe }}</td>
-                    <th scope="row"><span class="float-end">مجموعة </span> </th>
+            <table class="custom-table">
+                <thead class="custom-table-header">
+                    <tr>
+                        <th scope="col" class="custom-table-col">Nom</th>
+                        <th colspan="2" class="custom-table-col">
+                            {{ $result->Nom }} {{ $result->Prenom }}
+                        </th>
+                        <th scope="col" class="custom-table-col">اسم</th>
+                    </tr>
+                    <tr>
+                        <th scope="row" class="custom-table-row">Numéro Apogée</th>
+                        <th colspan="2" class="custom-table-row" id="CodeApogee">
+                            {{ $result->CodeApogee }}
+                        </th>
+                        <th class="custom-table-row">رقم أبوجي</th>
+                    </tr>
+                </thead>
+                <tbody class="custom-table-body">
+                    <tr>
+                        <th scope="row"> <span class="float-start">Semestre </span></th>
+                        <td colspan="2">{{ $result->Semester }}</td>
+                        <th> <span class="float-end"> السداسي</span></th>
+                    </tr>
+                    <tr>
+                        <th scope="row"> <span class="float-start">Filiere </span></th>
+                        <td colspan="2">{{ $result->NomFiliere }}</td>
+                        <th scope="row"> <span class="float-end"> المسلك</span></th>
+                    </tr>
+                    <tr>
+                        <th scope="row"> <span class="float-start">Module </span></th>
+                        <td colspan="2">{{ $result->NomModule }}</td>
+                        <th scope="row"> <span class="float-end"> الوحدة</span></th>
+                    </tr>
+                    @if ($result->NumeroExamen)
+                    <tr>
+                        <th scope="row"> <span class="float-start">N d'examen </span></th>
+                        <td colspan="2">{{ $result->NumeroExamen }}</td>
+                        <th scope="row"> <span class="float-end"> رقم الامتحان</span></th>
+                    </tr>
                     @endif
-                </tr>
-                <tr>
-                    <th scope="row"> <span class="float-start">Professeur </span></th>
-                    <td colspan="2">{{ $result->ProfNom }} {{ $result->ProfPrenom }}</td>
-                    <th scope="row"> <span class="float-end"> مدرس</span></th>
-                </tr>
-                <tr>
-                    <th scope="row"> <span class="float-start">Sujet de la réclamation </span></th>
-                    <td colspan="2">{{ $result->Sujet }}</td>
-                    <th scope="row"> <span class="float-end"> موضوع الطلب</span></th>
-                </tr>
-                <tr>
-                    <th scope="row"> <span class="float-start">observations </span></th>
-                    <td colspan="2">{{ $result->observations }}</td>
-                    <th scope="row"> <span class="float-end"> ملاحظات</span></th>
-                </tr>
-            </tbody>
-        </table>
-        <div style="font-size: xx-small;" class="mt-2 p-0" id="paper-footers">
-            <p class="page-footer-texts">Faculté des sciences juridiques économiques et sociales Université Mohammed Premier, BV Mohammed VI B.P. 724 Oujda 60000 Maroc.</p>
-            <p class="page-footer-textsss">كلية العلوم القانونية والاقتصادية والاجتماعية جامعة محمد الأول، شارع محمد الخامس، ص.ب, 724 وجدة 60000 المغرب</p>
-            <p class="page-footer-texts">00212536500597</p>
-        </div>
-</section>
+                    @if ($result->Lieu)
+                    <tr>
+                        <th scope="row"> <span class="float-start">Salle ou Aphhi </span></th>
+                        <td colspan="2">{{ $result->Lieu }}</td>
+                        <th scope="row"> <span class="float-end"> مكان اجتياز الامتحان</span></th>
+                    </tr>
+                    @endif
+
+                    <tr>
+                        @if ($result->nomGroupe)
+                        <th scope="row"><span class="float-start">Group</span></th>
+                        <td colspan="2">{{ $result->nomGroupe }}</td>
+                        <th scope="row"><span class="float-end">مجموعة </span> </th>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th scope="row"> <span class="float-start">Professeur </span></th>
+                        <td colspan="2">{{ $result->ProfNom }} {{ $result->ProfPrenom }}</td>
+                        <th scope="row"> <span class="float-end"> مدرس</span></th>
+                    </tr>
+                    <tr>
+                        <th scope="row"> <span class="float-start">Sujet de la réclamation </span></th>
+                        <td colspan="2">{{ $result->Sujet }}</td>
+                        <th scope="row"> <span class="float-end"> موضوع الطلب</span></th>
+                    </tr>
+                    <tr>
+                        <th scope="row"> <span class="float-start">observations </span></th>
+                        <td colspan="2">{{ $result->observations }}</td>
+                        <th scope="row"> <span class="float-end"> ملاحظات</span></th>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- <div style="font-size: xx-small;" class="mt-2 p-0" id="paper-footers">
+                <p class="page-footer-texts">Faculté des sciences juridiques économiques et sociales Université Mohammed Premier, BV Mohammed VI B.P. 724 Oujda 60000 Maroc.</p>
+                <p class="page-footer-textsss">كلية العلوم القانونية والاقتصادية والاجتماعية جامعة محمد الأول، شارع محمد الخامس، ص.ب, 724 وجدة 60000 المغرب</p>
+                <p class="page-footer-texts">00212536500597</p>
+            </div> -->
+    </section>
 </div>
 <div id="paper-footer">
     <p class="page-footer-text">Faculté des sciences juridiques économiques et sociales Université Mohammed Premier, BV Mohammed VI B.P. 724 Oujda 60000 Maroc.</p>
@@ -268,6 +226,30 @@
 <script src="/js/html2canvas.js"></script>
 
 <script>
+     function updateReclamationsCount() {
+        var CodeApogee = $('#CodeApogee').text();
+        $('.btn-primary').attr('data-apogee', CodeApogee);
+
+        $.ajax({
+            url: "/reclamations/etudiant/" + CodeApogee,
+            method: 'GET',
+            success: function(response) {
+                // Update the count in the navigation menu
+                $('#reclamationsCount').text(response.count > 0 ? response.count : '0');
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    // Call the function initially to update the count
+    updateReclamationsCount();
+
+    // Optionally, you can set up a timer to periodically update the count
+    setInterval(updateReclamationsCount, 6000);
+
+
     window.jsPDF = window.jspdf.jsPDF;
     document.getElementById('download-pdf').addEventListener('click', function() {
         // Capture the content of the <section id="reclamation"> as an image
@@ -280,7 +262,7 @@
 
             // Add the image to the PDF
             pdf.addImage(imgData, 'PNG', 0, 0, pdf.internal.pageSize.getWidth(),
-						pdf.internal.pageSize.getHeight()); // Adjust dimensions as needed
+                pdf.internal.pageSize.getHeight()); // Adjust dimensions as needed
 
             // Save the PDF
             pdf.save('reclamation.pdf');
@@ -377,6 +359,8 @@
                 // Add user-friendly error display (e.g., alert)
             });
     });
+
+   
 </script>
 
 

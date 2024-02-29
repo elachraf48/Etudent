@@ -40,27 +40,29 @@
                                 <div class="item">
                                     <button id="btnSubmit" class="submitBtn submitBtn-large" type="submit">Trouver</button>
                                 </div>
-                                <div class="item">
-                                            <a href="/reclamation">
-                                            هل تريد التبليغ عن مشكل في الامتحان ؟
-                                            <br>
-                                            Vous souhaitez signaler un problème lors de l'examen ?
-                                            </a>
-                                        </div>
+                                <div class="item text-center " >
+                                    <a style="text-decoration: none;font-size: large;" href="/reclamation" >
+                                        هل تريد التبليغ عن مشكل في الامتحان ؟
+                                        <br>
+                                        Vous souhaitez signaler un problème lors de l'examen ?
+                                    </a>
+                                </div>
 
-                                
+
                                 @if (session('error'))
                                 <div class="alert alert-danger">
                                     <p>{!! session('error') !!}</p>
                                 </div>
                                 @endif
-                               
+
                             </div>
                         </div>
                     </form>
 
-                    <div class="text-secondary">
-                    &copy; 2023 <a style="text-decoration: none" href="http://droit.ump.ma/" class="text-secondary" target="_blank" title="Facult&eacute;des Sciences Juridiques, Économiques - Oujda">Facult&eacute;des Sciences Juridiques, Économiques - Oujda</a>
+                    <div id="foot" class="text-secondary text-center">
+                    &copy; 2023-<span id="currentYear"></span>  <a style="text-decoration: none" href="http://droit.ump.ma/" class="text-secondary" target="_blank" title="Facult&eacute;des Sciences Juridiques, Économiques - Oujda">Facult&eacute;des Sciences Juridiques, Économiques - Oujda</a>
+                    
+                    <span ><a style="text-decoration: none" target="_blank" href="http://cv.achraf48.co">  Réaliser et  Développé par Achraf-Elabouye</a> </span>
                 </div>
                 </div>
             </div>
@@ -68,9 +70,16 @@
     </div>
 
 </div>
+<style>
+
+</style>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <script>
+    var currentYear = new Date().getFullYear();
+
+// Set the current year in the HTML
+document.getElementById("currentYear").innerHTML = currentYear;
     function removeLeadingZeros(input) {
         // Remove leading zeros using a regular expression
         input.value = input.value.replace(/^0+/, '');

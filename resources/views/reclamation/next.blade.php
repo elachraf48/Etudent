@@ -253,7 +253,7 @@
             <div class="row g-2 mt-1">
                 <label for="professeurv" class="clearfix">
                     <span class="float-start">Professeur <span class="text-danger">*</span></span>
-                    <span class="float-end"><span class="text-danger">*</span> مدرس</span>
+                    <span class="float-end"><span class="text-danger">*</span> استاذ</span>
                 </label>
                 <div class="col-md">
                     <div class="form-floating">

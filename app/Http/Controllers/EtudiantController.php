@@ -167,16 +167,19 @@ class EtudiantController extends Controller
         $AnneeUniversitaire = (date('Y') - 1) . '-' . date('Y');
         $student = Etudiant::where('CodeApogee', $CodeApogee)->first();
 
-        $results = Reclamation::select('m.NomModule', 'reclamations.Sujet', 'reclamations.observations', 'reclamations.idSESSION', 'reclamations.AnneeUniversitaire', 'tr.stratu', 'reclamations.created_at', 'tr.Repense', 'e.Nom', 'e.Prenom', 'e.CodeApogee', 'ie.NumeroExamen', 'ie.Lieu', 'g.nomGroupe')
+        $results = Reclamation::select('f.NomFiliere','f.Parcours','p.Nom as Nomp','p.Prenom as Prenomp','m.Semester','m.NomModule', 'reclamations.Sujet', 'reclamations.observations', 'reclamations.idSESSION', 'reclamations.AnneeUniversitaire', 'tr.stratu', 'reclamations.created_at', 'tr.Repense', 'e.Nom', 'e.Prenom', 'e.CodeApogee', 'ie.NumeroExamen', 'ie.Lieu', 'g.nomGroupe')
             ->join('tracking_reclamations AS tr', 'tr.idReclamation', '=', 'reclamations.id')
             ->join('etudiants AS e', 'e.id', '=', 'reclamations.idEtudiant')
             ->join('info_exames AS ie', 'ie.id', '=', 'reclamations.idInfo_Exames')
+            ->join('professeurs AS p', 'p.id', '=', 'reclamations.idProfesseur')
             ->join('groupes AS g', 'g.id', '=', 'ie.idGroupe')
             ->join('modules AS m', 'm.id', '=', 'reclamations.idModule')
+            ->join('filieres AS f', 'f.id', '=', 'm.idFiliere')
+
             ->whereHas('etudiant', function ($query) use ($CodeApogee) {
                 $query->where('CodeApogee', $CodeApogee);
             })
-            ->where('tr.Repense', '!=', 'valide')
+            ->where('tr.stratu', '=', 'valide')
             ->where('reclamations.idSESSION', $maxIdSession)
             ->where('reclamations.AnneeUniversitaire', $AnneeUniversitaire)
             ->get();
@@ -187,7 +190,6 @@ class EtudiantController extends Controller
     {
 
 
-        $sessionId = 1;
         $sessionId = DB::table('calendrier_modules')
             ->where('AnneeUniversitaire', function ($query) {
                 $query->select(DB::raw('MAX(AnneeUniversitaire)'))
@@ -198,7 +200,7 @@ class EtudiantController extends Controller
             ->whereHas('etudiant', function ($query) use ($etudiantCodeApogee) {
                 $query->where('CodeApogee', $etudiantCodeApogee);
             })
-            ->where('tracking_reclamations.Repense', '!=', 'valide')
+            ->where('tracking_reclamations.stratu', '=', 'valide')
             ->where('reclamations.idSESSION', $sessionId)
             ->where('reclamations.AnneeUniversitaire', $academicYear)
             ->count();

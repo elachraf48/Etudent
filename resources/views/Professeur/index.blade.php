@@ -10,15 +10,18 @@
 <style>
   @media screen and (max-width: 768px) {
 
-  table{
-    font-size: .7em;
+    table {
+      font-size: .7em;
+    }
+
+    #reclamation-table tbody :nth-child(4) {
+      display: none;
+    }
+
+    #reclamation-table thead :nth-child(4) {
+      display: none;
+    }
   }
-  #reclamation-table tbody :nth-child(4) {
-    display: none;
-  }
-  #reclamation-table thead :nth-child(4) {
-    display: none;
-  }}
 </style>
 
 <div class="row g-2  m-2">
@@ -58,7 +61,7 @@
   <div class="col-md">
     <div class="form-floating">
       <select name="Statu" id="StatuDropdown" class="form-control" required>
-      <option value="%">All</option>
+        <option value="%">All</option>
         <option value="nv" selected>invisible</option>
         <option value="Trituration">Sous traitement </option>
         <option value="Encours">Encours </option>
@@ -108,10 +111,10 @@
         <form id="response-form">
 
           <table id="reclamationTable" class="table table-bordered border-primary text-center">
-          <tr>
-            <th colspan='3' class="table-primary" id="Date"></th>
-          </tr>
-          <tr class="table-primary">
+            <tr>
+              <th colspan='3' class="table-primary" id="Date"></th>
+            </tr>
+            <tr class="table-primary">
               <th colspan='2'>Étudiant</th>
               <th>Code apogee</th>
             </tr>
@@ -143,6 +146,11 @@
             </tr>
           </table>
           <div class="mb-3">
+            <select id="response-select" class="form-control">
+              <option value="Maintenir la note">Maintenir la note</option>
+              <option value="autre" selected>autre</option>
+            </select>
+
             <label for="message-text" class="col-form-label">Réponse:</label>
             <textarea class="form-control" id="message-text" required></textarea>
           </div>
@@ -158,142 +166,156 @@
     </div>
   </div>
 </div>
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <!-- FileSaver.js -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+<!-- FileSaver.js -->
 
-  <script>
-    change_reclamations();
+<script>
+  change_reclamations();
 
-    function change_reclamations() {
-      var AnneeUniversitaire = $('#AnneeUniversitaire').val();
-      var semester = $('#semesterDropdown').val();
-      var Statu = $('#StatuDropdown').val();
-      var sessions = $('#sessions').val();
+  function change_reclamations() {
+    var AnneeUniversitaire = $('#AnneeUniversitaire').val();
+    var semester = $('#semesterDropdown').val();
+    var Statu = $('#StatuDropdown').val();
+    var sessions = $('#sessions').val();
 
-      // Add cache buster parameter
-      var cacheBuster = new Date().getTime(); // or any unique value
-      var url = '/fetch-reclamations/' + AnneeUniversitaire + '/' + Statu + '/' + semester + '/' + sessions + '?_=' + cacheBuster;
+    // Add cache buster parameter
+    var cacheBuster = new Date().getTime(); // or any unique value
+    var url = '/fetch-reclamations/' + AnneeUniversitaire + '/' + Statu + '/' + semester + '/' + sessions + '?_=' + cacheBuster;
 
+    $.ajax({
+      url: url,
+      type: 'GET',
+      success: function(data) {
+        // Clear existing table rows
+        var table = $('#reclamation-table').DataTable();
+        table.clear().draw();
+
+        // Assuming the data structure is { "reclamations": [...] }
+        var reclamations = data.reclamations;
+
+        // Populate table with reclamations data
+        $.each(reclamations, function(index, reclamation) {
+          // Check if nomGroupe is equal to 0, if yes, replace it with "Aucun"
+          var buttonClass = reclamation.stratu == 'Valide' ? 'btn-danger' : 'btn-primary';
+          var buttonLabel = reclamation.stratu == 'Valide' ? 'Modifier' : 'Réponse';
+          var buttonHtml = '<button class="btn ' + buttonClass + ' response-btn w-100" data-toggle="modal" data-target="#exampleModal" data-reclamation-id="' + reclamation.id + '">' + buttonLabel + '</button>';
+
+          var rowData = [
+            reclamation.NomModule,
+            reclamation.CodeApogee,
+            reclamation.Nom + ' ' + reclamation.Prenom,
+            reclamation.created_at,
+            buttonHtml
+          ];
+          table.row.add(rowData).draw();
+        });
+
+
+      }
+    });
+  }
+
+
+  $(document).ready(function() {
+    document.getElementById("response-select").addEventListener("change", function() {
+      var selectValue = this.value;
+      var messageTextArea = document.getElementById("message-text");
+
+      // If the selected value is "Maintenir la note"
+      if (selectValue === "Maintenir la note") {
+        messageTextArea.value = selectValue;
+        messageTextArea.readOnly = true; // Set textarea to readonly
+      } else {
+        messageTextArea.value = ""; // Clear textarea
+        messageTextArea.readOnly = false; // Allow read and write
+      }
+    });
+    $('#AnneeUniversitaire, #semesterDropdown, #StatuDropdown, #sessions').change(function() {
+      change_reclamations();
+    });
+    // Function to populate the table with reclamation data
+    function populateReclamationTable(reclamationData) {
+      $('#reclamation-id').text(reclamationData.id);
+      $('#name').text(reclamationData.Nom + ' ' + reclamationData.Prenom);
+      $('#apogee').text(reclamationData.CodeApogee || "aucan");
+      $('#Examen').text(reclamationData.NumeroExamen || "aucan");
+      $('#Lieu').text(reclamationData.Lieu || "aucan");
+      $('#Groupe').text(reclamationData.nomGroupe !== '0' ? reclamationData.nomGroupe : "aucan");
+      $('#Sujet').text(reclamationData.Sujet || "aucan");
+      $('#Observations').text(reclamationData.observations || "aucan");
+      $('#message-text').text(reclamationData.Repense);
+      $('#Date').text('Date de réclamation: ' + reclamationData.created_at);
+
+    }
+
+
+    // Add event listener for the response button
+    $(document).on('click', '.response-btn', function() {
+      var reclamationId = $(this).data('reclamation-id');
+
+      // Use the reclamation-id as idreq in the AJAX call
       $.ajax({
-        url: url,
-        type: 'GET',
-        success: function(data) {
-          // Clear existing table rows
-          var table = $('#reclamation-table').DataTable();
-          table.clear().draw();
+        url: '/detailsreqlamation/' + reclamationId, // Use reclamationId here
+        method: 'GET',
+        success: function(response) {
+          var reclamationData = response.reclamationData;
 
-          // Assuming the data structure is { "reclamations": [...] }
-          var reclamations = data.reclamations;
-
-          // Populate table with reclamations data
-          $.each(reclamations, function(index, reclamation) {
-            // Check if nomGroupe is equal to 0, if yes, replace it with "Aucun"
-            var buttonClass = reclamation.stratu == 'Valide' ? 'btn-danger' : 'btn-primary';
-            var buttonLabel = reclamation.stratu == 'Valide' ? 'Modifier' : 'Réponse';
-            var buttonHtml = '<button class="btn ' + buttonClass + ' response-btn w-100" data-toggle="modal" data-target="#exampleModal" data-reclamation-id="' + reclamation.id + '">' + buttonLabel + '</button>';
-
-            var rowData = [
-              reclamation.NomModule,
-              reclamation.CodeApogee,
-              reclamation.Nom + ' ' + reclamation.Prenom,
-              reclamation.created_at,
-              buttonHtml             ];
-            table.row.add(rowData).draw();
-          });
-
-
+          populateReclamationTable(reclamationData);
+        },
+        error: function(xhr, status, error) {
+          console.error('Error fetching reclamation details:', error);
+          // Handle error if necessary
         }
       });
-    }
+
+      $('#exampleModal').modal('show');
+    });
+
+    // Function to fetch reclamation details and populate the table
 
 
-    $(document).ready(function() {
-      $('#AnneeUniversitaire, #semesterDropdown, #StatuDropdown, #sessions').change(function() {
-                change_reclamations();
-            });
-      // Function to populate the table with reclamation data
-      function populateReclamationTable(reclamationData) {
-        $('#reclamation-id').text(reclamationData.id);
-        $('#name').text(reclamationData.Nom + ' ' + reclamationData.Prenom);
-        $('#apogee').text(reclamationData.CodeApogee || "aucan");
-        $('#Examen').text(reclamationData.NumeroExamen || "aucan");
-        $('#Lieu').text(reclamationData.Lieu || "aucan");
-        $('#Groupe').text(reclamationData.nomGroupe !=='0' ? reclamationData.nomGroupe : "aucan");
-        $('#Sujet').text(reclamationData.Sujet || "aucan");
-        $('#Observations').text(reclamationData.observations || "aucan");
-        $('#message-text').text(reclamationData.Repense);
-        $('#Date').text('Date de réclamation: '+reclamationData.created_at);
 
-    }
+    // Function to handle saving response
 
+    $('#saveResponseButton').click(function(event) {
+      event.preventDefault(); // Prevent default form submission
 
-      // Add event listener for the response button
-      $(document).on('click', '.response-btn', function() {
-        var reclamationId = $(this).data('reclamation-id');
-
-        // Use the reclamation-id as idreq in the AJAX call
-        $.ajax({
-          url: '/detailsreqlamation/' + reclamationId, // Use reclamationId here
-          method: 'GET',
-          success: function(response) {
-            var reclamationData = response.reclamationData;
-
-            populateReclamationTable(reclamationData);
-          },
-          error: function(xhr, status, error) {
-            console.error('Error fetching reclamation details:', error);
-            // Handle error if necessary
-          }
-        });
-
-        $('#exampleModal').modal('show');
+      var reponse = $('#message-text').val();
+      var reclamationId = $('#reclamation-id').text();
+      var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtain CSRF token value
+      $.ajax({
+        url: '/update-tracking-reclamations',
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
+        },
+        data: {
+          reclamation_id: reclamationId,
+          reponse: reponse
+        },
+        success: function(response) {
+          // Update table row with response
+          $('#exampleModal').modal('hide');
+          // Assuming you have a function to update the table row with response
+          updateTableRow(response);
+          $('#message-text').val('');
+        },
+        error: function(xhr, status, error) {
+          console.error('Error updating tracking reclamation:', error);
+          // Handle error if necessary
+        }
       });
-
-      // Function to fetch reclamation details and populate the table
-     
-
-
-      // Function to handle saving response
-    
-      $('#saveResponseButton').click(function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        var reponse = $('#message-text').val();
-        var reclamationId = $('#reclamation-id').text();
-        var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtain CSRF token value
-        $.ajax({
-            url: '/update-tracking-reclamations',
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
-            },
-            data: {
-                reclamation_id: reclamationId,
-                reponse: reponse
-            },
-            success: function(response) {
-                // Update table row with response
-                $('#exampleModal').modal('hide');
-                // Assuming you have a function to update the table row with response
-                updateTableRow(response);
-                $('#message-text').val('');
-            },
-            error: function(xhr, status, error) {
-                console.error('Error updating tracking reclamation:', error);
-                // Handle error if necessary
-            }
-        });
     });
 
     function updateTableRow(response) {
       change_reclamations();
-        // Update table row with response data
-        // This function should update the relevant elements in the table row with the new response data
-        // You can use the response data to update the table row accordingly
+      // Update table row with response data
+      // This function should update the relevant elements in the table row with the new response data
+      // You can use the response data to update the table row accordingly
     }
 
-    });
-  </script>
-  @endsection('content')
+  });
+</script>
+@endsection('content')
