@@ -64,7 +64,7 @@
         <option value="%">All</option>
         <option value="nv" selected>invisible</option>
         <!-- <option value="Trituration">Sous traitement </option> -->
-        <option value="Encours">Encours </option>
+        <!-- <option value="Encours">Encours </option> -->
         <option value="Valide">Valide </option>
       </select>
       <label for="floatingSelectGrid">Statu</label>

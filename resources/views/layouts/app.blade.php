@@ -39,8 +39,30 @@
         <!-- Page Content -->
         <main>
             {{ $slot }}
+            <!-- confirmation delete old data -->
+ 
         </main>
     </div>
+    <div class="modal " id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+            <div class="modal-dialog ">
+                <div class="modal-content p-3" style="border: 3px solid red; margin-top: 40vh;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-bodyy">
+                        <label class="form-check-label clearfix" for="flexSwitchCheckDefault">
+                            <span class="float-start">Voulez-vous supprimer toutes les informations avant de inséré ? </span><br>
+                            <span class="float-end">هل تريد إزالة جميع المعلومات قبل الإدراج؟</span>
+                        </label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">annuler <br>الغاء</button>
+                        <button type="button" class="btn btn-success" id="confirm-submit-btn">Valider<br> تأكيد</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     <span style="position: fixed;"><a style="text-decoration: none" target="_blank" href="http://cv.achraf48.co"> Réaliser et Développé par Achraf-Elabouye</a> </span>
 
     @stack('modals')

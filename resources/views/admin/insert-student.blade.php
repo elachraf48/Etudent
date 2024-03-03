@@ -19,7 +19,7 @@
     <form method="POST" action="{{ route('process_student_data') }}" enctype="multipart/form-data">
         @csrf
 
-        
+
         <div class="row g-2 mt-1 p-1">
 
             <div class="col-md">
@@ -53,7 +53,7 @@
                 <div class="form-floating">
                     <select name="AnneeUniversitaire" id="AnneeUniversitaire" class="form-control" required>
                         <?php
-                        $currentYear = date('Y') ;
+                        $currentYear = date('Y');
                         for ($i = 0; $i < 3; $i++) {
                             $startYear = $currentYear - $i;
                             $endYear = $startYear + 1;
@@ -86,41 +86,79 @@
 
         </div>
         <div class="col-md mb-2">
-                <div class="form-check form-switch form-check-inline">
-                    <input class="form-check-input" type="checkbox" role="switch" id="groupe" name="groupe">
-                    <label class="form-check-label" for="groupe">Aucun groupe</label>
-                </div>
-                <div class="form-check form-switch form-check-inline">
-                    <input class="form-check-input" type="checkbox" role="switch" id="nbexamen" name="nbexamen">
-                    <label class="form-check-label" for="nbexamen">auto generet Numéro d'examen</label>
-                </div> 
-                <div id="num"  class="inline" style="display: none;">
+            <div class="form-check form-switch form-check-inline">
+                <input class="form-check-input" type="checkbox" role="switch" id="groupe" name="groupe">
+                <label class="form-check-label" for="groupe">Aucun groupe</label>
+            </div>
+            <div class="form-check form-switch form-check-inline">
+                <input class="form-check-input" type="checkbox" role="switch" id="nbexamen" name="nbexamen">
+                <label class="form-check-label" for="nbexamen">auto generet Numéro d'examen</label>
+            </div>
+            <div id="num" class="inline" style="display: none;">
                 <span class="">strat from</span>
                 <input name="num" type="number" class="" value="1">
-                </div>
-                
+            </div>
+
         </div>
         <div class="mb-3">
             <textarea name="student_data" class="form-control" rows="10" required placeholder="Code Apogee,Nom,Prénom,Date Naiss,LIEU,Numéro d'examen,GROUPE"></textarea>
         </div>
-<!-- Add a switch button for choosing the method -->
-<div class="form-check form-switch mb-3">
+        <!-- Add a switch button for choosing the method -->
+        <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" id="methodSwitch" name="method_switch">
             <label class="form-check-label" for="methodSwitch">Upload CSV or TXT File</label>
         </div>
         <!-- Add a file input for uploading a CSV or TXT file -->
-<div class="input-group mb-3">
-  <input type="file" class="form-control" name="file" id="inputGroupFile02" accept=".csv, .txt">
-  <label class="input-group-text" for="inputGroupFile02">Upload</label>
-</div>
-      
-        <button  type="submit" class="btn btn-primary">Insérer des données</button>
+        <div class="input-group mb-3">
+            <input type="file" class="form-control" name="file" id="inputGroupFile02" accept=".csv, .txt">
+            <label class="input-group-text" for="inputGroupFile02">Upload</label>
+        </div>
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="delele_old" name="delele_old" checked>
+            <label class="form-check-label" for="delele_old">Souhaitez-vous supprimer des informations avant d'entrer ?</label>
+        </div>
+        <button id="insertDataButton" type="submit" class="btn btn-primary">Insérer des données</button>
         <button type="button" class="btn btn-success" onclick="saveAsCSV()">exemple CSV</button>
     </form>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('#insertDataButton').click(function(event) {
+                event.preventDefault(); // Prevent default form submission
+                var isValide = $('#delele_old').prop('checked');
+                var textareaValue = $('textarea[name="student_data"]').val();
+                var file = $('input[name="file"]').val();
+
+                if (file != '' || textareaValue != '') {
+                    if (isValide) {
+
+
+                        // Show the confirmation modal
+                        $('#confirmationModal').modal('show');
+
+                        // Event listener for confirm button in the confirmation modal
+                        $('#confirm-submit-btn').click(function() {
+                            $('#confirmationModal').modal('hide');
+                            $('form').submit();
+                        });
+
+                    } else {
+                        $('form').submit();
+                    }
+                } else {
+                    var alertElement = $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed;     top:20px;">' +
+                        '<strong>Error!</strong> "Veuillez insérer des données !"<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                        '</div>');
+                    $('body').append(alertElement);
+
+                    // Automatically dismiss the alert after 5 seconds
+                    setTimeout(function() {
+                        alertElement.alert('close');
+                    }, 5000);
+
+                }
+            });
             // Check the initial state of the checkbox
             toggleInputs();
 
@@ -156,7 +194,7 @@
                             optionsHtml += '<option value="' + filiere.id + '">' + filiere.NomFiliere;
 
                             // Include Parcours in parentheses if it's not NULL
-                            if (filiere.Parcours !=='') {
+                            if (filiere.Parcours !== '') {
                                 optionsHtml += ' (' + filiere.Parcours + ')';
                             }
 

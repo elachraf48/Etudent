@@ -109,27 +109,7 @@
                 </div>
             </div>
         </div>
-        <!-- confirmation delete old data -->
-        <div class="modal" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-            <div class="modal-dialog ">
-                <div class="modal-content " style="border: 3px solid red; margin-top: 40vh;">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-bodyy">
-                        <label class="form-check-label clearfix" for="flexSwitchCheckDefault">
-                            <span class="float-start">Toutes les informations sont-elles correctes ? </span><br>
-                            <span class="float-end"> هل جميع المعلومات صحيحة ؟</span>
-                        </label>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">annuler <br>الغاء</button>
-                        <button type="button" class="btn btn-success" id="confirm-submit-btn">Valider<br> تأكيد</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+       
         <button id="insertDataButton" type="submit" class="btn btn-primary">Insérer des données</button>
         <button type="button" class="btn btn-success" onclick="saveAsCSV()">exemple CSV</button>
         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal()">Afficher le modèle</button>
@@ -155,15 +135,15 @@
                     // Event listener for confirm button in the confirmation modal
                     $('#confirm-submit-btn').click(function() {
                         $('#confirmationModal').modal('hide');
-                        $('#form').submit();
+                        $('form').submit();
                     });
 
                 }else{
-                    $('#form').submit();
+                    $('form').submit();
                 }
             } else {
                 var alertElement = $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed;     top:20px;">' +
-                    '<strong>Error!</strong> "Please insert data!"<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                    '<strong>Error!</strong> "Veuillez insérer des données !"<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
                     '</div>');
                 $('body').append(alertElement);
 
