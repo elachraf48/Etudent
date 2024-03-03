@@ -65,7 +65,8 @@ Route::get('/fetch-filieres/{semester}', [CalendrierModuleController::class, 'fe
 Route::get('/fetch-filieres/{semester}', [ReclamationController::class, 'fetchFilieresBySemester']);
 Route::get('/fetch-filieres/{semester}', [DetailModuleController::class, 'fetchFilieresBySemester']);
 Route::get('/fetch-filieres/{semester}', [AdminController::class, 'fetchFilieresBySemester']);
-Route::get('/fetch-reclamations/{AnneeUniversitaire}/{module}/{semester}/{filiere}/{professeur}/{SESSION}', [TrackingReclamationController::class, 'reclamations']);
+Route::get('/fetch-reclamations/{AnneeUniversitaire}/{module}/{semester}/{filiere}/{professeur}/{SESSION}/{stratu}', [TrackingReclamationController::class, 'reclamations']);
+Route::get('/fetch-professeur-reclamations/{AnneeUniversitaire}/{module}/{semester}/{filiere}/{professeur}/{SESSION}/{statu}', [TrackingReclamationController::class, 'professors_reclamations']);
 Route::get('/fetch-reclamations/{AnneeUniversitaire}/{statu}/{semester}/{sessions}', [DetailProfesseurController::class, 'reclamations']);
 Route::get('/detailsreqlamation/{id}', [DetailProfesseurController::class, 'detailsReclamation']);
 Route::post('/save-response', [DetailProfesseurController::class, 'saveResponse'])->name('save-response');
@@ -79,7 +80,7 @@ Route::get('/fetch-modules/{filiere}', [ReclamationController::class, 'fetchModu
 // Routes for Etudiants_Filieres
 Route::resource('etudiants-filieres', EtudiantFiliereController::class);
 
-// Routes for Module
+// Routes for Module    
 Route::resource('modules', ModuleController::class);
 
 // Routes for Detail_module
@@ -120,9 +121,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('/Professeur', DetailProfesseurController::class);
         Route::get('/reclamations/count', [DetailProfesseurController::class,'getReclamationsCount'])->name('reclamations.count');
         Route::get('/Professeur/Reclamation', [DetailProfesseurController::class, 'show'])->name('Reclamationpr');
-
-    
     });
+    
     
     // Your authenticated routes here
     Route::middleware(['role:0'])->group(function () {
@@ -134,9 +134,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/Filier_modules', [AdminController::class, 'showFiliermodules'])->name('Filier_modules_form');
         Route::post('/admin/Filier_modules', [AdminController::class, 'processFiliermodules'])->name('Filier_modules_process');
         // admin/Reclamation
+        Route::get('/admin/Professeur', [TrackingReclamationController::class,'indexProfesseur'] )->name('Professeur_form');
+        Route::post('/admin/Professeur', [TrackingReclamationController::class, 'processFiliermodules'])->name('Professeur_process');
+        // admin/Reclamation
         Route::get('/admin/Reclamation', [TrackingReclamationController::class,'index'] )->name('Reclamation_form');
         Route::post('/admin/Reclamation', [TrackingReclamationController::class, 'processFiliermodules'])->name('Reclamation_process');
-        // admin/bulk_professeurs
+        
+         // admin/bulk_professeurs
         Route::get('/admin/bulk_professeurs', [ProfesseurController::class, 'index'])->name('bulk_professeurs_form');
         Route::post('/admin/bulk_professeurs', [ProfesseurController::class, 'bulk_professeurs_process'])->name('bulk_professeurs_process');
         // admin/Calendrier_modules

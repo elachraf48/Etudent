@@ -2,16 +2,16 @@
 @extends('layouts.apps')
 @section('content')
 <style>
-    body {
+    /* body {
   width: 100%;
   height: 100%;
-  /* Add your background pattern here */
+  /* Add your background pattern here 
   background-color: white;
   background-image: radial-gradient(rgba(12, 12, 12, 0.171) 2px, transparent 0);
   background-size: 30px 30px;
   background-position: -5px -5px;
 
-}
+} */
 .home{
    min-height: 100vh;
 }
@@ -35,11 +35,11 @@
         @endforeach
     </div> 
     @foreach ($results as $result )
-    <table class="table table-bordered border-primary text-center ">
+    <table class="table text-center table-striped table-bordered ">
         <tr class="table table-success table-striped-columns">
-        <th scope="col" colspan='3'>Semestre  {{$result->Semester}} السداسي 
-            @if($result->nomGroupe!='0')| Group  {{$result->nomGroupe}} مجموعة @endif
-            @if($result->Lieu!='')| Salle  {{$result->Lieu}}  مكان اجتياز @endif
+        <th scope="col" colspan='3'>Semestre  : {{$result->Semester}} : السداسي 
+            @if($result->nomGroupe!='0')| Group  : {{$result->nomGroupe}} : مجموعة @endif
+            @if($result->Lieu!='')| Salle  : {{$result->Lieu}} :  مكان اجتياز @endif
         </th>
        
         </tr>

@@ -18,6 +18,7 @@
 </head>
 <body>
 <style>
+
     .loader {
         --background: linear-gradient(135deg, #23C4F8, #275EFE);
         --shadow: rgba(39, 94, 254, 0.28);
@@ -258,12 +259,15 @@
 </div>
     <div id="app" style="display: none;">
         @yield('content')
+        <span style="position: fixed; bottom: 3vh;"><a style="text-decoration: none;position: fixed;" target="_blank" href="http://cv.achraf48.co">  Réaliser et  Développé par Achraf-Elabouye</a> </span>
+
     </div>
-    
+
 <!-- Remove the slim version -->
 <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
      $(document).ready(function() {
         // Delay for 10 seconds
@@ -275,6 +279,7 @@
             $('.loader').hide();
         }, 1000); // 10000 milliseconds = 10 seconds
     });
+    
 </script>
    
 </body>

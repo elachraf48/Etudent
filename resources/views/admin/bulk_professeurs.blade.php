@@ -16,7 +16,7 @@
     </div>
     @endif
 
-    <form method="POST" action="{{ route('bulk_professeurs_process') }}" enctype="multipart/form-data">
+    <form id="form" method="POST" action="{{ route('bulk_professeurs_process') }}" enctype="multipart/form-data">
         @csrf
 
         <div class="row g-2 mt-1 mb-2">
@@ -65,9 +65,9 @@
                 </div>
             </div>
             <div class="form-check form-switch form-check-inline">
-                    <input class="form-check-input" type="checkbox" role="switch" id="groupe" name="groupe">
-                    <label class="form-check-label" for="groupe">Aucun groupe</label>
-                </div>
+                <input class="form-check-input" type="checkbox" role="switch" id="groupe" name="groupe">
+                <label class="form-check-label" for="groupe">Aucun groupe</label>
+            </div>
 
 
         </div>
@@ -79,18 +79,18 @@
         </div>
         <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" id="methodSwitch" name="method_switch">
-            <label class="form-check-label" for="methodSwitch">Use File checked</label>
+            <label class="form-check-label" for="methodSwitch">Pour Utiliser le fichier coché</label>
         </div>
         <!-- Add a file input for uploading a CSV or TXT file -->
         <div class="mb-3">
-            <label for="file" class="form-label">Upload CSV or TXT File:</label>
+            <label for="file" class="form-label">Téléchargez un fichier CSV ou TXT :</label>
             <input disabled type="file" name="file" class="form-control" accept=".csv, .txt">
         </div>
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="delele_old" name="delele_old" checked>
+            <label class="form-check-label" for="delele_old">Souhaitez-vous supprimer des informations avant d'entrer ?</label>
+        </div>
 
-        <button style="background: gray;" type="submit" class="btn btn-primary">Insert Data</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal()">
-            Show Module
-        </button>
 
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -104,15 +104,76 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" style="color:red;" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button"  class="btn btn-primary" id="saveCsvButton">Save csv</button>
+                        <button type="button" class="btn btn-primary" id="saveCsvButton">Save csv</button>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- confirmation delete old data -->
+        <div class="modal" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+            <div class="modal-dialog ">
+                <div class="modal-content " style="border: 3px solid red; margin-top: 40vh;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-bodyy">
+                        <label class="form-check-label clearfix" for="flexSwitchCheckDefault">
+                            <span class="float-start">Toutes les informations sont-elles correctes ? </span><br>
+                            <span class="float-end"> هل جميع المعلومات صحيحة ؟</span>
+                        </label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">annuler <br>الغاء</button>
+                        <button type="button" class="btn btn-success" id="confirm-submit-btn">Valider<br> تأكيد</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="insertDataButton" type="submit" class="btn btn-primary">Insérer des données</button>
+        <button type="button" class="btn btn-success" onclick="saveAsCSV()">exemple CSV</button>
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal()">Afficher le modèle</button>
+
     </form>
+
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
+        $('#insertDataButton').click(function(event) {
+            event.preventDefault(); // Prevent default form submission
+            var isValide = $('#delele_old').prop('checked');
+            var textareaValue = $('textarea[name="bulk_professeurs_data"]').val();
+            var file = $('input[name="file"]').val();
+
+            if (file != '' || textareaValue != '') {
+                if (isValide) {
+
+
+                    // Show the confirmation modal
+                    $('#confirmationModal').modal('show');
+
+                    // Event listener for confirm button in the confirmation modal
+                    $('#confirm-submit-btn').click(function() {
+                        $('#confirmationModal').modal('hide');
+                        $('#form').submit();
+                    });
+
+                }else{
+                    $('#form').submit();
+                }
+            } else {
+                var alertElement = $('<div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed;     top:20px;">' +
+                    '<strong>Error!</strong> "Please insert data!"<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                    '</div>');
+                $('body').append(alertElement);
+
+                // Automatically dismiss the alert after 5 seconds
+                setTimeout(function() {
+                    alertElement.alert('close');
+                }, 5000);
+
+            }
+        });
         $(document).ready(function() {
             $('#groupe').change(function() {
                 var groupeChecked = $('#groupe').prop('checked');
@@ -140,8 +201,8 @@
                 var isChecked = $('#methodSwitch').prop('checked');
 
                 // Enable or disable the textarea and file input based on the checkbox state
-                $('textarea[name="bulk_professeurs_data"]').prop('disabled', isChecked);
-                $('input[name="file"]').prop('disabled', !isChecked);
+                $('textarea[name="bulk_professeurs_data"]').prop('disabled', isChecked).val('');
+$('input[name="file"]').prop('disabled', !isChecked).val('');
             }
             //filier show after change semester
             $('#semesterDropdown').change(function() {

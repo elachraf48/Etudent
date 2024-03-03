@@ -15,12 +15,12 @@
 
 
 <!-- CSRF token for Laravel security -->
-<section class="text-center  bg-light">
-<div class="container-fluid m-0 text-center">
+<section class="text-center pt-0  bg-light">
+<div class="container-fluid pt-0 text-center">
             
-            <div class="continue bg-gray m-0" >
+            <div class="continue bg-gray pt-0" >
 
-                <h5 class="link-danger mt-5">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
+                <h5 class="link-danger pt-3">Demande de correction de faute matérielle concernant les résultats des examens.</h5>
                 <h5 class="link-success p-2">طلب تصحيح خطأ مادي متعلق بنتائج الامتحانات</h5>
             </div>
 

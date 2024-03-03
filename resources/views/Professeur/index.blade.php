@@ -63,7 +63,7 @@
       <select name="Statu" id="StatuDropdown" class="form-control" required>
         <option value="%">All</option>
         <option value="nv" selected>invisible</option>
-        <option value="Trituration">Sous traitement </option>
+        <!-- <option value="Trituration">Sous traitement </option> -->
         <option value="Encours">Encours </option>
         <option value="Valide">Valide </option>
       </select>
@@ -154,6 +154,9 @@
             <label for="message-text" class="col-form-label">Réponse:</label>
             <textarea class="form-control" id="message-text" required></textarea>
           </div>
+          <div class="alert alert-primary text-center d-none" role="alert" id="info">
+            Si vous souhaitez modifier, veuillez envoyer les informations à l'administration
+          </div>
           <input type="hidden" id="reclamation-id">
 
           <!-- Modal Footer -->
@@ -166,9 +169,28 @@
     </div>
   </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+<!-- confirmation donne -->
+<div class="modal" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content " style="border: 3px solid red; margin-top: 40vh;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-check-label clearfix" for="flexSwitchCheckDefault">
+          <span class="float-start">Toutes les informations sont-elles correctes ? </span><br>
+          <span class="float-end"> هل جميع المعلومات صحيحة ؟</span>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">annuler <br>الغاء</button>
+        <button type="button" class="btn btn-success" id="confirm-submit-btn">Valider<br> تأكيد</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- FileSaver.js -->
 
 <script>
@@ -198,9 +220,9 @@
         // Populate table with reclamations data
         $.each(reclamations, function(index, reclamation) {
           // Check if nomGroupe is equal to 0, if yes, replace it with "Aucun"
-          var buttonClass = reclamation.stratu == 'Valide' ? 'btn-danger' : 'btn-primary';
-          var buttonLabel = reclamation.stratu == 'Valide' ? 'Modifier' : 'Réponse';
-          var buttonHtml = '<button class="btn ' + buttonClass + ' response-btn w-100" data-toggle="modal" data-target="#exampleModal" data-reclamation-id="' + reclamation.id + '">' + buttonLabel + '</button>';
+          var buttonClass = reclamation.stratu == 'Valide' ? 'btn-secondary' : 'btn-primary';
+          var buttonLabel = reclamation.stratu == 'Valide' ? 'Afficher' : 'Réponse';
+          var buttonHtml = '<button  class="btn ' + buttonClass + ' response-btn w-100" data-toggle="modal" data-target="#exampleModal" data-reclamation-id="' + reclamation.id + '">' + buttonLabel + '</button>';
 
           var rowData = [
             reclamation.NomModule,
@@ -237,6 +259,8 @@
     });
     // Function to populate the table with reclamation data
     function populateReclamationTable(reclamationData) {
+
+      
       $('#reclamation-id').text(reclamationData.id);
       $('#name').text(reclamationData.Nom + ' ' + reclamationData.Prenom);
       $('#apogee').text(reclamationData.CodeApogee || "aucan");
@@ -254,7 +278,13 @@
     // Add event listener for the response button
     $(document).on('click', '.response-btn', function() {
       var reclamationId = $(this).data('reclamation-id');
-
+      var isValide = $('button[data-reclamation-id='+reclamationId+']').text() === 'Afficher';
+      $('#saveResponseButton').toggle(!isValide);
+      // Make the textarea readonly if the status is "Valide"
+      $('#message-text').prop('readonly', isValide);
+      // Hide the drop-down list if the status is "Valide"
+      $('#response-select').toggle(!isValide);
+      $('#info').toggleClass('d-none', !isValide);
       // Use the reclamation-id as idreq in the AJAX call
       $.ajax({
         url: '/detailsreqlamation/' + reclamationId, // Use reclamationId here
@@ -282,38 +312,46 @@
     $('#saveResponseButton').click(function(event) {
       event.preventDefault(); // Prevent default form submission
 
-      var reponse = $('#message-text').val();
-      var reclamationId = $('#reclamation-id').text();
-      var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtain CSRF token value
-      $.ajax({
-        url: '/update-tracking-reclamations',
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
-        },
-        data: {
-          reclamation_id: reclamationId,
-          reponse: reponse
-        },
-        success: function(response) {
-          // Update table row with response
-          $('#exampleModal').modal('hide');
-          // Assuming you have a function to update the table row with response
-          updateTableRow(response);
-          $('#message-text').val('');
-        },
-        error: function(xhr, status, error) {
-          console.error('Error updating tracking reclamation:', error);
-          // Handle error if necessary
-        }
+      // Show the confirmation modal
+      $('#confirmationModal').modal('show');
+
+      // Event listener for confirm button in the confirmation modal
+      $('#confirm-submit-btn').click(function() {
+        $('#confirmationModal').modal('hide');
+
+        var reponse = $('#message-text').val();
+        var reclamationId = $('#reclamation-id').text();
+        var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtain CSRF token value
+
+        // Perform AJAX request to update tracking reclamation
+        $.ajax({
+          url: '/update-tracking-reclamations',
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
+          },
+          data: {
+            reclamation_id: reclamationId,
+            reponse: reponse
+          },
+          success: function(response) {
+            // Update table row with response
+            $('#exampleModal').modal('hide');
+            // Assuming you have a function to update the table row with response
+            updateTableRow(response);
+            $('#message-text').val('');
+          },
+          error: function(xhr, status, error) {
+            console.error('Error updating tracking reclamation:', error);
+            // Handle error if necessary
+          }
+        });
       });
     });
 
+
     function updateTableRow(response) {
       change_reclamations();
-      // Update table row with response data
-      // This function should update the relevant elements in the table row with the new response data
-      // You can use the response data to update the table row accordingly
     }
 
   });

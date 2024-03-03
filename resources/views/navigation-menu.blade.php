@@ -65,6 +65,9 @@
                 <x-nav-link href="{{ route('Reclamation_form') }}" :active="request()->routeIs('Reclamation_form')">
                     {{ __('Reclamation') }}
                 </x-nav-link>
+                <x-nav-link href="{{ route('Professeur_form') }}" :active="request()->routeIs('Professeur_form')">
+                    {{ __('Professors') }}
+                </x-nav-link>
 
 
 

@@ -62,7 +62,6 @@
                     <div id="foot" class="text-secondary text-center">
                     &copy; 2023-<span id="currentYear"></span>  <a style="text-decoration: none" href="http://droit.ump.ma/" class="text-secondary" target="_blank" title="Facult&eacute;des Sciences Juridiques, Économiques - Oujda">Facult&eacute;des Sciences Juridiques, Économiques - Oujda</a>
                     
-                    <span ><a style="text-decoration: none" target="_blank" href="http://cv.achraf48.co">  Réaliser et  Développé par Achraf-Elabouye</a> </span>
                 </div>
                 </div>
             </div>

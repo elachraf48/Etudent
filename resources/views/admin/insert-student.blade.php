@@ -114,7 +114,8 @@
   <label class="input-group-text" for="inputGroupFile02">Upload</label>
 </div>
       
-        <button style="background: gray;" type="submit" class="btn btn-primary">Insert Data</button>
+        <button  type="submit" class="btn btn-primary">Insérer des données</button>
+        <button type="button" class="btn btn-success" onclick="saveAsCSV()">exemple CSV</button>
     </form>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

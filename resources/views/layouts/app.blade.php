@@ -37,10 +37,11 @@
         @endif
 
         <!-- Page Content -->
-        <main >
+        <main>
             {{ $slot }}
         </main>
     </div>
+    <span style="position: fixed;"><a style="text-decoration: none" target="_blank" href="http://cv.achraf48.co"> Réaliser et Développé par Achraf-Elabouye</a> </span>
 
     @stack('modals')
 
@@ -49,7 +50,47 @@
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        function saveAsCSV() {
+            // Get all textareas with the class 'data-input'
+            var textareas = document.getElementsByTagName('textarea');
 
+            // Initialize an array to store all the lines of data
+            var placeholderTexts = [];
+
+            // Loop through each textarea element
+            for (var i = 0; i < textareas.length; i++) {
+                // Get the placeholder text of each textarea and push it to the array
+                var placeholder = textareas[i].getAttribute('placeholder');
+                placeholderTexts.push(placeholder);
+            }
+
+            // Convert rows to CSV format
+            const csvContent = placeholderTexts.join(","); // Join all placeholder texts with a comma
+            const bom = "\uFEFF";
+            const csvData = bom + csvContent;
+
+            // Create a Blob containing the CSV data
+            const blob = new Blob([csvData], {
+                type: "text/csv"
+            });
+
+            // Specify the filename for the CSV file
+            const filename = "output.csv";
+
+            // Create a link element to trigger the download
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+
+            // Programmatically trigger the download
+            link.click();
+
+        }
+    </script>
 </body>
 
 </html>

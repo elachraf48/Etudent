@@ -103,8 +103,9 @@
             <input disabled type="file" name="file" class="form-control" accept=".csv, .txt">
         </div>
 
-        <button style="background: gray;" type="submit" class="btn btn-primary">Insert Data</button>
-    </form>
+        <button  type="submit" class="btn btn-primary">Insérer des données</button>
+        <button type="button" class="btn btn-success" onclick="saveAsCSV()">exemple CSV</button>
+        </form>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>

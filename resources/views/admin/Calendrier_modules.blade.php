@@ -87,10 +87,9 @@
             <textarea name="cld_mod_data" class="form-control" rows="10" placeholder="Module , Jour , Horaire , GROUPE" required></textarea>
         </div>
 
-        <button style="background: gray;" type="submit" class="btn btn-primary">Insert Data</button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal()">
-            Show model
-        </button>
+        <button  type="submit" class="btn btn-primary">Insérer des données</button>
+        <button type="button" class="btn btn-success" onclick="saveAsCSV()">exemple CSV</button>
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="openModal()">Afficher le modèle</button>
 
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -103,7 +102,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" style="color:red;" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button"  class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button"  class="btn btn-primary" id="saveCsvButton">Save csv</button>
                     </div>
                 </div>
