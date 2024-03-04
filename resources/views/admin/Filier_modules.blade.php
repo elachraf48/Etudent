@@ -32,7 +32,7 @@
             <label class="input-group-text" for="inputGroupFile02">Upload</label>
         </div>
         <div class="form-check form-switch mb-3">
-            <input class="form-check-input" type="checkbox" id="delele_old" name="delele_old" checked>
+            <input class="form-check-input" type="checkbox" id="delele_old" name="delele_old" >
             <label class="form-check-label" for="delele_old">Souhaitez-vous supprimer des informations avant d'entrer ?</label>
         </div>
         <button id="insertDataButton" type="submit" class="btn btn-primary">Insérer des données</button>

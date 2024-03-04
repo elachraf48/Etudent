@@ -52,7 +52,7 @@ CREATE TABLE modules (
 
 );
 
-Table Calendrier_SESSION {
+CREATE Table Calendrier_SESSION {
     id int AUTO_INCREMENT PRIMARY KEY,
     SESSION ENUM('ORD', 'RAT'),
     part_Semester INT,

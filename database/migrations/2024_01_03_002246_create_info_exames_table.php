@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('Lieu');
             $table->unsignedBigInteger('idEtudiant');
             $table->unsignedBigInteger('idGroupe');
+            $table->unsignedBigInteger('idSession');
+            $table->foreign('idSession')->references('id')->on('calendrier_sessions');
             $table->foreign('idEtudiant')->references('id')->on('etudiants');
             $table->foreign('idGroupe')->references('id')->on('groupes');
             $table->timestamps();

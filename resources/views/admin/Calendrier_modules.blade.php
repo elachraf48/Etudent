@@ -21,15 +21,32 @@
         @csrf
         <div class="row g-2 mt-1 p-1">
 
+        <div class="col-md">
+                <div class="form-floating">
+                    <select name="sessions" id="sessionDropdown" class="form-control" required>
+                        <!-- <option value="" disabled selected>Select Session</option> -->
+                        @foreach($sessions as $session)
+                        <option value="{{ $session->id }}" data-session-type="{{ $session->part_semester }}">
+                            Session: {{ $session->part_semester }} -
+                            @if($session->SESSION == 'ORD')
+                            Ordinaire
+                            @else
+                            Rattrapage
+                            @endif
+                        </option>
+                        @endforeach
+                    </select>
+                    <label for="floatingSelectGrid">Session Universitaire</label>
+                </div>
+            </div>
+
             <div class="col-md">
                 <div class="form-floating">
                     <select name="semester" id="semesterDropdown" class="form-control" required>
+                        <!-- Options will be dynamically added here based on the selected session -->
                         <option value="S1">S1</option>
-                        <option value="S2">S2</option>
                         <option value="S3">S3</option>
-                        <option value="S4">S4</option>
                         <option value="S5">S5</option>
-                        <option value="S6">S6</option>
                     </select>
                     <label for="floatingSelectGrid">Semester</label>
                 </div>
@@ -64,17 +81,7 @@
                     <label for="floatingSelectGrid">Annee Universitaire</label>
                 </div>
             </div>
-            <div class="col-md">
-                <div class="form-floating">
-                    <select name="sessions" id="sessionDropdown" class="form-control" required>
-                        <option value="" disabled selected>Select Session</option>
-                        @foreach($sessions as $session)
-                        <option value="{{ $session->id }}">Part Semester: {{ $session->part_semester }} - {{ $session->SESSION }} </option>
-                        @endforeach
-                    </select>
-                    <label for="floatingSelectGrid">Session Universitaire</label>
-                </div>
-            </div>
+       
 
 
             <div class="form-check form-switch form-check-inline">

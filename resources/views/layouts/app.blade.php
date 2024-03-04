@@ -112,6 +112,34 @@
             link.click();
 
         }
+         //select semester
+         const sessionDropdown = document.getElementById('sessionDropdown');
+        const semesterDropdown = document.getElementById('semesterDropdown');
+
+        // Add event listener to the session dropdown
+        sessionDropdown.addEventListener('change', function() {
+            // Clear previous options
+            semesterDropdown.innerHTML = '';
+
+            // Get the selected session type
+            const sessionType = this.options[this.selectedIndex].getAttribute('data-session-type');
+
+            // Define the options based on the selected session type
+            let options = [];
+            if (sessionType === '1') {
+                options = ['S1', 'S3', 'S5'];
+            } else {
+                options = ['S2', 'S4', 'S6'];
+            }
+
+            // Add the options to the semester dropdown
+            options.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.textContent = option;
+                semesterDropdown.appendChild(optionElement);
+            });
+        });
     </script>
 </body>
 

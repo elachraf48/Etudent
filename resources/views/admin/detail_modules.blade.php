@@ -21,15 +21,32 @@
 
         <div class="row g-2 mt-1 mb-2">
 
+        <div class="col-md">
+                <div class="form-floating">
+                    <select name="sessions" id="sessionDropdown" class="form-control" required>
+                        <!-- <option value="" disabled selected>Select Session</option> -->
+                        @foreach($sessions as $session)
+                        <option value="{{ $session->id }}" data-session-type="{{ $session->part_semester }}">
+                            Session: {{ $session->part_semester }} -
+                            @if($session->SESSION == 'ORD')
+                            Ordinaire
+                            @else
+                            Rattrapage
+                            @endif
+                        </option>
+                        @endforeach
+                    </select>
+                    <label for="floatingSelectGrid">Session Universitaire</label>
+                </div>
+            </div>
+
             <div class="col-md">
                 <div class="form-floating">
                     <select name="semester" id="semesterDropdown" class="form-control" required>
+                        <!-- Options will be dynamically added here based on the selected session -->
                         <option value="S1">S1</option>
-                        <option value="S2">S2</option>
                         <option value="S3">S3</option>
-                        <option value="S4">S4</option>
                         <option value="S5">S5</option>
-                        <option value="S6">S6</option>
                     </select>
                     <label for="floatingSelectGrid">Semester</label>
                 </div>
@@ -53,7 +70,7 @@
                     <select name="AnneeUniversitaire" id="AnneeUniversitaire" class="form-control" required>
                         <?php
                         $currentYear = date('Y') ;
-                        for ($i = 0; $i < 3; $i++) {
+                        for ($i = 1; $i < 4; $i++) {
                             $startYear = $currentYear - $i;
                             $endYear = $startYear + 1;
                             $academicYear = $startYear . '-' . $endYear;
@@ -64,24 +81,7 @@
                     <label for="floatingSelectGrid">Annee Universitaire</label>
                 </div>
             </div>
-            <div class="col-md">
-                <div class="form-floating">
-                    <select name="sessions" id="sessionDropdown" class="form-control" required>
-                        <!-- <option value="" disabled selected>Select Session</option> -->
-                        @foreach($sessions as $session)
-                        <option value="{{ $session->id }}">Session: {{ $session->part_semester }} -
-                            @if($session->SESSION == 'ORD')
-                            Ordinaire
-                            @else
-                            Rattrapage
-                            @endif
-                        </option>
-                        @endforeach
-
-                    </select>
-                    <label for="floatingSelectGrid">Session Universitaire</label>
-                </div>
-            </div>
+       
 
 
 
@@ -140,9 +140,12 @@
                         var moduleIds = modules.map(function(module) {
                             return module.id;
                         });
+                        var moduleNomModule = modules.map(function(module) {
+                            return module.NomModule;
+                        });
 
                         // Set the placeholder of the textarea
-                        $('textarea[name="detail_modules_data"]').attr('placeholder', codeApogee + ',module ' + moduleIds.join(',module '));
+                        $('textarea[name="detail_modules_data"]').attr('placeholder', codeApogee + ',module ' + moduleNomModule.join());
                         $('input[name="id_module"]').val(moduleIds.join(','));
 
 
@@ -172,7 +175,7 @@
                 $('input[name="file"]').prop('disabled', !isChecked);
             }
             //filier show after change semester
-            $('#semesterDropdown').change(function() {
+            $('#semesterDropdown,#sessionDropdown').change(function() {
                 var selectedSemester = $(this).val();
                 // Make an Ajax request to fetch filieres based on the selected semester
                 $.ajax({

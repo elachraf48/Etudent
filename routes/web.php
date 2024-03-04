@@ -108,7 +108,7 @@ Route::resource('calendrier-module-groupes', CalendrierModuleGroupeController::c
 
 
 // admin/Filier_modules
-Route::get('/reclamations/etudiant/{filiere}', [EtudiantController::class,'getReclamationsCount'])->name('reclamations.etudiant');
+Route::get('/reclamations/etudiant/{filiere}', [EtudiantController::class, 'getReclamationsCount'])->name('reclamations.etudiant');
 
 
 // routes/web.php
@@ -119,11 +119,11 @@ Route::get('/etudiant/Repense', [EtudiantController::class, 'Repense'])->name('R
 Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:3'])->group(function () {
         Route::resource('/Professeur', DetailProfesseurController::class);
-        Route::get('/reclamations/count', [DetailProfesseurController::class,'getReclamationsCount'])->name('reclamations.count');
+        Route::get('/reclamations/count', [DetailProfesseurController::class, 'getReclamationsCount'])->name('reclamations.count');
         Route::get('/Professeur/Reclamation', [DetailProfesseurController::class, 'show'])->name('Reclamationpr');
     });
-    
-    
+
+
     // Your authenticated routes here
     Route::middleware(['role:0'])->group(function () {
         Route::get('/admin/insert-student', [AdminController::class, 'showInsertStudentForm'])->name('insert_student_form');
@@ -134,23 +134,20 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/Filier_modules', [AdminController::class, 'showFiliermodules'])->name('Filier_modules_form');
         Route::post('/admin/Filier_modules', [AdminController::class, 'processFiliermodules'])->name('Filier_modules_process');
         // admin/Reclamation
-        Route::get('/admin/Professeur', [TrackingReclamationController::class,'indexProfesseur'] )->name('Professeur_form');
+        Route::get('/admin/Professeur', [TrackingReclamationController::class, 'indexProfesseur'])->name('Professeur_form');
         Route::post('/admin/Professeur', [TrackingReclamationController::class, 'processFiliermodules'])->name('Professeur_process');
         // admin/Reclamation
-        Route::get('/admin/Reclamation', [TrackingReclamationController::class,'index'] )->name('Reclamation_form');
+        Route::get('/admin/Reclamation', [TrackingReclamationController::class, 'index'])->name('Reclamation_form');
         Route::post('/admin/Reclamation', [TrackingReclamationController::class, 'processFiliermodules'])->name('Reclamation_process');
-        
-         // admin/bulk_professeurs
+
+        // admin/bulk_professeurs
         Route::get('/admin/bulk_professeurs', [ProfesseurController::class, 'index'])->name('bulk_professeurs_form');
         Route::post('/admin/bulk_professeurs', [ProfesseurController::class, 'bulk_professeurs_process'])->name('bulk_professeurs_process');
         // admin/Calendrier_modules
         Route::post('/admin/Calendrier_modules', [CalendrierModuleController::class, 'insertCalendrierModules'])->name('Calendrier_modules_process');
         Route::get('/admin/Calendrier_modules', [CalendrierModuleController::class, 'showCalendriermodules'])->name('Calendrier_modules_form');
         Route::resource('/admin', AdminController::class);
-       
     });
-    
-       
 });
 Route::middleware([
     'auth:sanctum',
@@ -171,4 +168,3 @@ Route::get('/login', function () {
 //         return redirect()->route('login');
 //     }
 // })->where('any', '.*');
-

@@ -86,10 +86,10 @@
             <label for="file" class="form-label">Téléchargez un fichier CSV ou TXT :</label>
             <input disabled type="file" name="file" class="form-control" accept=".csv, .txt">
         </div>
-        <div class="form-check form-switch mb-3">
+        <!-- <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" id="delele_old" name="delele_old" checked>
             <label class="form-check-label" for="delele_old">Souhaitez-vous supprimer des informations avant d'entrer ?</label>
-        </div>
+        </div> -->
 
 
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

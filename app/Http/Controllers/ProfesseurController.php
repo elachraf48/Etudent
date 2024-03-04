@@ -129,6 +129,11 @@ class ProfesseurController extends Controller
                     $groupe = $columns[3];
                 }
                 if ($deletold) {
+                    $idprof=DB::table('detail_professeurs')
+                        // ->where('idModule', $moduleId)
+                        // ->where('AnneeUniversitaire', $anneeUniversitaire)
+                        // ->where('idProfesseur', $professeursId)
+                        ->value('id');
                     $existingprofesseurs = DB::table('professeurs')
                         ->where('Nom', $columns[1])
                         ->where('Prenom', $columns[2])

@@ -33,9 +33,10 @@
 
             <!-- Navigation Links -->
             <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                <!-- <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                     {{ __('Dashboard') }}
-                </x-nav-link>
+                </x-nav-link> -->
+                @if(Auth::user()->role == 0)
                 <x-nav-link class="m-0" :active="request()->routeIs('dashboard')">
                     <ul class="nav-item dropdown m-0">
                         <a class="nav-link dropdown-toggle w-25" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -62,6 +63,7 @@
                         </ul>
                     </ul>
                 </x-nav-link>
+                @endif
                 <x-nav-link href="{{ route('Reclamation_form') }}" :active="request()->routeIs('Reclamation_form')">
                     {{ __('Reclamation') }}
                 </x-nav-link>

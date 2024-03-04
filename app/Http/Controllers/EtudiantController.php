@@ -139,7 +139,7 @@ class EtudiantController extends Controller
                 $join->on('m.id', '=', 'cm.idModule')
                     ->where('cm.AnneeUniversitaire', '=', DB::raw('(SELECT MAX(AnneeUniversitaire) FROM detail_modules)'));
             })
-            ->where('g.idSESSION', '=', DB::raw('(SELECT max(idSESSION) FROM detail_modules WHERE AnneeUniversitaire = (SELECT MAX(AnneeUniversitaire) FROM info_exames))'))
+            ->whereRaw('ie.idSESSION = g.idSESSION AND g.idSESSION = dm.idSESSION AND ie.idSESSION = (SELECT MAX(ie_inner.idSESSION) FROM info_exames ie_inner WHERE ie_inner.AnneeUniversitaire = (SELECT MAX(AnneeUniversitaire) FROM detail_modules))')
             ->where('dm.AnneeUniversitaire', '=', DB::raw('(SELECT MAX(AnneeUniversitaire) FROM info_exames)'))
             ->where('ie.AnneeUniversitaire', '=', DB::raw('(SELECT MAX(AnneeUniversitaire) FROM detail_modules)'))
             ->where('e.CodeApogee', '=', $codeApogee)
