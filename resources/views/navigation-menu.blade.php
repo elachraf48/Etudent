@@ -282,6 +282,7 @@
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
+        
         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             {{ Auth::user()->name }}
 
@@ -318,11 +319,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ">
-                <li class="nav-item ">
+                <!-- <li class="nav-item ">
                     <a class="nav-link active " aria-current="page" href="/Professeur"> <button type="button" class="btn btn-primary position-relative">
                             Home </button>
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link position-relative" href="{{ route('Reclamationpr') }}">
                         <button type="button" class="btn btn-primary position-relative">

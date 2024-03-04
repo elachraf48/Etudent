@@ -78,9 +78,9 @@
   <div class="row">
 
     <div class="col-md-12">
-      <table id="reclamation-table" class="table ">
+      <table id="reclamation-table" class="table text-center table-striped table-bordered">
         <thead>
-          <tr>
+          <tr class="table-primary">
             <!-- <th>Semester</th> -->
             <th>Module</th>
             <th>C.Apogee</th>
