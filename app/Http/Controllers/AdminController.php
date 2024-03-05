@@ -223,7 +223,9 @@ class AdminController extends Controller
                 if ($iseExamen) {
                     $Examen = $incrementexamen;
                 } else {
-                    $Examen = $columns[5];
+                    try{$Examen = $columns[5];}
+                    catch (\Throwable $e) {$Examen=null;}
+                    
                 }
                 // Convert the date format
 

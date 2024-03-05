@@ -109,6 +109,7 @@ Route::resource('calendrier-module-groupes', CalendrierModuleGroupeController::c
 
 // admin/Filier_modules
 Route::get('/reclamations/etudiant/{filiere}', [EtudiantController::class, 'getReclamationsCount'])->name('reclamations.etudiant');
+Route::get('/check-connection', [TrackingReclamationController::class,'checkConnection']);
 
 
 // routes/web.php
@@ -126,6 +127,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Your authenticated routes here
     Route::middleware(['role:0'])->group(function () {
+
         Route::get('/admin/insert-student', [AdminController::class, 'showInsertStudentForm'])->name('insert_student_form');
         Route::post('/admin/process-student-data', [AdminController::class, 'processStudentData'])->name('process_student_data');
         //detail_modules

@@ -113,29 +113,16 @@
             </div> -->
 
             <div class="col-md-12">
-                <div class="col-auto">
-                    <button id="save-pdf-button" class="btn btn-success mb-3">Enregistrer au format PDF</button>
-                    <input type="checkbox" class="btn-check mb-3" id="btncheck1" autocomplete="off">
-                    <label class="btn btn-outline-primary mb-3" for="btncheck1">utiliser les couleur</label>
-                </div>
-                <form class="row g-3 d-none">
-                    <div class="col-auto">
-                        <label for="staticEmail2" class="visually-hidden">Email</label>
-                        <input type="text" class="form-control" id="staticEmail2" placeholder="email@example.com">
-                    </div>
-                    <div class="col-auto">
-                        <label for="inputPassword2" class="visually-hidden">Password</label>
-                        <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-secondary mb-3">vérifier la connexion</button>
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-primary mb-3">envoyer pour chaque</button>
-                    </div>
+            <div class="col-12 d-flex justify-content-center">
+    <button id="save-pdf-button" class="btn btn-primary mb-3 me-2">Enregistrer PDF</button>
+    <input type="checkbox" class="btn-check mb-3 me-2" id="btncheck1" autocomplete="off">
+    <label class="btn btn-outline-primary mb-3 me-2" for="btncheck1">utiliser les couleur</label>
+    <button class="btn btn-primary mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Envoyer Email</button>
+</div>
 
-                </form>
-                <table id="reclamation-table" class="table  text-center table-striped table-bordered">
+
+
+                <table id="reclamation-table" class="table  text-center table-striped table-bordered table-responsive-xxl ">
                     <thead>
                         <tr class="table-success">
                             <th><input type="checkbox" id="toggleAll"></th>
@@ -143,6 +130,7 @@
                             <th>Réclamation est en cours</th>
                             <th>Réclamation valide</th>
                             <th>Réclamation totale</th>
+                            <th>Email</th>
 
                         </tr>
                     </thead>
@@ -153,23 +141,110 @@
             </div>
         </div>
     </div>
+    <!-- send email -->
 
+
+
+    <div class="offcanvas offcanvas-start " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Email</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form class="row g-3" id="connectionForm">
+                <!-- <div class="col-auto">
+                    <label for="staticEmail2" class="visually-hidden">Email</label>
+                    <input type="text" name="Email" class="form-control" id="staticEmail2" placeholder="email@example.com">
+                </div>
+                <div class="col-12">
+                    <label for="inputPassword2" class="visually-hidden">Password</label>
+                    <input type="password" name="Password" class="form-control" id="inputPassword2" placeholder="Password">
+                </div> -->
+                <!--  -->
+                <div class="alert alert-info" id="nembersent" role="alert">coche Le professeur veut lui envoyer un e-mail</div>
+                <div class="row g-2 mt-1  pt-2">
+                    <label for="Name" class="clearfix">
+                        <span class="float-start">Name </span>
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" id="Name" name="Name" class="form-control" require>
+                            <label for="floatingSelectGrid">Name</label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2 mt-1  pt-2">
+                    <label for="Email" class="clearfix">
+                        <span class="float-start">Email </span>
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="email" id="Email" name="Email" class="form-control" require>
+                            <label for="floatingSelectGrid">Email</label>
+
+                        </div>
+                    </div>
+                </div>
+                <!--  -->
+                <div class="row g-2 mt-1  pt-2">
+                    <label for="Password" class="clearfix">
+                        <span class="float-start">Password </span>
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="password" id="Password" name="Password" class="form-control" require>
+                            <label for="floatingSelectGrid">Password</label>
+
+                        </div>
+                    </div>
+                </div>
+                <!--  -->
+                <div class="row g-2 mt-1  pt-2">
+                    <label for="subject" class="clearfix">
+                        <span class="float-start">subject </span>
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" id="subject" name="subject" value="{nbnotvalid} nouvelles réclamation" class="form-control" require>
+                            <label for="floatingSelectGrid">subject</label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2 mt-1  pt-2">
+                    <label for="message" class="clearfix">
+                        message
+                    </label>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <textarea require type="text" id="message" rows="10" name="message" class="form-control" style="height: 134px;">Bonjour Professeur {fullname},
+vous avez de {nbnotvalid} nouvelles reclamation, veuillez y répondre</textarea>
+                            <label for="floatingSelectGrid">message</label>
+
+                        </div>
+                    </div>
+                </div>
+                <!--  -->
+                <button type="submit" id="checkConnectionBtn" class="btn btn-primary ">envoyer</button>
+
+            </form>
+            
+        </div>
+        <div class="alert alert-success p-0" role="alert">
+        <div class="text-center text-danger fw-bold">Note</div>
+        <ul>
+            <ol><span class="text-danger">{fullname}</span> : nom et prenom </ol>
+            <ol><span class="text-danger">{nbnotvalid}</span> : Réclamation est en cours</ol>
+            <ol><span class="text-danger">{nbvalid}</span> : Réclamation valide</ol>
+            <ol><span class="text-danger">{nbtotal}</span> : Réclamation totale</ol>
+        </ul>
+          </div>
+    </div>
     <style>
-        tr td:nth-child(10) {
-            max-width: 200px;
-            /* Set your desired max-width */
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-
-        }
-
-        tr td:nth-child(2),
-
-        tbody tr td:hover {
-            white-space: normal;
-            overflow: visible;
+        tr td:nth-child(6),
+        tr th:nth-child(6) {
+            display: none;
 
         }
     </style>
@@ -239,6 +314,17 @@
         }
         /////////////////////////////////////
         $(document).ready(function() {
+            $(document).ready(function() {
+                // Add event listener to the document for changes in checkboxes within the table body
+                $(document).on('change', '#reclamation-table  input[type="checkbox"]', function() {
+                    // Get the number of checked checkboxes within the table body
+                    var numChecked = $('#reclamation-table tbody input[type="checkbox"]:checked').length;
+
+                    // Update the content of the #nembersent div with the count
+                    $('#nembersent').text('Des messages seront envoyés aux ' + numChecked + ' professeurs');
+                });
+            });
+
             $('#professeurDropdown').change(function() {
                 if ($(this).val() === '%') {
                     $('#downloadByProfesseur').show();
@@ -260,81 +346,8 @@
 
 
 
-            $('#downloadAll').click(function() {
-                downloadCSV('all');
-            });
 
-            $('#downloadByProfesseur').click(function() {
-                downloadCSV('professeur');
-            });
 
-            function downloadCSV(type) {
-                var currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
-
-                var zip = new JSZip();
-
-                // Construct CSV data based on type
-                if (type === 'all') {
-                    var csvContent = '';
-                    csvContent += '\uFEFF"Professeur","Semester","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
-
-                    $('#reclamation-table tbody tr').each(function() {
-                        $(this).find('td').each(function() {
-                            csvContent += '"' + $(this).text().replace(/"/g, '""') + '",'; // Wrap data in quotes to handle special characters and escape quotes
-                        });
-                        csvContent += '\n';
-                    });
-
-                    var blob = new Blob([csvContent], {
-                        type: 'text/csv;charset=utf-8;'
-                    });
-                    var link = document.createElement('a');
-                    if (link.download !== undefined) { // feature detection
-                        var url = URL.createObjectURL(blob);
-                        link.setAttribute('href', url);
-                        link.setAttribute('download', 'all-reclamations-' + currentDate + '.csv');
-                        link.style.visibility = 'hidden';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    }
-                } else if (type === 'professeur') {
-                    var headerRow = '\uFEFF"Professeur","Semester","Module","Code Apogee","Étudiant","Numéro Examen","Lieu","Groupe","Sujet","Observations","Reponse"\n';
-
-                    var columnIndex = [];
-                    $('#reclamation-table thead tr th').each(function(index) {
-                        var columnName = $(this).text();
-                        if (columnName !== 'Professeur') {
-                            columnIndex.push(index);
-                        }
-                    });
-
-                    var professeurs = {};
-                    $('#reclamation-table tbody tr').each(function() {
-                        var professeur = $(this).find('td:eq(0)').text();
-                        if (!professeurs[professeur]) {
-                            professeurs[professeur] = [];
-                        }
-                        var rowData = [];
-                        $(this).find('td').slice(0).each(function(index) {
-                            if (columnIndex.includes(index)) {
-                                rowData.push('"' + $(this).text().replace(/"/g, '""') + '"'); // Wrap data in quotes to handle special characters and escape quotes
-                            }
-                        });
-                        professeurs[professeur].push(rowData.join(','));
-                    });
-
-                    for (var prof in professeurs) {
-                        zip.file(prof.replace(/\s+/g, '-') + '.csv', headerRow + professeurs[prof].join('\n'));
-                    }
-
-                    zip.generateAsync({
-                        type: 'blob'
-                    }).then(function(content) {
-                        saveAs(content, 'reclamations' + currentDate + '.zip');
-                    });
-                }
-            }
             //filier show after change semester
             $('#semesterDropdown').change(function() {
                 var selectedSemester = $(this).val();
@@ -452,19 +465,21 @@
                             professor.Nom + ' ' + professor.Prenom,
                             professor.count_not_valid,
                             professor.count_valid,
-                            professor.total
+                            professor.total,
+                            professor.Email
+
                         ];
                         // Add row to the table
                         var row = table.row.add(rowData).draw().node();
                         if ($('#btncheck1').prop('checked')) {
-                        // Set row background color based on professor's statistics
-                        if (professor.count_valid == professor.total) {
-                            $(row).addClass('bg-success'); // Green background
-                        } else if (professor.count_valid == 0) {
-                            $(row).addClass('bg-danger'); // Red background
-                        } else {
-                            $(row).addClass('bg-warning'); // Orange background
-                        }
+                            // Set row background color based on professor's statistics
+                            if (professor.count_valid == professor.total) {
+                                $(row).addClass('bg-success'); // Green background
+                            } else if (professor.count_valid == 0) {
+                                $(row).addClass('bg-danger'); // Red background
+                            } else {
+                                $(row).addClass('bg-warning'); // Orange background
+                            }
                         }
                     });
                 }
@@ -521,6 +536,52 @@
 
 
         // Attach the tableToCsv function to the "Save csv" button click event
-        // document.getElementById('saveCsvButton').addEventListener('click', tableToCsv);
+
+        $(document).ready(function() {
+            $('#checkConnectionBtn').on('click', function(event) {
+                event.preventDefault(); // Prevent form submission
+                
+                // Iterate through each checked checkbox within the table body
+                    $('#reclamation-table tbody input[type="checkbox"]:checked').each(function() {
+                        // Find the corresponding row data
+                        var rowData = [];
+                        $(this).closest('tr').find('td').not(':first-child').each(function() {
+                            rowData.push($(this).text().trim());
+                        });
+                        sendRowData(rowData);
+                        $('#nembersent').text('messages  envoyés au professeurs ' + rowData[0] + ' ');
+
+                        
+                        // Send an AJAX request for each row's data
+                        //  sendRowData(rowData);
+                    });
+                });
+            // Add event listener to the "vérifier la connexion" button
+            function sendRowData(rowData){
+                var formData = {
+                    Email: $('#Email').val(),
+                    Password: $('#Password').val(),
+                    Message: $('#message').val(),
+                    Subject: $('#subject').val(),
+                    Name: $('#Name').val(),
+                    RowData: rowData
+
+                };
+                $.ajax({
+                    url: '/check-connection', // Replace with your endpoint for connection check
+                    method: 'GET',
+                    data: formData, // Pass form data to the server
+
+                    success: function(response) {
+                        // Handle success response
+                        $('#nembersent').text('messages  envoyés au professeurs ' + rowData[0] + ' ');
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        $('#nembersent').text('Connection failed! Error ' + error);
+                    }
+                });
+        };
+    });
     </script>
     @endsection

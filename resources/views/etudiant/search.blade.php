@@ -55,7 +55,9 @@
                     <div class="exam-details">
                         <p>
                             Filière: {{ $module->NomFiliere }} | Semester: {{ $module->ExamenSemester }}
+                            @if($module->NumeroExamen!='')
                             | Numero Examen: {{ $module->NumeroExamen }}
+                            @endif
                             @if ($module->NomGroupe && $module->NomGroupe !== "0")
                             | Groupe: {{ $module->NomGroupe }}
                             @endif

@@ -394,6 +394,8 @@
                     $.each(reclamations, function(index, reclamation) {
                         // Check if nomGroupe is equal to 0, if yes, replace it with "Aucun"
                         var groupe = reclamation.nomGroupe === '0' ? "Aucun" : reclamation.nomGroupe;
+                        var NumeroExamen = reclamation.NumeroExamen === null ? "Aucun" : reclamation.NumeroExamen;
+                        var Repense = reclamation.Repense === '' ? "No Repense" : reclamation.Repense;
 
                         var rowData = [
                             reclamation.prof_nom + ' ' + reclamation.prof_prenom,
@@ -401,12 +403,12 @@
                             reclamation.NomModule,
                             reclamation.CodeApogee,
                             reclamation.Nom + ' ' + reclamation.Prenom,
-                            reclamation.NumeroExamen,
+                            NumeroExamen,
                             reclamation.Lieu,
                             groupe, // Use the updated value of groupe
                             reclamation.Sujet,
                             reclamation.observations,
-                            reclamation.Repense
+                            Repense
 
                         ];
                         table.row.add(rowData).draw();

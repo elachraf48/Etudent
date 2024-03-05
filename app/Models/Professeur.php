@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Professeur extends Model
 {
-    protected $fillable = ['Nom', 'Prenom'];
+    protected $fillable = ['Nom', 'Prenom','Email','user_id'];
+    public function users()
+    {
+        return $this->belongsTo(user::class, 'user_id');
+    }
     use HasFactory;
     // No relationships in this example
 }
