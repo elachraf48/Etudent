@@ -81,6 +81,19 @@ body {
     cursor: pointer;
 
 }
+.formLoginStyle .submitBtncl {
+    background: -webkit-linear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
+    background: -moz- oldlinear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
+    background: -o-linear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
+    background: linear-gradient(135deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
+   
+}
+.formLoginStyle .submitBtnpr {
+    background: -webkit-linear-gradient(315deg,#7bff23,#77ff28 25%,#2fff28 50%,#23ff53);
+    background: -moz- oldlinear-gradient(315deg,#7bff23,#77ff28 25%,#2fff28 50%,#23ff53);
+    background: -o-linear-gradient(315deg,#7bff23,#77ff28 25%,#2fff28 50%,#23ff53);
+    background: linear-gradient(315deg,#7bff23,#77ff28 25%,#2fff28 50%,#23ff53);
+}
 
 .formLoginStyle .submitBtn {
     font-family: Nunito,sans-serif;
@@ -88,10 +101,6 @@ body {
     height: .4rem;
     line-height: .4rem;
     color: #fff;
-    background: -webkit-linear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
-    background: -moz- oldlinear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
-    background: -o-linear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
-    background: linear-gradient(135deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
     -webkit-background-size: 200% 200%;
     -moz-background-size: 200% 200%;
     background-size: 200% 200%;

@@ -64,11 +64,31 @@
                     </ul>
                 </x-nav-link>
                 @endif
-                <x-nav-link href="{{ route('Reclamation_form') }}" :active="request()->routeIs('Reclamation_form')">
-                    {{ __('Reclamation') }}
+                <x-nav-link class="m-0" :active="request()->routeIs('dashboard')">
+                    <ul class="nav-item dropdown m-0">
+                        <a class="nav-link dropdown-toggle w-25" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ __('Reclamation') }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <x-nav-link href="{{ route('Reclamation_form') }}" :active="request()->routeIs('Reclamation_form')">
+                                {{ __('Reclamation details') }}
+                            </x-nav-link>
+
+                            <x-nav-link style="width: 200px;" href="{{ route('Reclamation_edit_form') }}" :active="request()->routeIs('Reclamation_edit_form')">
+                                {{ __('Reclamation modefier') }}
+                            </x-nav-link>
+                           
+                        </ul>
+                    </ul>
                 </x-nav-link>
+                <!-- <x-nav-link href="{{ route('Reclamation_form') }}" :active="request()->routeIs('Reclamation_form')">
+                    {{ __('Reclamation') }}
+                </x-nav-link> -->
                 <x-nav-link href="{{ route('Professeur_form') }}" :active="request()->routeIs('Professeur_form')">
                     {{ __('Professors') }}
+                </x-nav-link>
+                <x-nav-link href="{{ route('parameterPage') }}" :active="request()->routeIs('parameterPage')">
+                    {{ __('Page') }}
                 </x-nav-link>
 
 

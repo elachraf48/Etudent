@@ -395,7 +395,7 @@
                         // Check if nomGroupe is equal to 0, if yes, replace it with "Aucun"
                         var groupe = reclamation.nomGroupe === '0' ? "Aucun" : reclamation.nomGroupe;
                         var NumeroExamen = reclamation.NumeroExamen === null ? "Aucun" : reclamation.NumeroExamen;
-                        var Repense = reclamation.Repense === '' ? "No Repense" : reclamation.Repense;
+                        // var Repense = reclamation.Repense === '' ? "No Repense" : reclamation.Repense;
 
                         var rowData = [
                             reclamation.prof_nom + ' ' + reclamation.prof_prenom,
@@ -408,7 +408,7 @@
                             groupe, // Use the updated value of groupe
                             reclamation.Sujet,
                             reclamation.observations,
-                            Repense
+                            reclamation.Repense
 
                         ];
                         table.row.add(rowData).draw();

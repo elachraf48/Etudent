@@ -30,39 +30,47 @@
                             </div>
                             <div class="formLoginStyle">
                                 <div class="item">
-                                    <input oninput="removeLeadingZeros(this)" maxlength="7" minlength="6" Title="" class="" data-val="true" id="CodeApogee" name="CodeApogee" placeholder="Code Apogée" required="required" type="number" value="" />
-
+                                    <input oninput="removeLeadingZeros(this)" maxlength="7" minlength="6" class="" data-val="true" id="CodeApogee" name="CodeApogee" placeholder="Code Apogée" required="required" type="number" value="" />
                                 </div>
-
-
-
 
                                 <div class="item">
-                                    <button id="btnSubmit" class="submitBtn submitBtn-large" type="submit">Trouver</button>
+                                    <button type="submit" id="btnSubmit" class="submitBtn submitBtn-large submitBtncl">calendrier des examens</button>
                                 </div>
-                                <div class="item text-center " >
-                                    <a style="text-decoration: none;font-size: large;" href="/reclamation" >
-                                        هل تريد التبليغ عن مشكل في الامتحان ؟
-                                        <br>
+
+                                <div class="item">
+                                <button class="submitBtn submitBtn-large submitBtnpr"> <a id="btnSubmitd" style="text-decoration: none;font-size: large; color:black;" onclick="redirectToPreinscription()">
+            pré-inscription des examens
+        </a></button>
+</div>
+<script>
+    function redirectToPreinscription() {
+        var codeApogee = document.getElementById("CodeApogee").value;
+        var preinscriptionUrl = "{{ route('preinscription.form') }}?CodeApogee=" + codeApogee;
+        document.getElementById("btnSubmitd").href = preinscriptionUrl;
+    }
+</script>
+
+                                <div class="item text-center">
+                                    <a style="text-decoration: none;font-size: large;" href="/reclamation">
+                                        هل تريد التبليغ عن مشكل في الامتحان ؟<br>
                                         Vous souhaitez signaler un problème lors de l'examen ?
                                     </a>
                                 </div>
-
 
                                 @if (session('error'))
                                 <div class="alert alert-danger">
                                     <p>{!! session('error') !!}</p>
                                 </div>
                                 @endif
-
                             </div>
                         </div>
                     </form>
 
+
                     <div id="foot" class="text-secondary text-center">
-                    &copy; 2023-<span id="currentYear"></span>  <a style="text-decoration: none" href="http://droit.ump.ma/" class="text-secondary" target="_blank" title="Facult&eacute;des Sciences Juridiques, Économiques - Oujda">Facult&eacute;des Sciences Juridiques, Économiques - Oujda</a>
-                    
-                </div>
+                        &copy; 2023-<span id="currentYear"></span> <a style="text-decoration: none" href="http://droit.ump.ma/" class="text-secondary" target="_blank" title="Facult&eacute;des Sciences Juridiques, Économiques - Oujda">Facult&eacute;des Sciences Juridiques, Économiques - Oujda</a>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,8 +85,9 @@
 <script>
     var currentYear = new Date().getFullYear();
 
-// Set the current year in the HTML
-document.getElementById("currentYear").innerHTML = currentYear;
+    // Set the current year in the HTML
+    document.getElementById("currentYear").innerHTML = currentYear;
+
     function removeLeadingZeros(input) {
         // Remove leading zeros using a regular expression
         input.value = input.value.replace(/^0+/, '');

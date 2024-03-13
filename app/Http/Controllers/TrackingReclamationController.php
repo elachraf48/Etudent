@@ -42,6 +42,27 @@ class TrackingReclamationController extends Controller
         // //
         return view('admin.Reclamation', compact('sessions', 'AnneeUniversitaire'));
     }
+    public function reclamation_edit()
+    {
+        $sessions = CalendrierSession::all();
+        // Retrieve unique values of AnneeUniversitaire
+        $AnneeUniversitaire = Reclamation::distinct()->pluck('AnneeUniversitaire');
+
+        
+        // //
+        return view('admin.ReclamationEdit', compact('sessions', 'AnneeUniversitaire'));
+    }
+    public function parameterPage()
+    {
+        $sessions = CalendrierSession::all();
+        // Retrieve unique values of AnneeUniversitaire
+        $AnneeUniversitaire = Reclamation::distinct()->pluck('AnneeUniversitaire');
+
+        
+        // //
+        return view('admin.parameterpage', compact('sessions', 'AnneeUniversitaire'));
+    }
+    
     public function indexProfesseur()
     {
         $sessions = CalendrierSession::all();
@@ -52,7 +73,6 @@ class TrackingReclamationController extends Controller
     }
     public function reclamations($AnneeUniversitaire, $module, $semester, $filiere, $professeur, $sessions, $stratu)
     {
-
         $reclamations = reclamation::select('tr.Repense', 'pr.Nom as prof_nom', 'pr.Prenom as prof_prenom', 'md.Semester', 'md.NomModule', 'ie.NumeroExamen', 'ie.Lieu', 'g.nomGroupe', 'et.CodeApogee', 'et.Nom', 'et.Prenom', 'reclamations.Sujet', 'reclamations.observations')
             ->join('professeurs as pr', 'pr.id', '=', 'reclamations.idProfesseur')
             ->join('etudiants as et', 'et.id', '=', 'reclamations.idEtudiant')

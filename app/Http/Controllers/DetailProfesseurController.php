@@ -88,8 +88,13 @@ class DetailProfesseurController extends Controller
     public function reclamations($AnneeUniversitaire, $statu, $semester,$sessions)
     {
 
-        $idproof =  Professeur::where('user_id', Auth::id())->pluck('id')->first();
+        if(Auth::user()->role=='0'){
+            $idproof='%';
+        }
+        else{
+            $idproof =  Professeur::where('user_id', Auth::id())->pluck('id')->first();
 
+        }
         $reclamations = DB::table('reclamations as r')
         ->select(
             'r.id',
@@ -98,10 +103,15 @@ class DetailProfesseurController extends Controller
             'm.NomModule',
             'e.Nom',
             'e.Prenom',
-            'e.CodeApogee'
+            'e.CodeApogee',
+            'p.Prenom as pPrenom',
+            'p.Nom as pNom',
+            'm.Semester'
            
         )
         ->join('tracking_reclamations as tr', 'tr.idReclamation', '=', 'r.id')
+        ->join('professeurs as p', 'r.idProfesseur', '=', 'p.id')
+
         ->join('modules as m', 'm.id', '=', 'r.idModule')
         ->join('etudiants as e', 'e.id', '=', 'r.idEtudiant')
         ->when($statu === 'nv', function ($query) {
@@ -109,12 +119,12 @@ class DetailProfesseurController extends Controller
         }, function ($query) use ($statu) {
             return $query->where('tr.stratu', 'LIKE', $statu);
         })
-        ->where('r.idProfesseur', $idproof)
+        ->where('r.idProfesseur','LIKE', $idproof)
         ->where('r.AnneeUniversitaire', 'LIKE', $AnneeUniversitaire)
         ->where('r.idSESSION', 'LIKE', $sessions)
+        ->where('m.Semester', 'LIKE', $semester)
 
         ->get();
-    
         
     
         // Return reclamations as JSON

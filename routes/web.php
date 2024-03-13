@@ -43,6 +43,7 @@ use App\Http\Controllers\DetailProfesseurController;
 use App\Http\Controllers\TrackingReclamationController;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\PreInscriptionController;
 
 // Routes for Filiere
 Route::resource('filieres', FiliereController::class);
@@ -117,6 +118,9 @@ Route::resource('/', EtudiantController::class);
 Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('search');
 Route::get('/etudiant/Repense', [EtudiantController::class, 'Repense'])->name('Repense');
 
+Route::get('/etudiant/preinscription', [PreInscriptionController::class, 'showForm'])->name('preinscription.form');
+Route::post('/etudiant/preinscription', [PreInscriptionController::class, 'submitForm'])->name('preinscription.submit');
+
 Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:3'])->group(function () {
         Route::resource('/Professeur', DetailProfesseurController::class);
@@ -141,6 +145,8 @@ Route::middleware(['auth'])->group(function () {
         // admin/Reclamation
         Route::get('/admin/Reclamation', [TrackingReclamationController::class, 'index'])->name('Reclamation_form');
         Route::post('/admin/Reclamation', [TrackingReclamationController::class, 'processFiliermodules'])->name('Reclamation_process');
+        Route::get('/admin/Reclamation/edit', [TrackingReclamationController::class, 'reclamation_edit'])->name('Reclamation_edit_form');
+        Route::get('/admin/parameter', [TrackingReclamationController::class, 'parameterPage'])->name('parameterPage');
 
         // admin/bulk_professeurs
         Route::get('/admin/bulk_professeurs', [ProfesseurController::class, 'index'])->name('bulk_professeurs_form');

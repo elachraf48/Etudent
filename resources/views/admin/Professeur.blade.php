@@ -113,12 +113,12 @@
             </div> -->
 
             <div class="col-md-12">
-            <div class="col-12 d-flex justify-content-center">
-    <button id="save-pdf-button" class="btn btn-primary mb-3 me-2">Enregistrer PDF</button>
-    <input type="checkbox" class="btn-check mb-3 me-2" id="btncheck1" autocomplete="off">
-    <label class="btn btn-outline-primary mb-3 me-2" for="btncheck1">utiliser les couleur</label>
-    <button class="btn btn-primary mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Envoyer Email</button>
-</div>
+                <div class="col-12 d-flex justify-content-center">
+                    <button id="save-pdf-button" class="btn btn-primary mb-3 me-2">Enregistrer PDF</button>
+                    <input type="checkbox" class="btn-check mb-3 me-2" id="btncheck1" autocomplete="off">
+                    <label class="btn btn-outline-primary mb-3 me-2" for="btncheck1">utiliser les couleur</label>
+                    <button class="btn btn-primary mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">Envoyer Email</button>
+                </div>
 
 
 
@@ -148,9 +148,11 @@
     <div class="offcanvas offcanvas-start " tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasExampleLabel">Email</h5>
+            
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
+        <div class="alert alert-info" id="nembersent" role="alert">coche Le professeur veut lui envoyer un e-mail</div>
             <form class="row g-3" id="connectionForm">
                 <!-- <div class="col-auto">
                     <label for="staticEmail2" class="visually-hidden">Email</label>
@@ -161,7 +163,7 @@
                     <input type="password" name="Password" class="form-control" id="inputPassword2" placeholder="Password">
                 </div> -->
                 <!--  -->
-                <div class="alert alert-info" id="nembersent" role="alert">coche Le professeur veut lui envoyer un e-mail</div>
+                
                 <div class="row g-2 mt-1  pt-2">
                     <label for="Name" class="clearfix">
                         <span class="float-start">Name </span>
@@ -226,26 +228,31 @@ vous avez de {nbnotvalid} nouvelles reclamation, veuillez y répondre</textarea>
                     </div>
                 </div>
                 <!--  -->
-                <button type="submit" id="checkConnectionBtn" class="btn btn-primary ">envoyer</button>
+
+                <button type="submit" id="checkConnectionBtn" class="btn btn-primary " disabled>envoyer</button>
 
             </form>
-            
+            <div class="alert alert-success mt-2" role="alert">
+                <div class="text-center text-danger fw-bold">Note</div>
+                <ul>
+                    <ol><span class="text-danger">{fullname}</span> : nom et prenom </ol>
+                    <ol><span class="text-danger">{nbnotvalid}</span> : Réclamation est en cours</ol>
+                    <ol><span class="text-danger">{nbvalid}</span> : Réclamation valide</ol>
+                    <ol><span class="text-danger">{nbtotal}</span> : Réclamation totale</ol>
+                </ul>
+            </div>
         </div>
-        <div class="alert alert-success p-0" role="alert">
-        <div class="text-center text-danger fw-bold">Note</div>
-        <ul>
-            <ol><span class="text-danger">{fullname}</span> : nom et prenom </ol>
-            <ol><span class="text-danger">{nbnotvalid}</span> : Réclamation est en cours</ol>
-            <ol><span class="text-danger">{nbvalid}</span> : Réclamation valide</ol>
-            <ol><span class="text-danger">{nbtotal}</span> : Réclamation totale</ol>
-        </ul>
-          </div>
+
     </div>
     <style>
         tr td:nth-child(6),
         tr th:nth-child(6) {
             display: none;
 
+        }
+
+        #offcanvasExample {
+            min-width: 50vw;
         }
     </style>
 
@@ -319,9 +326,14 @@ vous avez de {nbnotvalid} nouvelles reclamation, veuillez y répondre</textarea>
                 $(document).on('change', '#reclamation-table  input[type="checkbox"]', function() {
                     // Get the number of checked checkboxes within the table body
                     var numChecked = $('#reclamation-table tbody input[type="checkbox"]:checked').length;
-
+                    var btn = $('#checkConnectionBtn');
                     // Update the content of the #nembersent div with the count
                     $('#nembersent').text('Des messages seront envoyés aux ' + numChecked + ' professeurs');
+                    if (numChecked === 0) {
+                        btn.prop('disabled', true); // Disable the button
+                    } else {
+                        btn.prop('disabled', false); // Enable the button
+                    }
                 });
             });
 
@@ -540,24 +552,24 @@ vous avez de {nbnotvalid} nouvelles reclamation, veuillez y répondre</textarea>
         $(document).ready(function() {
             $('#checkConnectionBtn').on('click', function(event) {
                 event.preventDefault(); // Prevent form submission
-                
-                // Iterate through each checked checkbox within the table body
-                    $('#reclamation-table tbody input[type="checkbox"]:checked').each(function() {
-                        // Find the corresponding row data
-                        var rowData = [];
-                        $(this).closest('tr').find('td').not(':first-child').each(function() {
-                            rowData.push($(this).text().trim());
-                        });
-                        sendRowData(rowData);
-                        $('#nembersent').text('messages  envoyés au professeurs ' + rowData[0] + ' ');
 
-                        
-                        // Send an AJAX request for each row's data
-                        //  sendRowData(rowData);
+                // Iterate through each checked checkbox within the table body
+                $('#reclamation-table tbody input[type="checkbox"]:checked').each(function() {
+                    // Find the corresponding row data
+                    var rowData = [];
+                    $(this).closest('tr').find('td').not(':first-child').each(function() {
+                        rowData.push($(this).text().trim());
                     });
+                    sendRowData(rowData);
+                    // $('#nembersent').text('messages  envoyés au professeurs ' + rowData[0] + ' ');
+
+
+                    // Send an AJAX request for each row's data
+                    //  sendRowData(rowData);
                 });
+            });
             // Add event listener to the "vérifier la connexion" button
-            function sendRowData(rowData){
+            function sendRowData(rowData) {
                 var formData = {
                     Email: $('#Email').val(),
                     Password: $('#Password').val(),
@@ -581,7 +593,7 @@ vous avez de {nbnotvalid} nouvelles reclamation, veuillez y répondre</textarea>
                         $('#nembersent').text('Connection failed! Error ' + error);
                     }
                 });
-        };
-    });
+            };
+        });
     </script>
     @endsection
