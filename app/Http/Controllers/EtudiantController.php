@@ -17,6 +17,8 @@ use App\Models\Groupe;
 use App\Models\InfoExames;
 use App\Models\CalendrierModule;
 use App\Models\Reclamation;
+use App\Models\ParameterPage;
+use App\Models\PreInscription;
 
 //------
 class EtudiantController extends Controller
@@ -94,12 +96,36 @@ class EtudiantController extends Controller
         $validator = Validator::make(['CodeApogee' => $codeApogee], [
             'CodeApogee' => 'required|integer', // Add any additional validation rules
         ]);
+
         // Example query to get data
         if ($validator->fails()) {
             // Handle validation failure, e.g., return an error response
             return response()->json(['error' => $validator->errors()], 400);
         }
+        $lastdate = ParameterPage::where('NamePage','=', 'preinscription')->first();
+        $maxIdSession = DB::table('calendrier_modules')
+            ->where('AnneeUniversitaire', function ($query) {
+                $query->select(DB::raw('MAX(AnneeUniversitaire)'))
+                    ->from('calendrier_modules');
+            })->max('idSESSION');
+        $AnneeUniversitaire = (date('Y') - 1) . '-' . date('Y');
+       
+        $preInscriptions = DB::table('pre_inscriptions')
+            ->join('etudiants', 'etudiants.id', '=', 'pre_inscriptions.idEtudiant')
+            ->where('pre_inscriptions.idSession', $maxIdSession) 
+            ->where('pre_inscriptions.AnneeUniversitaire', $AnneeUniversitaire) 
+            ->where('etudiants.CodeApogee', $codeApogee) 
+            ->select('pre_inscriptions.*')
+            ->get();
+        if($lastdate->Statu=='true' && count($preInscriptions)==0){
+            return redirect()->route('index')->with('error', "عليك حجز مقعد في الامتحانات اولا<br>Vous devez d'abord réserver une place pour les examens");
 
+        }
+        $currentpage = ParameterPage::where('NamePage','=', 'calendrier')->first();
+        if($currentpage->Statu=='false' || $currentpage->LastDate<date('Y-m-d')){
+            return redirect()->route('index')->with('error', 'الصفحة غير متوفرة حاليا لمعرفة المزيد المرجو توجه لشؤون الطلبة<br> La page est actuellement indisponible. Pour en savoir plus, rendez-vous sur Affaires étudiantes');
+
+        }
 
 
         $student  = DB::table('Etudiants as e')
@@ -153,7 +179,7 @@ class EtudiantController extends Controller
         if ($student && count($groupedModules) > 0) {
             return view('etudiant.search', compact('student', 'groupedModules'));
         } else {
-            return redirect()->route('index')->with('error', 'Aucun étudiant trouvé <br>avec le Code Apogee fourni.');
+            return redirect()->route('index')->with('error', 'Aucun étudiant trouvé avec le Code Apogee fourni <br> لم يتم العثور على الطلاب مع هذا الرقم');
         }
     }
     public function Repense(Request $request)

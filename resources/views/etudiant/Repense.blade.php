@@ -80,7 +80,7 @@
 
 <script>
    
-    function updateReclamationsCount() {
+   function updateReclamationsCount() {
         var CodeApogee = $('#CodeApogee').val();
         $('.btn-primary').attr('data-apogee', CodeApogee);
 

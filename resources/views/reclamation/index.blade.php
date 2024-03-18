@@ -1,4 +1,4 @@
-<!-- resources/views/students/index.blade.php -->
+<!-- resources/views/reclamation/index.blade.php -->
 
 @extends('layouts.apps')
 
@@ -50,7 +50,7 @@
                                         </option>
                                         @endforeach
                                     </select>
-                                    <button id="btnSubmit" class="submitBtn submitBtn-large" type="submit">Reclamation</button>
+                                    <button id="btnSubmit" class="submitBtn submitBtn-large submitBtncl" type="submit">Reclamation</button>
                                     <div class="item text-center mt-1" >
                                     <a style="text-decoration: none;font-size: large;" href="/" >
                                     هل تريد الاطلاع على جدول الامتحان ؟ <br>Voulez-vous voir le calendrier des examens?</a>

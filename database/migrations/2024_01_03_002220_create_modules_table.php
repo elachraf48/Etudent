@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('NomModule');
             $table->string('Semester', 2);
             $table->unsignedBigInteger('idFiliere');
+            $table->enum('Statu', ['Y', 'N'])->default('N');
             $table->unique(['CodeModule', 'NomModule']);
             $table->foreign('idFiliere')->references('id')->on('filieres');
             $table->timestamps();

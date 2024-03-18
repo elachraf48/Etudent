@@ -1,0 +1,3 @@
+php artisan make:controller PreInscriptionController
+php artisan make:model YourModelName --resource
+php artisan make:model PreInscription -mcr

@@ -40,21 +40,21 @@
                 <x-nav-link class="m-0" :active="request()->routeIs('dashboard')">
                     <ul class="nav-item dropdown m-0">
                         <a class="nav-link dropdown-toggle w-25" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ __('insert multiple') }}
+                            {{ __('Insérer plusieurs') }}
                         </a>
                         <ul class="dropdown-menu">
                             <x-nav-link href="{{ route('Filier_modules_form') }}" :active="request()->routeIs('dashboard')">
-                                {{ __('moudel and filier') }}
+                                {{ __('Module et Filières') }}
                             </x-nav-link>
 
-                            <x-nav-link style="width: 200px;" href="{{ route('insert_student_form') }}" :active="request()->routeIs('dashboard')">
-                                {{ __('student group infoExam') }}
+                            <x-nav-link style="width: 250px;" href="{{ route('insert_student_form') }}" :active="request()->routeIs('dashboard')">
+                                {{ __('Etudiant & groupe & info Examen') }}
                             </x-nav-link>
                             <x-nav-link href="{{ route('Calendrier_modules_form') }}" :active="request()->routeIs('dashboard')">
                                 {{ __('Calendrier modules') }}
                             </x-nav-link>
                             <x-nav-link href="{{ route('detail_modules_form') }}" :active="request()->routeIs('dashboard')">
-                                {{ __('Detail Modules') }}
+                                {{ __('Modules de détail') }}
                             </x-nav-link>
                             <br>
                             <x-nav-link href="{{ route('bulk_professeurs_process') }}" :active="request()->routeIs('dashboard')">
@@ -67,28 +67,31 @@
                 <x-nav-link class="m-0" :active="request()->routeIs('dashboard')">
                     <ul class="nav-item dropdown m-0">
                         <a class="nav-link dropdown-toggle w-25" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ __('Reclamation') }}
+                            {{ __('Réclamation') }}
                         </a>
                         <ul class="dropdown-menu">
                             <x-nav-link href="{{ route('Reclamation_form') }}" :active="request()->routeIs('Reclamation_form')">
-                                {{ __('Reclamation details') }}
+                                {{ __('Réclamation details') }}
                             </x-nav-link>
 
                             <x-nav-link style="width: 200px;" href="{{ route('Reclamation_edit_form') }}" :active="request()->routeIs('Reclamation_edit_form')">
-                                {{ __('Reclamation modefier') }}
+                                {{ __('Réclamation Modificateur ') }}
                             </x-nav-link>
-                           
+                            <x-nav-link style="width: 200px;" href="{{ route('module_post') }}" :active="request()->routeIs('module_post')">
+                                {{ __('Réclamation Module') }}
+                            </x-nav-link>
+                            <x-nav-link href="{{ route('Professeur_form') }}" :active="request()->routeIs('Professeur_form')">
+                                {{ __('Réclamation Professors') }}
+                            </x-nav-link>
                         </ul>
                     </ul>
                 </x-nav-link>
                 <!-- <x-nav-link href="{{ route('Reclamation_form') }}" :active="request()->routeIs('Reclamation_form')">
                     {{ __('Reclamation') }}
                 </x-nav-link> -->
-                <x-nav-link href="{{ route('Professeur_form') }}" :active="request()->routeIs('Professeur_form')">
-                    {{ __('Professors') }}
-                </x-nav-link>
+
                 <x-nav-link href="{{ route('parameterPage') }}" :active="request()->routeIs('parameterPage')">
-                    {{ __('Page') }}
+                    {{ __('Parameter') }}
                 </x-nav-link>
 
 
@@ -302,7 +305,7 @@
 </style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        
+
         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             {{ Auth::user()->name }}
 

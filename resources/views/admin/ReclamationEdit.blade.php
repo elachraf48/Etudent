@@ -13,14 +13,17 @@
     table {
       font-size: .5em;
     }
-    tr td,tr th ,.btn{
+
+    tr td,
+    tr th,
+    .btn {
       font-size: 1em;
       max-width: 50px;
 
 
     }
-    
-    
+
+
   }
 </style>
 
@@ -49,24 +52,24 @@
   </div>
 
   <div class="col-md">
-            <div class="form-floating">
-                <select name="semester" id="semesterDropdown" class="form-control" required>
-                    <option value="%">All</option>
-                    <option value="S1">S1</option>
-                    <option value="S2">S2</option>
-                    <option value="S3">S3</option>
-                    <option value="S4">S4</option>
-                    <option value="S5">S5</option>
-                    <option value="S6">S6</option>
-                </select>
-                <label for="floatingSelectGrid">Semester</label>
-            </div>
-        </div>
+    <div class="form-floating">
+      <select name="semester" id="semesterDropdown" class="form-control" required>
+        <option value="%">All</option>
+        <option value="S1">S1</option>
+        <option value="S2">S2</option>
+        <option value="S3">S3</option>
+        <option value="S4">S4</option>
+        <option value="S5">S5</option>
+        <option value="S6">S6</option>
+      </select>
+      <label for="floatingSelectGrid">Semester</label>
+    </div>
+  </div>
   <div class="col-md">
     <div class="form-floating">
       <select name="Statu" id="StatuDropdown" class="form-control" required>
         <option value="%" selected>All</option>
-        <option value="nv" >invisible</option>
+        <option value="nv">invisible</option>
         <!-- <option value="Trituration">Sous traitement </option> -->
         <!-- <option value="Encours">Encours </option> -->
         <option value="Valide">Valide </option>
@@ -157,8 +160,8 @@
               <th colspan='3' id="message-text"></th>
             </tr>
           </table>
-         
-        
+
+
           <input type="hidden" id="reclamation-id">
 
           <!-- Modal Footer -->
@@ -171,26 +174,7 @@
   </div>
 </div>
 <!-- confirmation donne -->
-<div class="modal" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-  <div class="modal-dialog ">
-    <div class="modal-content " style="border: 3px solid red; margin-top: 40vh;">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <label class="form-check-label clearfix" for="flexSwitchCheckDefault">
-          <span class="float-start">Toutes les informations sont-elles correctes ? </span><br>
-          <span class="float-end"> هل جميع المعلومات صحيحة ؟</span>
-        </label>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">annuler <br>الغاء</button>
-        <button type="button" class="btn btn-success" id="confirm-submit-btn">Valider<br> تأكيد</button>
-      </div>
-    </div>
-  </div>
-</div>
+
 
 <!-- FileSaver.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -229,7 +213,7 @@
           // Check if nomGroupe is equal to 0, if yes, replace it with "Aucun"
           var buttonClass = reclamation.stratu == 'Valide' ? 'btn-danger' : 'btn-primary';
           var buttonLabel = reclamation.stratu == 'Valide' ? 'Encours' : 'Valid';
-          var buttonHtml = '<button style="width:5vw;min-width:40px"  class="btn ' + buttonClass + ' response-btn  mx-1" data-toggle="modal" data-target="#exampleModal" data-reclamation-id="' + reclamation.id + '">' + buttonLabel + '</button>';
+          var buttonHtml = '<button style="width:5vw;min-width:40px"  class="btn ' + buttonClass + ' updates-btn  mx-1" data-toggle="modal" data-target="#exampleModal" data-reclamation-id="' + reclamation.id + '">' + buttonLabel + '</button>';
           var buttonAfficher = '<button style="width:5vw;min-width:40px"  class="btn btn-secondary response-btn  mx-1" data-toggle="modal" data-target="#exampleModal" data-reclamation-id="' + reclamation.id + '">Détail</button>';
 
           var rowData = [
@@ -239,7 +223,7 @@
             reclamation.NomModule,
 
             reclamation.Semester,
-            buttonAfficher+buttonHtml
+            buttonAfficher + buttonHtml
           ];
           table.row.add(rowData).draw();
         });
@@ -251,8 +235,8 @@
 
 
   $(document).ready(function() {
-    
-    
+
+
     $('#AnneeUniversitaire, #semesterDropdown, #StatuDropdown, #sessions').change(function() {
       // alert();
       change_reclamations();
@@ -278,7 +262,7 @@
     // Add event listener for the response button
     $(document).on('click', '.response-btn', function() {
       var reclamationId = $(this).data('reclamation-id');
-      
+
       $.ajax({
         url: '/detailsreqlamation/' + reclamationId, // Use reclamationId here
         method: 'GET',
@@ -348,5 +332,31 @@
     }
 
   });
+  $(document).on('click', '.updates-btn', function() {
+        // Retrieve data from the table row
+        const id = this.getAttribute('data-reclamation-id');
+        var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtain CSRF token value
+
+        $.ajax({
+          url: '/admin/Reclamation/edit',
+          method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
+          },
+          data: {
+            id: id,
+          },
+          success: function(response) {
+            // Update table row with response
+            // Assuming you have a function to update the table row with response
+            change_reclamations();
+          },
+          error: function(xhr, status, error) {
+            console.error('Error updating tracking reclamation:', error);
+            // Handle error if necessary
+          }
+        });
+      });
+   
 </script>
 @endsection('content')

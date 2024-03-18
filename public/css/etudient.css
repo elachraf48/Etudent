@@ -130,19 +130,22 @@ body {
 
 
 .formLoginStyle .alert {
-    font-size: .13rem;
+    font-size: .16rem;
+    font-weight: bolder;
     /* color: #fff; */
-    max-height: 5vh;
+    max-height: 11vh;
     text-align: center;
-    padding: .5vh;
+    padding: 2vh;
     /* margin: 0 0 .3rem */
 }
 
 @media screen and (max-width: 800px) {
     .formLoginStyle .alert {
         text-align:center;
-        margin: 0 0 .16rem;
-        max-height: 7vh;
+        margin: 0 0 .12rem;
+        max-height: 11vh;
+        font-size: .12rem;
+
     }
 }
 

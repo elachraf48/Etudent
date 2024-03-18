@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pre_inscriptions', function (Blueprint $table) {
+        Schema::create('parameter_pages', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('idEtudiant');
-            $table->unsignedBigInteger('idSession');
-            $table->string('AnneeUniversitaire', 10);
-            $table->foreign('idSession')->references('id')->on('calendrier_sessions');
-            $table->foreign('idEtudiant')->references('id')->on('etudiants');
+            $table->string('NamePage');
+            $table->date('LastDate');
+            $table->enum('Statu', ['true', 'false']);
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pre_inscriptions');
+        Schema::dropIfExists('parameter_pages');
     }
 };

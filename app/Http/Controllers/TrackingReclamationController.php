@@ -52,17 +52,7 @@ class TrackingReclamationController extends Controller
         // //
         return view('admin.ReclamationEdit', compact('sessions', 'AnneeUniversitaire'));
     }
-    public function parameterPage()
-    {
-        $sessions = CalendrierSession::all();
-        // Retrieve unique values of AnneeUniversitaire
-        $AnneeUniversitaire = Reclamation::distinct()->pluck('AnneeUniversitaire');
-
-        
-        // //
-        return view('admin.parameterpage', compact('sessions', 'AnneeUniversitaire'));
-    }
-    
+   
     public function indexProfesseur()
     {
         $sessions = CalendrierSession::all();
@@ -169,9 +159,32 @@ class TrackingReclamationController extends Controller
      * @param  \App\Models\TrackingReclamation  $TrackingReclamation
      * @return \Illuminate\Http\Response
      */
-    public function edit(TrackingReclamation $TrackingReclamation)
+    public function edit(Request $request)
     {
-        //
+        $id = $request->input('id');
+        $TrackingReclamation = TrackingReclamation::where('idReclamation',$id)->first();
+        if($TrackingReclamation->stratu=="Encours"){
+            $newstartu='Valide';
+        }
+        else if($TrackingReclamation->stratu=="Valide"){
+            $newstartu='Encours';
+        }
+
+        TrackingReclamation::where('idReclamation', $id)
+        ->update([
+            'stratu' => $newstartu,
+            'updated_at' => now() // Update updated_at timestamp
+        ]);
+
+        // Return updated data if necessary
+        return response()->json(['success' => true]);
+        
+        
+        
+    
+        
+
+
     }
 
     /**

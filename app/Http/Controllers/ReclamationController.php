@@ -27,7 +27,8 @@ use Barryvdh\Snappy\Facades\SnappyImage;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use PDF;
 use AlSelwi\ArabicHTML\Facades\ArabicHTML;
-
+use App\Models\ParameterPage;
+use App\Models\PreInscription;
 use Illuminate\Support\Facades\View;
 use Mpdf\Mpdf;
 use Spatie\Browsershot\Browsershot;
@@ -39,6 +40,7 @@ class ReclamationController extends Controller
 {
     public function index()
     {
+        
 
 
 
@@ -169,13 +171,32 @@ class ReclamationController extends Controller
         $filiere = $request->input('filiere');
         $filieres = Filiere::where('id', $filiere)->get(['id', 'NomFiliere', 'Parcours']);
         $studentuniue = Etudiant::where('CodeApogee', $codeApogee)->get(['CodeApogee', 'Nom', 'Prenom']);
-        $Modules = Module::where('idFiliere', $filiere)->get(['id', 'NomModule', 'CodeModule']);
+        $Modules = Module::where('idFiliere', $filiere)->where('statu', '=', 'Y')->get(['id', 'NomModule', 'CodeModule']);
         $Groups = Groupe::where('Semester', $semester)->where('AnneeUniversitaire', $AnneeUniversitaire)
             ->where('idSESSION', $maxIdSession)->get(['id', 'nomGroupe']);
 
         $validator = Validator::make(['CodeApogee' => $codeApogee], [
             'CodeApogee' => 'required|integer', // Add any additional validation rules
         ]);
+       //verf page
+       $lastdate = ParameterPage::where('NamePage','=', 'preinscription')->first();
+
+        $preInscriptions = DB::table('pre_inscriptions')
+            ->join('etudiants', 'etudiants.id', '=', 'pre_inscriptions.idEtudiant')
+            ->where('pre_inscriptions.idSession', $maxIdSession) 
+            ->where('pre_inscriptions.AnneeUniversitaire', $AnneeUniversitaire) 
+            ->where('etudiants.CodeApogee', $codeApogee) 
+            ->select('pre_inscriptions.*')
+            ->get();
+        if($lastdate->Statu=='true' && count($preInscriptions)==0){
+            return redirect()->route('index')->with('error', "عليك حجز مقعد في الامتحانات اولا<br>Vous devez d'abord réserver une place pour les examens");
+
+        }
+        $currentpage = ParameterPage::where('NamePage','=', 'reclamations')->first();
+        if($currentpage->Statu=='false' || $currentpage->LastDate<date('Y-m-d')){
+            return redirect()->route('reclamation.index')->with('error', 'الصفحة غير متوفرة حاليا لمعرفة المزيد المرجو توجه لشؤون الطلبة<br> La page est actuellement indisponible. Pour en savoir plus, rendez-vous sur Affaires étudiantes');
+
+        }
         // Example query to get data
         // $etudiants = Etudiant::where('CodeApogee', $codeApogee)->first();
         $student  = DB::table('Etudiants as e')
@@ -222,9 +243,12 @@ class ReclamationController extends Controller
             ->where('ie.AnneeUniversitaire', '=', DB::raw('(SELECT MAX(AnneeUniversitaire) FROM detail_modules)'))
             ->where('e.CodeApogee', '=', $codeApogee)
             ->where('f.id', '=', $filiere)
-
+            ->where('m.statu', '=', 'Y')
             ->get();
+        if(count($Modules)<=0 || count($student)<=0){
+            return redirect()->route('reclamation.index')->with('error', "لا توجد وحدات متاحة حاليا في هذا الفصل الدراسي<br> Il n'y a aucun module disponible actuellement dans cette semestre");
 
+        }
         if ($validator->fails()) {
             // Handle validation failure, e.g., return an error response
             return response()->json(['error' => $validator->errors()], 400);

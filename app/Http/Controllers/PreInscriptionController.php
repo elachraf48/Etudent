@@ -6,6 +6,8 @@ use App\Models\PreInscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use App\Models\Etudiant;
+use App\Models\ParameterPage;
 
 class PreInscriptionController extends Controller
 {
@@ -22,23 +24,20 @@ class PreInscriptionController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
+        $studentunique = Etudiant::where('CodeApogee', $codeApogee)->first();
+        $lastdate = ParameterPage::where('NamePage','=', 'preinscription')->first();
+        if($lastdate->Statu=='false' || $lastdate->LastDate<date('Y-m-d')){
+            return redirect()->route('index')->with('error', 'الصفحة غير متوفرة حاليا لمعرفة المزيد المرجو توجه لشؤون الطلبة<br> La page est actuellement indisponible. Pour en savoir plus, rendez-vous sur Affaires étudiantes');
 
+        }
 
-        $student  = DB::table('Etudiants as e')
+        $student  = DB::table('etudiants as e')
             ->select(
-                'e.CodeApogee as CodeApogee',
-                'e.Nom as Nom',
-                'e.Prenom as Prenom',
+               
                 'f.NomFiliere as NomFiliere',
                 'f.Parcours as Parcours',
-                'm.NomModule as NomModule',
-                'g.nomGroupe as NomGroupe',
-                'ie.Lieu as Lieu',
                 'ie.AnneeUniversitaire as ExamenAnneeUniversitaire',
-                'ie.NumeroExamen as NumeroExamen',
                 'ie.Semester as ExamenSemester',
-                'cm.DateExamen as DateExamen',
-                'cm.Houre as Houre'
             )
             ->join('etudiants_filieres as ef', 'e.id', '=', 'ef.idEtudiant')
             ->join('filieres as f', 'ef.idFiliere', '=', 'f.id')
@@ -65,7 +64,7 @@ class PreInscriptionController extends Controller
             ->where('dm.AnneeUniversitaire', '=', DB::raw('(SELECT MAX(AnneeUniversitaire) FROM info_exames)'))
             ->where('ie.AnneeUniversitaire', '=', DB::raw('(SELECT MAX(AnneeUniversitaire) FROM detail_modules)'))
             ->where('e.CodeApogee', '=', $codeApogee)
-
+            ->groupBy('ExamenSemester', 'NomFiliere', 'Parcours', 'ExamenAnneeUniversitaire')
             ->get();
 
 
@@ -73,10 +72,32 @@ class PreInscriptionController extends Controller
         $groupedModules = $student->groupBy('ExamenSemester');
 
         if ($student && count($groupedModules) > 0) {
-            return view('etudiant.preinscription', compact('student', 'groupedModules'));
+            return view('etudiant.preinscription', compact('student', 'groupedModules','studentunique','lastdate'));
         } else {
-            return redirect()->route('index')->with('error', 'Aucun étudiant trouvé <br>avec le Code Apogee fourni.');
+            return redirect()->route('index')->with('error', 'Aucun étudiant trouvé avec le Code Apogee fourni <br> لم يتم العثور على الطلاب مع هذا الرقم');
         }
+    }
+
+    public function getCreationDate($id)
+    {
+        $maxIdSession = DB::table('calendrier_modules')
+            ->where('AnneeUniversitaire', function ($query) {
+                $query->select(DB::raw('MAX(AnneeUniversitaire)'))
+                    ->from('calendrier_modules');
+            })->max('idSESSION');
+        $AnneeUniversitaire = (date('Y') - 1) . '-' . date('Y');
+        $preinscription = DB::table('pre_inscriptions')
+            ->select('created_at')
+            ->where('idEtudiant', $id) // Replace $idEtudiant with the actual student's idEtudiant
+            ->where('idSession', $maxIdSession)   // Replace $idSession with the actual session ID
+            ->where('AnneeUniversitaire', $AnneeUniversitaire) // Replace $AnneeUniversitaire with the actual year range
+            ->first();
+        if (!$preinscription) {
+            return response()->json(['error' => 'Student not found'], 404);
+        }
+        $createdAt = $preinscription->created_at; // Adjust format as needed
+        return response()->json(['creationDate' => $createdAt]);
+        
     }
     /**
      * Display a listing of the resource.
@@ -93,9 +114,28 @@ class PreInscriptionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+       
+        $idEtudiant = $request->input('id');
+        $CodeApogee = Etudiant::where('id', $idEtudiant)->value('codeApogee');
+        $maxIdSession = DB::table('calendrier_modules')
+            ->where('AnneeUniversitaire', function ($query) {
+                $query->select(DB::raw('MAX(AnneeUniversitaire)'))
+                    ->from('calendrier_modules');
+            })->max('idSESSION');
+        $AnneeUniversitaire = (date('Y') - 1) . '-' . date('Y');
+        
+        PreInscription::create([
+            'idEtudiant' => $idEtudiant,
+            'idSession' => $maxIdSession,
+            'AnneeUniversitaire' =>  $AnneeUniversitaire,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        // Return a response indicating success
+        return redirect()->route('preinscription.form', ['CodeApogee' => $CodeApogee])->with('success', 'Data inserted successfully!');
+
     }
 
     /**

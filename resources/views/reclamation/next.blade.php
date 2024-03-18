@@ -354,7 +354,38 @@
         </div>
     </div>
 </div>
+
     <!-- <button onclick="generatePDF()">Generate PDF</button> -->
+    <div class="modal fade modal-dialog-scrollable modal-dialog-centered" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Information</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <strong class="text-start text-danger" lang="fr">Bienvenue, cher étudiant, si vous ne trouvez pas votre module, c'est pour les raisons suivantes :</strong>
+        <hr>
+        <ul class="text-start text-success" lang="fr">
+            <li>Peut-être est-il encore temps de réclamation</li>
+            <li>Peut-être que vous n'êtes pas inscrit dans cette module</li>
+            <li>Peut-être que le temps des réclamations est révolu dans cette module</li>
+        </ul>
+        <hr>
+        <strong dir="rtl" class="text-end text-danger" lang="ar">أهلاً بك عزيزي الطالب، إذا لم تتمكن من العثور على الوحدة الخاصة بك، فذلك للأسباب التالية:</strong>
+        <hr>
+        <ul dir="rtl" class="text-end text-success" lang="ar">
+            <li>ربما لم يحن الوقت للشكاوى</li>
+            <li>ربما أنت غير مسجل في هذه الوحدة</li>
+            <li>ربما انتهى وقت الشكاوى في هذه الوحدة</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">fermer اغلق</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </section>
 <div class="row text-center p-3" style="background: #8B4513; color:antiquewhite" >
@@ -479,6 +510,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     $(document).ready(function() {
+        const modal = document.getElementById('staticBackdrop');
+
+        $(modal).modal('show');
         // Event listener for changes in the semester dropdown
         $('#filiereDropdown').change(function() {
             var selectedSemester = $('#semesterDropdown').val();

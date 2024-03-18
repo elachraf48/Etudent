@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CalendrierSession extends Model
 {
-    protected $table = 'Calendrier_SESSIONS';
+    protected $table = 'calendrier_sessions';
     protected $fillable = ['SESSION', 'part_Semester'];
 
     public function calendrierModules()

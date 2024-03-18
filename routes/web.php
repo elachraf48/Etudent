@@ -44,7 +44,7 @@ use App\Http\Controllers\TrackingReclamationController;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\PreInscriptionController;
-
+use App\Http\Controllers\ParameterPageController;
 // Routes for Filiere
 Route::resource('filieres', FiliereController::class);
 
@@ -72,6 +72,7 @@ Route::get('/fetch-reclamations/{AnneeUniversitaire}/{statu}/{semester}/{session
 Route::get('/detailsreqlamation/{id}', [DetailProfesseurController::class, 'detailsReclamation']);
 Route::post('/save-response', [DetailProfesseurController::class, 'saveResponse'])->name('save-response');
 Route::post('/update-tracking-reclamations', [DetailProfesseurController::class, 'updateTrackingReclamations']);
+Route::get('/fetch-reclamations-modules/{semester}/{filiere}/{stratu}', [ModuleController::class, 'updateModules']);
 
 Route::get('/fetch-professeur/{fetchModules}', [ReclamationController::class, 'fetchProfesseur']);
 
@@ -119,7 +120,9 @@ Route::get('/etudiant/search', [EtudiantController::class, 'search'])->name('sea
 Route::get('/etudiant/Repense', [EtudiantController::class, 'Repense'])->name('Repense');
 
 Route::get('/etudiant/preinscription', [PreInscriptionController::class, 'showForm'])->name('preinscription.form');
-Route::post('/etudiant/preinscription', [PreInscriptionController::class, 'submitForm'])->name('preinscription.submit');
+Route::post('/etudiant/preinscription', [PreInscriptionController::class, 'create'])->name('create.preinscription');
+Route::get('/getCreationDate/{id}',[PreInscriptionController::class, 'getCreationDate'])->name('getCreationDate');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:3'])->group(function () {
@@ -146,7 +149,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admin/Reclamation', [TrackingReclamationController::class, 'index'])->name('Reclamation_form');
         Route::post('/admin/Reclamation', [TrackingReclamationController::class, 'processFiliermodules'])->name('Reclamation_process');
         Route::get('/admin/Reclamation/edit', [TrackingReclamationController::class, 'reclamation_edit'])->name('Reclamation_edit_form');
-        Route::get('/admin/parameter', [TrackingReclamationController::class, 'parameterPage'])->name('parameterPage');
+        Route::post('/admin/Reclamation/edit', [TrackingReclamationController::class, 'edit'])->name('Reclamation_edit');
+        Route::get('/admin/parameter', [ParameterPageController::class, 'index'])->name('parameterPage');
+        Route::post('/admin/parameter', [ParameterPageController::class, 'edit'])->name('parameter_edit');
+        Route::get('/admin/Reclamation/module', [ModuleController::class, 'index'])->name('module_post');
+        Route::post('/admin/Reclamation/module', [ModuleController::class, 'update'])->name('module_edit');
 
         // admin/bulk_professeurs
         Route::get('/admin/bulk_professeurs', [ProfesseurController::class, 'index'])->name('bulk_professeurs_form');

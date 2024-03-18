@@ -16,78 +16,122 @@
     @foreach ($student as $key => $students)
     @if ($key === count($student) - 1)
     <div class="container-fleux p-0">
-        <h1>achraf</h1>
-        <h2 class="text-center mt-5">Bonjour <span class="text-danger">{{ $students->Nom }} {{ $students->Prenom }}</span></h2>
-        <div class="printbt mt-3">
-                <div class="row">
-                <h5>Année universitaire: <span class="text-primary">{{ $students->ExamenAnneeUniversitaire }}</span></h5>
-                <h5>Filière: <span class="text-primary">{{ $students->NomFiliere }}</span></h5>
-                @if ($students->Parcours != "")
-                <h5>Parcours: <span class="text-primary">{{ $students->Parcours }}</span></h5>
-                @endif
-                <h5 class="col-md-6">Code Apogee: <span class="text-primary" id="CodeApogee">{{ $students->CodeApogee }}</span></h5>
 
-            </div>
+        <div class="py-5  bg-light">
+            <h6 class="text-center ">Bienvenue <span class="text-danger">{{ $studentunique->Nom }} {{ $studentunique->Prenom }}</span> pour vous pré-inscrire à l'examen, réserver votre place</h6>
+            <h6 class="text-center ">في التسجيل المسبق للامتحان احجز مقعدك <span class="text-danger">{{ $studentunique->Nom }} {{ $studentunique->Prenom }}</span> مرحبا بك</h6>
+
         </div>
+        <div class="alert alert-danger my-3" role="alert" id="lastdate">
+            <p class="text-center ">اخر اجل لحجز مقعدك في الامتحان <span class="text-danger"><br>{{$lastdate->LastDate}}</span><br>Date limite pour réserver votre place à l'examen</p>
+
+        </div>
+        <div class="alert alert-success d-none my-5" id="suecces" role="alert">
+            <p class="text-center ">تهانينا  قمت بحجز مقعدك بنجاح بتاريخ
+                <br><span class="text-danger" id="creationDate"></span>
+                <br>Félicitations, vous avez réservé avec succès votre place à une date
+            </p>
+        </div>
+
+      
 
 
     </div>
     @endif
     @endforeach
     @endif
+    
     @if ($student && count($groupedModules) > 0)
-    <table class="table table-bordered">
-        <thead>
-            <tr class="text-center table-info">
-                <th>
-                    <h4>Nom Filiere</h4>
+    <table class="table table-striped table-bordered text-center">
+        <tbody class="text-center">
+            @foreach ($student as $key => $students)
+            @if ($key === count($student) - 1)
+
+            <tr class="table-success">
+                <th colspan="2">Annee Universitaire : {{ $students->ExamenAnneeUniversitaire }} || <span class="text-center ">Code Apogee: <span name="CodeApogee" class="text-danger" id="CodeApogee">{{ $studentunique->CodeApogee }}</span></span>
                 </th>
-                <th>
-                    <h4>Parcours</h4>
-                </th>
-                <th>
-                    <h4>Semester</h4>
-                </th>
-                <th>
-                    <h4>AnneeUniversitaire</h4>
+
+            </tr>
+            <tr class="table-success">
+                <th for="filiere" class="clearfix px-5">
+                    <span class="float-start">Filière </span>
+                    <span class="float-end"> المسلك</span>
                 </th>
             </tr>
-        </thead>
-        <tbody>
-        @foreach ($student as $students)
             <tr>
-                <td>
-                    <h5>{{ $students->NomFiliere }}</h5>
-                </td>
-                <td>{{ $students->Parcours }}</td>
-                <td>{{ $students->ExamenSemester }}</td>
-                <td>{{ $students->ExamenAnneeUniversitaire }}</td>
+                <td>{{ $students->NomFiliere }}</td>
             </tr>
+            @if ($students->Parcours != "")
+
+            <tr class="table-success">
+                <th>Parcours</th>
+            </tr>
+            <tr>
+                <td>{{ $students->Parcours }}</td>
+            </tr>
+            @endif
+
+            @endif
             @endforeach
+            <tr class="table-success">
+                <th for="filiere" class="clearfix px-5">
+                    <span class="float-start">Semestre </span>
+                    <span class="float-end"> السداسي</span>
+                </th>
+            </tr>
+
+            @foreach ($student as $students)
+
+            <tr>
+                <td>{{ $students->ExamenSemester }}</td>
+            </tr>
+
+            @endforeach
+
+
         </tbody>
+
     </table>
-   
+    <form id="reclamation-form" action="{{ route('create.preinscription') }}" method="post">
+        @csrf
+
+        <input type="hidden" name="id" value="{{ $studentunique->id }}">
+        <div id="btnadd" class="d-grid gap-2 col-6 mx-auto text-center ">
+            <button class="btn btn-primary  pre-inscription-btn w-100" type="submit">
+                pré-inscription<br> التسجيل
+            </button>
+        </div>
+       
+
+    </form>
     @else
     <p>No student found with the provided Code Apogee or no semesters found.</p>
     @endif
 </div>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
-    function printPage() {
-        window.print();
-    }
-
-    function updateReclamationsCount() {
-        var CodeApogee = $('#CodeApogee').text();
-        $('.btn-primary').attr('data-apogee', CodeApogee);
-
+    function checkdate() {
+        var studentId = "{{ $studentunique->id }}"; // Assuming $studentunique is available
         $.ajax({
-            url: "/reclamations/etudiant/" + CodeApogee,
+
+            url: "/getCreationDate/" + studentId,
             method: 'GET',
             success: function(response) {
-                // Update the count in the navigation menu
-                $('#reclamationsCount').text(response.count > 0 ? response.count : '0');
+                // Update HTML content with creationDate
+                if (response) {
+
+                    $('#creationDate').text(response.creationDate);
+                    $('#btnadd').addClass('d-none');
+                    $('#lastdate').addClass('d-none');
+                    $('#suecces').removeClass('d-none');
+
+
+
+
+                } else {
+                    $('#creationDate').text('N/A');
+                }
             },
             error: function(xhr, status, error) {
                 console.error(error);
@@ -95,11 +139,12 @@
         });
     }
 
-    // Call the function initially to update the count
-    updateReclamationsCount();
 
+    // Call the function initially to update the count
+    checkdate();
     // Optionally, you can set up a timer to periodically update the count
-    setInterval(updateReclamationsCount, 6000);
+    setInterval(checkdate, 6000);
+    
 </script>
 
 

@@ -13,6 +13,9 @@
         min-height: 100vh;
     }
 </style>
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
 <header class="bg-white">
     <div class="text">
         <!-- English text on the left -->
@@ -43,7 +46,7 @@
                     </button>
                 </li>
                 <li>
-                    <button class="btn btn-primary m-1" onclick='window.location.href ="{{ url("/") }}"'>
+                    <button class="btn btn-primary m-1" id="cl" >
                         Calendrier examen <br>جدول الامتحانات
                     </button>
                 </li>
@@ -78,11 +81,11 @@
         </div>
     </div>
 </nav>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
-    $(document).ready(function() {
         // Click event handler for the "Repense" button
         $('#rp').click(function() {
             // Get the value of data-apogee attribute
@@ -91,5 +94,32 @@
             // Navigate to the repense page with CodeApogee as a query parameter
             window.location.href = "/etudiant/Repense?CodeApogee=" + CodeApogee;
         });
-    });
+
+        $('#cl').click(function() {
+            // Get the value of data-apogee attribute
+            var CodeApogee = $(this).data('apogee');
+
+            // Navigate to the repense page with CodeApogee as a query parameter
+            window.location.href = "/etudiant/search?CodeApogee=" + CodeApogee;
+        });
+    function updateReclamationsCount() {
+        var CodeApogee = $(this).data('apogee');
+        $('.btn-primary').attr('data-apogee', CodeApogee);
+
+        $.ajax({
+            url: "/reclamations/etudiant/" + CodeApogee,
+            method: 'GET',
+            success: function(response) {
+                // Update the count in the navigation menu
+                $('#reclamationsCount').text(response.count > 0 ? response.count : '0');
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+    // updateReclamationsCount();
+
+    setInterval(updateReclamationsCount, 6000);
+
 </script>

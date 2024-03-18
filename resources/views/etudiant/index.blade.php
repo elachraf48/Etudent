@@ -38,17 +38,17 @@
                                 </div>
 
                                 <div class="item">
-                                <button class="submitBtn submitBtn-large submitBtnpr"> <a id="btnSubmitd" style="text-decoration: none;font-size: large; color:black;" onclick="redirectToPreinscription()">
-            pré-inscription des examens
-        </a></button>
-</div>
-<script>
-    function redirectToPreinscription() {
-        var codeApogee = document.getElementById("CodeApogee").value;
-        var preinscriptionUrl = "{{ route('preinscription.form') }}?CodeApogee=" + codeApogee;
-        document.getElementById("btnSubmitd").href = preinscriptionUrl;
-    }
-</script>
+                                    <button class="submitBtn submitBtn-large submitBtnpr"> <a id="btnSubmitd" style="text-decoration: none;font-size: large; color:black;" onclick="redirectToPreinscription()">
+                                            pré-inscription des examens
+                                        </a></button>
+                                </div>
+                                <script>
+                                    function redirectToPreinscription() {
+                                        var codeApogee = document.getElementById("CodeApogee").value;
+                                        var preinscriptionUrl = "{{ route('preinscription.form') }}?CodeApogee=" + codeApogee;
+                                        document.getElementById("btnSubmitd").href = preinscriptionUrl;
+                                    }
+                                </script>
 
                                 <div class="item text-center">
                                     <a style="text-decoration: none;font-size: large;" href="/reclamation">

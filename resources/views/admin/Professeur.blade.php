@@ -262,8 +262,8 @@ vous avez de {nbnotvalid} nouvelles reclamation, veuillez y répondre</textarea>
 
 
     <!-- Add DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
