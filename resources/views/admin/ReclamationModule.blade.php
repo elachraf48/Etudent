@@ -156,7 +156,24 @@
     </div>
 </div>
 
+<div class="modal modale" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content p-3" style="border: 3px solid red; margin-top: 30vh;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-bodyy">
+                <p>Etes-vous sûr ? La dernière mise à jour a eu lieu y'a moins de trois jours. </p>
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">annuler</button>
+                <button type="button" class="btn btn-success" id="confirm-submit-btn">Valider</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Add a textarea for pasting data -->
 
@@ -169,56 +186,6 @@
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 <!-- FileSaver.js -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Ensure the script runs after the DOM is loaded
-        document.querySelectorAll('.update-parameter-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                // Retrieve data from the table row
-                const id = this.getAttribute('data-id');
-                const row = this.closest('tr');
-                const name = row.querySelector('input[name="name_page"]').value;
-                const date = row.querySelector('input[name="last_date"]').value;
-                const statu = row.querySelector('select[name="status"]').value;
-                $.ajax({
-                    url: "{{ route('parameter_edit') }}",
-                    type: 'POST',
-                    dataType: 'json', // Ensure the server returns valid JSON
-                    data: {
-                        id: id,
-                        name: name,
-                        date: date,
-                        statu: statu,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        // Handle success response (e.g., display a success message)
-                        // console.log('Parameter updated successfully');
-                        var toastContainer = document.querySelector('.toast-container');
-                        var liveToast = document.querySelector('#liveToast');
-
-                        liveToast.querySelector('.toast-body').textContent = 'Paramètre mis à jour avec succès';
-                        var bsToast = new bootstrap.Toast(liveToast);
-                        bsToast.show();
-                        var alertElement = $('<div class="alert alert-success  alert-dismissible fade show" role="alert" style="position: fixed;     top:20px;">' +
-                            '<strong>succès !</strong> "Paramètre mis à jour avec succès !"<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                            '</div>');
-                        $('body').append(alertElement);
-
-                        // Automatically dismiss the alert after 5 seconds
-                        setTimeout(function() {
-                            alertElement.alert('close');
-                        }, 5000);
-
-                    },
-                    error: function(xhr, status, error) {
-                        // Provide a user-friendly error message
-                        console.error(error); // Log the error for debugging
-                        alert('An error occurred while updating the parameter. Please try again.');
-                    }
-                });
-            });
-        });
-    });
     $(document).ready(function() {
 
         change_module();
@@ -272,22 +239,52 @@
 
     });
     $(document).on('click', '.update-parameter-btn', function() {
+        const row = this.closest('tr');
+        var date = row.querySelectorAll('td')[3].textContent;
+        var targetDate = new Date(date.replace(/-/g, '/'));
+        var differenceInDays = Math.floor((new Date() - targetDate) / (1000 * 60 * 60 * 24));
         var id = this.getAttribute('data-id');
-        $.ajax({
-            url: '/admin/Reclamation/module/', // Use reclamationId here
-            method: 'POST',
-            data: {
-                id: id,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                change_module()
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching reclamation details:', error);
-                // Handle error if necessary
-            }
-        });
+        if (differenceInDays <= 3 && this.textContent == "désactivé") {
+
+            $('.modale').modal('show');
+            $('#confirm-submit-btn').click(function() {
+
+                $.ajax({
+                    url: '/admin/Reclamation/module/', // Use reclamationId here
+                    method: 'POST',
+                    data: {
+                        id: id,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        change_module()
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching reclamation details:', error);
+                        // Handle error if necessary
+                    }
+
+                });
+                $('.modale').modal('hide');
+            });
+
+        } else {
+            $.ajax({
+                url: '/admin/Reclamation/module/', // Use reclamationId here
+                method: 'POST',
+                data: {
+                    id: id,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    change_module()
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching reclamation details:', error);
+                    // Handle error if necessary
+                }
+            });
+        }
     });
 
 

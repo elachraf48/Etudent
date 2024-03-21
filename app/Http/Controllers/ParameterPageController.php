@@ -66,12 +66,10 @@ class ParameterPageController extends Controller
 
     {
         $id = $request->input('id');
-        $name = $request->input('name');
         $date = $request->input('date');
         $statu = $request->input('statu');
     
         $affectedRows = ParameterPage::where('id', $id)->update([
-            'NamePage' => $name,
             'LastDate' => $date,
             'Statu' => $statu,
             'updated_at' => now(),

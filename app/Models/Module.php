@@ -13,6 +13,10 @@ class Module extends Model
     {
         return $this->belongsTo(Filiere::class, 'idFiliere');
     }
+    public function DetailProfesseur()
+    {
+        return $this->belongsTo(DetailProfesseur::class, 'idModule');
+    }
 
     public function calendrierModules()
     {

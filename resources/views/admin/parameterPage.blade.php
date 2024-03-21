@@ -28,16 +28,16 @@
             <tr class="table-success">
                 <th>Nom de la page</th>
                 <th>Dernier délai</th>
-                <th>Status</th>
+                <th>Statut</th>
                 <th>dernière mise à jour</th>
-                <th>name of user</th>
+                <th>Nom de l'utilisateur</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach($parameters as $parameter)
             <tr>
-                <td> <input class="form-control" type="text" id="name_page" name="name_page" value="{{ $parameter->NamePage }}" required></td>
+                <td id="name_page" name="name_page">  {{ $parameter->NamePage }}</td>
                 <td> <input class="form-control" type="date" id="last_date" name="last_date" value="{{ $parameter->LastDate }}" required></td>
                 <td>
                     <select class="form-control" id="status" name="status" required>
@@ -82,14 +82,12 @@
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
     <!-- FileSaver.js -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ensure the script runs after the DOM is loaded
-            document.querySelectorAll('.update-parameter-btn').forEach(button => {
-                button.addEventListener('click', function() {
+      
+        $(document).on('click', '.update-parameter-btn', function() {
+
                     // Retrieve data from the table row
                     const id = this.getAttribute('data-id');
                     const row = this.closest('tr');
-                    const name = row.querySelector('input[name="name_page"]').value;
                     const date = row.querySelector('input[name="last_date"]').value;
                     const statu = row.querySelector('select[name="status"]').value;
                     $.ajax({
@@ -98,7 +96,6 @@
                         dataType: 'json', // Ensure the server returns valid JSON
                         data: {
                             id: id,
-                            name: name,
                             date: date,
                             statu: statu,
                             _token: '{{ csrf_token() }}'
@@ -129,8 +126,7 @@
                         }
                     });
                 });
-            });
-        });
+      
     </script>
 
     @endsection

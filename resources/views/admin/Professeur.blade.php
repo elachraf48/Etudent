@@ -456,11 +456,21 @@ vous avez de {nbnotvalid} nouvelles reclamation, veuillez y répondre</textarea>
 
             // Add cache buster parameter
             var cacheBuster = new Date().getTime(); // or any unique value
-            var url = '/fetch-professeur-reclamations/' + AnneeUniversitaire + '/' + module + '/' + semester + '/' + filiere + '/' + professeur + '/' + sessions + '/' + stratu + '?_=' + cacheBuster;
+            var url = '/fetch-professeur-reclamations';
 
             $.ajax({
                 url: url,
                 type: 'GET',
+                data: {
+                    AnneeUniversitaire: AnneeUniversitaire,
+                    module: module,
+                    semester: semester,
+                    filiere: filiere,
+                    sessions: sessions,
+                    stratu: stratu,
+                    professeur: professeur,
+                            _token: '{{ csrf_token() }}'
+                        },
                 success: function(data) {
                     // Clear existing table rows
                     var table = $('#reclamation-table').DataTable();

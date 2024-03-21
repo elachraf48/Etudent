@@ -246,7 +246,7 @@ class ReclamationController extends Controller
             ->where('m.statu', '=', 'Y')
             ->get();
         if(count($Modules)<=0 || count($student)<=0){
-            return redirect()->route('reclamation.index')->with('error', "لا توجد وحدات متاحة حاليا في هذا الفصل الدراسي<br> Il n'y a aucun module disponible actuellement dans cette semestre");
+            return redirect()->route('reclamation.index')->with('error', "لا توجد وحدات متاحة حاليا في هذا الفصل الدراسي<br> Il n'y a aucun module disponible actuellement dans ce semestre");
 
         }
         if ($validator->fails()) {

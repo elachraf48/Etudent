@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\CalendrierSession;
 use App\Models\Reclamation;
 use Carbon\Carbon;
+use App\Models\Filiere;
 
 class ModuleController extends Controller
 {
@@ -54,7 +55,8 @@ class ModuleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+
     }
 
     /**
@@ -63,10 +65,29 @@ class ModuleController extends Controller
      * @param  \App\Models\Module  $module
      * @return \Illuminate\Http\Response
      */
-    public function show(Module $module)
+    public function show()
     {
-        //
+        $parameters = Module::with('filiere')->get();
+        $filieres = Filiere::where('CodeFiliere','like','%S1')->get();
+
+        return view('admin.individual.Module', compact('parameters','filieres'));
     }
+    public function fetchmoduletable($semester,$filiere)
+    {
+        $modules = Module::with('filiere')
+        ->where('idFiliere', 'like', $filiere)
+        ->where('Semester', 'like', $semester)
+        ->get();
+
+        // Check if modules are empty
+        if ($modules->isEmpty()) {
+            return response()->json(['message' => 'No modules found for the selected semester and filiere'], 404);
+        }
+
+        // Return modules as JSON
+        return response()->json(['modules' => $modules]);
+    }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -86,32 +107,32 @@ class ModuleController extends Controller
      * @param  \App\Models\Module  $module
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Module $module)
-    {
-        //
+        public function update(Request $request, Module $module)
+        {
+            //
 
-        $id = $request->input('id');
-        $Module = Module::where('id', $id)->first();
-        if($Module->statu=='N'){
-            $statu='Y';
-        }
-        else{
-            $statu='N';
-        }
-        $affectedRows = Module::where('id', $id)->update([
-            'Statu' => $statu,
-            'updated_at' => now(),
+            $id = $request->input('id');
+            $Module = Module::where('id', $id)->first();
+            if($Module->statu=='N'){
+                $statu='Y';
+            }
+            else{
+                $statu='N';
+            }
+            $affectedRows = Module::where('id', $id)->update([
+                'Statu' => $statu,
+                'updated_at' => now(),
 
-        ]);
-        if ($affectedRows === 1) {
-            // Return a success response
-            return response()->json(['success' => true]);
-        } else {
-            // Return an error response if the record was not updated
-            return response()->json(['success' => false, 'error' => 'Record not found or no changes were made.']);
-        }
+            ]);
+            if ($affectedRows === 1) {
+                // Return a success response
+                return response()->json(['success' => true]);
+            } else {
+                // Return an error response if the record was not updated
+                return response()->json(['success' => false, 'error' => 'Record not found or no changes were made.']);
+            }
 
-    }
+        }
 
     /**
      * Remove the specified resource from storage.

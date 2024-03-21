@@ -62,21 +62,6 @@ Route::get('/reclamation/last/{reclamationId}', [ReclamationController::class, '
 
 
 // In web.php
-Route::get('/fetch-filieres/{semester}', [CalendrierModuleController::class, 'fetchFilieresBySemester']);
-Route::get('/fetch-filieres/{semester}', [ReclamationController::class, 'fetchFilieresBySemester']);
-Route::get('/fetch-filieres/{semester}', [DetailModuleController::class, 'fetchFilieresBySemester']);
-Route::get('/fetch-filieres/{semester}', [AdminController::class, 'fetchFilieresBySemester']);
-Route::get('/fetch-reclamations/{AnneeUniversitaire}/{module}/{semester}/{filiere}/{professeur}/{SESSION}/{stratu}', [TrackingReclamationController::class, 'reclamations']);
-Route::get('/fetch-professeur-reclamations/{AnneeUniversitaire}/{module}/{semester}/{filiere}/{professeur}/{SESSION}/{statu}', [TrackingReclamationController::class, 'professors_reclamations']);
-Route::get('/fetch-reclamations/{AnneeUniversitaire}/{statu}/{semester}/{sessions}', [DetailProfesseurController::class, 'reclamations']);
-Route::get('/detailsreqlamation/{id}', [DetailProfesseurController::class, 'detailsReclamation']);
-Route::post('/save-response', [DetailProfesseurController::class, 'saveResponse'])->name('save-response');
-Route::post('/update-tracking-reclamations', [DetailProfesseurController::class, 'updateTrackingReclamations']);
-Route::get('/fetch-reclamations-modules/{semester}/{filiere}/{stratu}', [ModuleController::class, 'updateModules']);
-
-Route::get('/fetch-professeur/{fetchModules}', [ReclamationController::class, 'fetchProfesseur']);
-
-Route::get('/fetch-modules/{filiere}', [ReclamationController::class, 'fetchModules']);
 
 
 // Routes for Etudiants_Filieres
@@ -126,15 +111,37 @@ Route::get('/getCreationDate/{id}',[PreInscriptionController::class, 'getCreatio
 
 Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:3'])->group(function () {
-        Route::resource('/Professeur', DetailProfesseurController::class);
+        Route::get('/Professeur', [DetailProfesseurController::class,'index']);
         Route::get('/reclamations/count', [DetailProfesseurController::class, 'getReclamationsCount'])->name('reclamations.count');
         Route::get('/Professeur/Reclamation', [DetailProfesseurController::class, 'show'])->name('Reclamationpr');
+        Route::get('/Professeur/activation', [DetailProfesseurController::class, 'activation'])->name('activation');
+        // Route::post('/Professeur/activation', [DetailProfesseurController::class, 'update'])->name('module_edit');
+        Route::get('/fetch-reclamations/{AnneeUniversitaire}/{statu}/{semester}/{sessions}', [DetailProfesseurController::class, 'reclamations']);
+        Route::get('/detailsreqlamation/{id}', [DetailProfesseurController::class, 'detailsReclamation']);
+        Route::post('/save-response', [DetailProfesseurController::class, 'saveResponse'])->name('save-response');
+        Route::post('/update-tracking-reclamations', [DetailProfesseurController::class, 'updateTrackingReclamations']);
+
+
     });
 
 
     // Your authenticated routes here
     Route::middleware(['role:0'])->group(function () {
+        Route::get('/fetch-filieres/{semester}', [CalendrierModuleController::class, 'fetchFilieresBySemester']);
+        Route::get('/fetch-filieres/{semester}', [ReclamationController::class, 'fetchFilieresBySemester']);
+        Route::get('/fetch-filieres/{semester}', [DetailModuleController::class, 'fetchFilieresBySemester']);
+        Route::get('/fetch-filieres/{semester}', [AdminController::class, 'fetchFilieresBySemester']);
+        Route::get('/fetch-reclamations/{AnneeUniversitaire}/{statu}/{semester}/{sessions}', [DetailProfesseurController::class, 'reclamations']);
 
+        Route::get('/fetch-reclamations/{AnneeUniversitaire}/{module}/{semester}/{filiere}/{professeur}/{SESSION}/{stratu}', [TrackingReclamationController::class, 'reclamations']);
+        // Route::get('/fetch-professeur-reclamations/{AnneeUniversitaire}/{module}/{semester}/{filiere}/{professeur}/{SESSION}/{statu}', [TrackingReclamationController::class, 'professors_reclamations']);
+        Route::get('/fetch-professeur-reclamations', [TrackingReclamationController::class, 'professors_reclamations']);
+        Route::get('/fetch-reclamations-modules/{semester}/{filiere}/{stratu}', [ModuleController::class, 'updateModules']);
+        
+        Route::get('/fetch-professeur/{fetchModules}', [ReclamationController::class, 'fetchProfesseur']);
+        
+        Route::get('/fetch-modules/{filiere}', [ReclamationController::class, 'fetchModules']);
+        
         Route::get('/admin/insert-student', [AdminController::class, 'showInsertStudentForm'])->name('insert_student_form');
         Route::post('/admin/process-student-data', [AdminController::class, 'processStudentData'])->name('process_student_data');
         //detail_modules
@@ -162,6 +169,15 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/admin/Calendrier_modules', [CalendrierModuleController::class, 'insertCalendrierModules'])->name('Calendrier_modules_process');
         Route::get('/admin/Calendrier_modules', [CalendrierModuleController::class, 'showCalendriermodules'])->name('Calendrier_modules_form');
         Route::resource('/admin', AdminController::class);
+        //indevidl
+        Route::get('/admin/individual/module', [ModuleController::class, 'show'])->name('showmodule');
+        Route::get('/fetch-module-table/{semester}/{filiere}', [ModuleController::class, 'fetchmoduletable'])->name('fetchmoduletable');
+
+       
+        Route::get('/admin/individual/filier', [ModuleController::class, 'show'])->name('showfilier');
+        Route::get('/admin/individual/etudiant', [ModuleController::class, 'show'])->name('showetudiant');
+
+
     });
 });
 Route::middleware([

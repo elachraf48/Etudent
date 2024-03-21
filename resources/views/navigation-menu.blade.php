@@ -86,6 +86,28 @@
                         </ul>
                     </ul>
                 </x-nav-link>
+
+                <x-nav-link class="m-0" :active="request()->routeIs('dashboard')">
+                    <ul class="nav-item dropdown m-0">
+                        <a class="nav-link dropdown-toggle w-25" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ __('individual') }}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <x-nav-link href="{{ route('showmodule') }}" :active="request()->routeIs('showmodule')">
+                                {{ __('Module') }}
+                            </x-nav-link>
+                            <x-nav-link style="width: 200px;" href="{{ route('showfilier') }}" :active="request()->routeIs('showfilier')">
+                                {{ __('Filier') }}
+                            </x-nav-link>
+                            <x-nav-link style="width: 200px;" href="{{ route('showetudiant') }}" :active="request()->routeIs('showetudiant')">
+                                {{ __('Etudiant') }}
+                            </x-nav-link>
+                            <x-nav-link href="{{ route('Professeur_form') }}" :active="request()->routeIs('Professeur_form')">
+                                {{ __('Calendrier Module') }}
+                            </x-nav-link>
+                        </ul>
+                    </ul>
+                </x-nav-link>
                 <!-- <x-nav-link href="{{ route('Reclamation_form') }}" :active="request()->routeIs('Reclamation_form')">
                     {{ __('Reclamation') }}
                 </x-nav-link> -->
@@ -355,6 +377,15 @@
                                 0
                                 <span class="visually-hidden">unread messages</span>
                             </span>
+                        </button>
+
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link position-relative" href="{{ route('activation') }}">
+                        <button type="button" class="btn btn-primary ">
+                             Activation
+                           
                         </button>
 
                     </a>

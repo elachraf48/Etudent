@@ -333,30 +333,29 @@
 
   });
   $(document).on('click', '.updates-btn', function() {
-        // Retrieve data from the table row
-        const id = this.getAttribute('data-reclamation-id');
-        var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtain CSRF token value
+    // Retrieve data from the table row
+    const id = this.getAttribute('data-reclamation-id');
+    var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtain CSRF token value
 
-        $.ajax({
-          url: '/admin/Reclamation/edit',
-          method: 'POST',
-          headers: {
-            'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
-          },
-          data: {
-            id: id,
-          },
-          success: function(response) {
-            // Update table row with response
-            // Assuming you have a function to update the table row with response
-            change_reclamations();
-          },
-          error: function(xhr, status, error) {
-            console.error('Error updating tracking reclamation:', error);
-            // Handle error if necessary
-          }
-        });
-      });
-   
+    $.ajax({
+      url: '/admin/Reclamation/edit',
+      method: 'POST',
+      headers: {
+        'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
+      },
+      data: {
+        id: id,
+      },
+      success: function(response) {
+        // Update table row with response
+        // Assuming you have a function to update the table row with response
+        change_reclamations();
+      },
+      error: function(xhr, status, error) {
+        console.error('Error updating tracking reclamation:', error);
+        // Handle error if necessary
+      }
+    });
+  });
 </script>
 @endsection('content')

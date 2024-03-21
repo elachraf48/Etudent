@@ -2045,9 +2045,9 @@ CREATE TABLE IF NOT EXISTS `detail_professeurs` (
   CONSTRAINT `detail_professeurs_idgroupe_foreign` FOREIGN KEY (`idGroupe`) REFERENCES `groupes` (`id`),
   CONSTRAINT `detail_professeurs_idmodule_foreign` FOREIGN KEY (`idModule`) REFERENCES `modules` (`id`),
   CONSTRAINT `detail_professeurs_idprofesseur_foreign` FOREIGN KEY (`idProfesseur`) REFERENCES `professeurs` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table etudentexam.detail_professeurs: ~8 rows (approximately)
+-- Dumping data for table etudentexam.detail_professeurs: ~9 rows (approximately)
 INSERT IGNORE INTO `detail_professeurs` (`id`, `idProfesseur`, `idModule`, `idGroupe`, `AnneeUniversitaire`, `created_at`, `updated_at`) VALUES
 	(1, 1, 1, 1, '2023-2024', '2024-02-05 15:57:57', '2024-02-05 15:57:57'),
 	(2, 2, 2, 1, '2023-2024', '2024-02-05 15:57:57', '2024-02-05 15:57:57'),
@@ -2058,7 +2058,8 @@ INSERT IGNORE INTO `detail_professeurs` (`id`, `idProfesseur`, `idModule`, `idGr
 	(7, 7, 7, 1, '2023-2024', '2024-02-05 15:57:57', '2024-02-05 15:57:57'),
 	(8, 8, 18, 2, '2023-2024', '2024-02-09 21:34:38', '2024-02-09 21:34:38'),
 	(13, 13, 15, 1, '2023-2024', '2024-03-03 01:37:56', '2024-03-03 01:37:56'),
-	(14, 14, 15, 1, '2023-2024', '2024-03-03 01:37:57', '2024-03-03 01:37:57');
+	(14, 14, 15, 1, '2023-2024', '2024-03-03 01:37:57', '2024-03-03 01:37:57'),
+	(15, 1, 51, 1, '2023-2024', '2024-03-18 13:52:54', '2024-03-18 13:52:55');
 
 -- Dumping structure for table etudentexam.etudiants
 CREATE TABLE IF NOT EXISTS `etudiants` (
@@ -2782,7 +2783,7 @@ CREATE TABLE IF NOT EXISTS `groupes` (
   UNIQUE KEY `groupes_anneeuniversitaire_nomgroupe_semester_idsession_unique` (`AnneeUniversitaire`,`nomGroupe`,`Semester`,`idSESSION`),
   KEY `groupes_idsession_foreign` (`idSESSION`),
   CONSTRAINT `groupes_idsession_foreign` FOREIGN KEY (`idSESSION`) REFERENCES `calendrier_sessions` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table etudentexam.groupes: ~9 rows (approximately)
 INSERT IGNORE INTO `groupes` (`id`, `nomGroupe`, `Semester`, `AnneeUniversitaire`, `idSESSION`, `created_at`, `updated_at`) VALUES
@@ -2794,7 +2795,8 @@ INSERT IGNORE INTO `groupes` (`id`, `nomGroupe`, `Semester`, `AnneeUniversitaire
 	(7, '5', 'S1', '2023-2024', 2, '2024-02-18 14:19:20', '2024-02-18 14:19:20'),
 	(8, '7', 'S1', '2023-2024', 2, '2024-02-18 14:23:28', '2024-02-18 14:23:28'),
 	(9, '6', 'S3', '2023-2024', 2, '2024-02-19 09:32:00', '2024-02-19 09:32:00'),
-	(10, '2', 'S3', '2023-2024', 1, '2024-03-04 08:09:10', '2024-03-04 08:09:10');
+	(10, '2', 'S3', '2023-2024', 1, '2024-03-04 08:09:10', '2024-03-04 08:09:10'),
+	(11, '1', 'S1', '2023-2024', 1, '2024-03-07 10:27:37', '2024-03-07 10:27:37');
 
 -- Dumping structure for table etudentexam.groupe_etudiant
 CREATE TABLE IF NOT EXISTS `groupe_etudiant` (
@@ -3222,7 +3224,9 @@ INSERT IGNORE INTO `groupe_etudiant` (`idEtudiant`, `idGroupe`) VALUES
 	(23, 6),
 	(104, 9),
 	(174, 9),
-	(1, 10);
+	(1, 10),
+	(1, 11),
+	(104, 11);
 
 -- Dumping structure for table etudentexam.info_exames
 CREATE TABLE IF NOT EXISTS `info_exames` (
@@ -3582,7 +3586,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table etudentexam.migrations: ~23 rows (approximately)
 INSERT IGNORE INTO `migrations` (`id`, `migration`, `batch`) VALUES
@@ -3609,7 +3613,9 @@ INSERT IGNORE INTO `migrations` (`id`, `migration`, `batch`) VALUES
 	(22, '2024_02_01_165134_create_tracking_reclamations_table', 2),
 	(23, '2024_02_06_214943_create_insert_by_table', 3),
 	(24, '2024_03_03_185920_add_id_session_to_info_exames_table', 4),
-	(26, '2024_03_03_192046_add_user_id_to_professeurs_tabl', 5);
+	(26, '2024_03_03_192046_add_user_id_to_professeurs_tabl', 5),
+	(27, '2024_03_13_095739_create_pre_inscriptions_table', 6),
+	(29, '2024_03_16_221509_create_parameter_pages_table', 7);
 
 -- Dumping structure for table etudentexam.modules
 CREATE TABLE IF NOT EXISTS `modules` (
@@ -3618,6 +3624,7 @@ CREATE TABLE IF NOT EXISTS `modules` (
   `NomModule` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `Semester` varchar(2) COLLATE utf8mb4_unicode_ci NOT NULL,
   `idFiliere` bigint unsigned NOT NULL,
+  `statu` enum('Y','N') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -3627,157 +3634,177 @@ CREATE TABLE IF NOT EXISTS `modules` (
 ) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table etudentexam.modules: ~150 rows (approximately)
-INSERT IGNORE INTO `modules` (`id`, `CodeModule`, `NomModule`, `Semester`, `idFiliere`, `created_at`, `updated_at`) VALUES
-	(1, 'FDS1M1', 'Introduction aux sciences juridiques', 'S1', 1, '2024-03-03 02:05:34', '2024-03-03 02:05:34'),
-	(2, 'FDS1M2', 'Introduction au droit musulman', 'S1', 1, '2024-03-03 02:05:34', '2024-03-03 02:05:34'),
-	(3, 'FDS1M3', 'Introduction à la science politique', 'S1', 1, '2024-03-03 02:05:34', '2024-03-03 02:05:34'),
-	(4, 'FDS1M4', 'Introduction aux relations internationales', 'S1', 1, '2024-03-03 02:05:34', '2024-03-03 02:05:34'),
-	(5, 'FDS1M5', 'Méthodes des sciences sociales', 'S1', 1, '2024-03-03 02:05:34', '2024-03-03 02:05:34'),
-	(6, 'FDS1M6', 'Introduction aux sciences économiques ', 'S1', 1, '2024-03-03 02:05:34', '2024-03-03 02:05:34'),
-	(7, 'FDS1M7', 'Langue et terminologie I', 'S1', 1, '2024-03-03 02:05:34', '2024-03-03 02:05:34'),
-	(8, 'FDS2M8', 'Théorie générale et des obligations', 'S2', 2, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(9, 'FDS2M9', 'Droit commercial', 'S2', 2, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(10, 'FDS2M10', 'Théorie générale du droit constitutionnel', 'S2', 2, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(11, 'FDS2M11', 'Droit pénal général', 'S2', 2, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(12, 'FDS2M12', 'Organisation fdministrative', 'S2', 2, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(13, 'FDS2M13', 'Droit international public', 'S2', 2, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(14, 'FDS2M14', 'Langue et terminologie 2', 'S2', 2, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(15, 'FDS3M15', 'Droit budgétaire', 'S3', 3, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(16, 'FDS3M16', 'Droit social', 'S3', 3, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(17, 'FDS3M17', 'Régimes constitutionnels comparés', 'S3', 3, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(18, 'FDS3M18', 'L\'action administrative', 'S3', 3, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(19, 'FDS3M19', 'Responsabilité civile', 'S3', 3, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(20, 'FDS3M20', 'Droit de la famille', 'S3', 3, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(21, 'FDS4M21', 'Droit des sociétés', 'S4', 4, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(22, 'FDS4M22', 'Organisationjudiciaire', 'S4', 4, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(23, 'FDS4M23', 'Droits de l’homme et libertés publiques', 'S4', 4, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(24, 'FDS4M24', 'Droit pénalspécial', 'S4', 4, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(25, 'FDS4M25', 'Droit fiscal', 'S4', 4, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(26, 'FDS4M26', 'Instruments de paiement et de crédit', 'S4', 4, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(27, 'FDVS5M27', 'Droit foncier et droit réel', 'S5', 5, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(28, 'FDVS5M28', 'Droit international privé', 'S5', 5, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(29, 'FDVS5M29', 'Droit des assurances', 'S5', 5, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(30, 'FDVS5M30', 'criminologie', 'S5', 5, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(31, 'FDVS5M31', 'Contrats spéciaux', 'S5', 5, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(32, 'FDVS5M32', 'Entreprise en difficulté', 'S5', 5, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(33, 'FDPS5M27', 'Administration territoriale', 'S5', 6, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(34, 'FDPS5M28', 'Politiques publiques', 'S5', 6, '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
-	(35, 'FDPS5M29', 'Droit économique international', 'S5', 6, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(36, 'FDPS5M30', 'Grands services Publics', 'S5', 6, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(37, 'FDPS5M31', 'Histoires des idées politiques', 'S5', 6, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(38, 'FDPS5M32', 'Finances Locales', 'S5', 6, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(39, 'FDVS6M33', 'Procédurecivile', 'S6', 7, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(40, 'FDVS6M34', 'Procédurepénale', 'S6', 7, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(41, 'FDVS6M35', 'Successions et Droits financiers', 'S6', 7, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(42, 'FDVS6M36', 'Propriétéintellectuelle', 'S6', 7, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(43, 'FDVS6M37', 'Droit bancaire', 'S6', 7, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(44, 'FDVS6M38', 'Projet de fin d’études', 'S6', 7, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(45, 'FDPS6M33', 'Histoire des idées politiques  2', 'S6', 8, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(46, 'FDPS6M34', 'Droit des marchés publics', 'S6', 8, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(47, 'FDPS6M35', 'Droit international humanitaire', 'S6', 8, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(48, 'FDPS6M36', 'Les organisations internationales', 'S6', 8, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(49, 'FDPS6M37', 'Contentieux fdministratif', 'S6', 8, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(50, 'FDPS6M38', 'Projet de fin d’études', 'S6', 8, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(51, 'ADS1M1', 'Introduction aux sciences juridiques', 'S1', 9, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(52, 'ADS1M2', 'Introduction au droit musulman', 'S1', 9, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(53, 'ADS1M3', 'Introduction à la science politique', 'S1', 9, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(54, 'ADS1M4', 'Introduction aux relations internationales', 'S1', 9, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(55, 'ADS1M5', 'Méthodes des sciences sociales', 'S1', 9, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(56, 'ADS1M6', 'Introduction aux sciences économiques ', 'S1', 9, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(57, 'ADS1M7', 'Langue et terminologie I', 'S1', 9, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(58, 'ADS2M8', 'Théorie générale et des obligations', 'S2', 10, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(59, 'ADS2M9', 'Droit commercial', 'S2', 10, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(60, 'ADS2M10', 'Théorie générale du droit constitutionnel', 'S2', 10, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(61, 'ADS2M11', 'Droit pénal général', 'S2', 10, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(62, 'ADS2M12', 'Organisation fdministrative', 'S2', 10, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(63, 'ADS2M13', 'Droit international public', 'S2', 10, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(64, 'ADS2M14', 'Langue et terminologie 2', 'S2', 10, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(65, 'ADS3M15', 'Droit budgétaire', 'S3', 11, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(66, 'ADS3M16', 'Droit social', 'S3', 11, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(67, 'ADS3M17', 'Régimes constitutionnels comparés', 'S3', 11, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(68, 'ADS3M18', 'L\'action administrative', 'S3', 11, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(69, 'ADS3M19', 'Responsabilité civile', 'S3', 11, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(70, 'ADS3M20', 'Droit de la famille', 'S3', 11, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(71, 'ADS4M21', 'Droit des sociétés', 'S4', 12, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(72, 'ADS4M22', 'Organisationjudiciaire', 'S4', 12, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(73, 'ADS4M23', 'Droits de l’homme et libertés publiques', 'S4', 12, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(74, 'ADS4M24', 'Droit pénalspécial', 'S4', 12, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(75, 'ADS4M25', 'Droit fiscal', 'S4', 12, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(76, 'ADS4M26', 'Instruments de paiement et de crédit', 'S4', 12, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(77, 'ADVS5M27', 'Droit foncier et droit réel', 'S5', 13, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(78, 'ADVS5M28', 'Droit international privé', 'S5', 13, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(79, 'ADVS5M29', 'Droit des assurances', 'S5', 13, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(80, 'ADVS5M30', 'criminologie', 'S5', 13, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(81, 'ADVS5M31', 'Contrats spéciaux', 'S5', 13, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(82, 'ADVS5M32', 'Entreprise en difficulté', 'S5', 13, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(83, 'PDAS5M27', 'Droit international humanitaire', 'S5', 14, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(84, 'PDAS5M28', 'Droit des marchés publics', 'S5', 14, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(85, 'PDAS5M29', 'Contentieuxadministratif', 'S5', 14, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(86, 'PDAS5M30', 'Histoire des idéespolitiques 2', 'S5', 14, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(87, 'PDAS5M31', 'Les organizationsinternationals', 'S5', 14, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(88, 'PDAS5M32', 'Projet de fin d’études', 'S5', 14, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(89, 'ADVS6M33', 'Droit international humanitaire', 'S6', 15, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(90, 'ADVS6M34', 'Droit des marchés publics', 'S6', 15, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(91, 'ADVS6M35', 'Contentieuxadministratif', 'S6', 15, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(92, 'ADVS6M36', 'Histoire des idéespolitiques 2', 'S6', 15, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(93, 'ADVS6M37', 'Les organizationsinternationals', 'S6', 15, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(94, 'ADVS6M38', 'Projet de fin d’études', 'S6', 15, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(95, 'PDAS6M33', 'Histoire des idées politiques  2', 'S6', 16, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(96, 'PDAS6M34', 'Droit des marchés publics', 'S6', 16, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(97, 'PDAS6M35', 'Droit international humanitaire', 'S6', 16, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(98, 'PDAS6M36', 'Les organisations internationales', 'S6', 16, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(99, 'PDAS6M37', 'Contentieux fdministratif', 'S6', 16, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(100, 'PDAS6M38', 'Projet de fin d’études', 'S6', 16, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(101, 'EEGS1M1', 'Introduction à l’économie', 'S1', 17, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(102, 'EEGS1M2', 'Microéconomie 1', 'S1', 17, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(103, 'EEGS1M3', 'Comptabilité générale 1', 'S1', 17, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(104, 'EEGS1M4', 'Management 1', 'S1', 17, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(105, 'EEGS1M5', 'Statistique descriptive', 'S1', 17, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(106, 'EEGS1M6', 'Analyse mathématique', 'S1', 17, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(107, 'EEGS1M7', 'Terminologie', 'S1', 17, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(108, 'EEGS2M8', 'Macroéconomie', 'S2', 18, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(109, 'EEGS2M9', 'Microéconomie 2', 'S2', 18, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(110, 'EEGS2M10', 'Comptabilité générale 2', 'S2', 18, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(111, 'EEGS2M11', 'Management 2', 'S2', 18, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(112, 'EEGS2M12', 'Probabilité', 'S2', 18, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(113, 'EEGS2M13', 'Algèbre ET Math financières', 'S2', 18, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(114, 'EEGS2M14', 'Terminologie', 'S2', 18, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(115, 'EEGS3M15', 'Economie monétaire et financière', 'S3', 19, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(116, 'EEGS3M16', 'Problèmes économiques et sociaux', 'S3', 19, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(117, 'EEGS3M17', 'Comptabilité analytique', 'S3', 19, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(118, 'EEGS3M18', 'Marketing de base', 'S3', 19, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(119, 'EEGS3M19', 'Echantillonnage et estimation', 'S3', 19, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(120, 'EEGS3M20', 'Introduction à l’étude du droit', 'S3', 19, '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
-	(121, 'EEGS4M21', 'Economie monétaire et financière 2', 'S4', 20, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(122, 'EEGS4M22', 'Comptabilité des sociétés', 'S4', 20, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(123, 'EEGS4M23', 'Finances publiques', 'S4', 20, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(124, 'EEGS4M24', 'Informatique de gestion', 'S4', 20, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(125, 'EEGS4M25', 'Analyse financière', 'S4', 20, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(126, 'EEGS4M26', 'Droit commercial et des sociétés', 'S4', 20, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(127, 'GES5M27', 'Fiscalité d’entreprise', 'S5', 21, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(128, 'GES5M28', 'Gestion financière', 'S5', 21, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(129, 'GES5M29', 'Marketing Approfondi', 'S5', 21, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(130, 'GES5M30', 'Gestion des ressources humaines', 'S5', 21, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(131, 'GES5M31', 'Droit des affaires', 'S5', 21, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(132, 'GES5M32', 'Recherche opérationnelle ET Informatique de gestion', 'S5', 21, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(133, 'EEGS5M27', 'Histoire de la pensée économique', 'S5', 22, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(134, 'EEGS5M28', 'Politique économique', 'S5', 22, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(135, 'EEGS5M29', 'Comptabilité nationale 1', 'S5', 22, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(136, 'EEGS5M30', 'Gestion financière', 'S5', 22, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(137, 'EEGS5M31', 'Gestion des ressources humaines', 'S5', 22, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(138, 'EEGS5M32', 'Fiscalité', 'S5', 22, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(139, 'GES6M33', 'Audit général', 'S6', 23, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(140, 'GES6M34', 'Contrôle de gestion', 'S6', 23, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(141, 'GES6M35', 'Management stratégique', 'S6', 23, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(142, 'GES6M36', 'Stratégies industrielles', 'S6', 23, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(143, 'GES6M37', 'Projet de fin d’études', 'S6', 23, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(144, 'GES6M38', 'Projet de fin d’études', 'S6', 23, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(145, 'EEG6M33', 'Relations économiques internationales', 'S6', 24, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(146, 'EEG6M34', 'Méthodes économétriques ET Recherche opérationnelle', 'S6', 24, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(147, 'EEG6M35', 'Informatique appliquée', 'S6', 24, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(148, 'EEG6M36', 'Contrôle de gestion', 'S6', 24, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(149, 'EEG6M37', 'Projet de fin d’études', 'S6', 24, '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
-	(150, 'EEG6M38', 'Projet de fin d’études', 'S6', 24, '2024-01-23 16:28:39', '2024-01-23 16:28:39');
+INSERT IGNORE INTO `modules` (`id`, `CodeModule`, `NomModule`, `Semester`, `idFiliere`, `statu`, `created_at`, `updated_at`) VALUES
+	(1, 'FDS1M1', 'Introduction aux sciences juridiques', 'S1', 1, 'Y', '2024-03-03 02:05:34', '2024-03-19 09:13:47'),
+	(2, 'FDS1M2', 'Introduction au droit musulman', 'S1', 1, 'N', '2024-03-03 02:05:34', '2024-03-18 13:32:34'),
+	(3, 'FDS1M3', 'Introduction à la science politique', 'S1', 1, 'N', '2024-03-03 02:05:34', '2024-03-18 13:32:49'),
+	(4, 'FDS1M4', 'Introduction aux relations internationales', 'S1', 1, 'N', '2024-03-03 02:05:34', '2024-03-19 09:22:37'),
+	(5, 'FDS1M5', 'Méthodes des sciences sociales', 'S1', 1, 'Y', '2024-03-03 02:05:34', '2024-03-17 21:43:42'),
+	(6, 'FDS1M6', 'Introduction aux sciences économiques ', 'S1', 1, 'Y', '2024-03-03 02:05:34', '2024-03-17 21:43:38'),
+	(7, 'FDS1M7', 'Langue et terminologie I', 'S1', 1, 'Y', '2024-03-03 02:05:34', '2024-03-17 21:43:39'),
+	(8, 'FDS2M8', 'Théorie générale et des obligations', 'S2', 2, 'N', '2024-01-23 16:28:37', '2024-03-17 21:57:14'),
+	(9, 'FDS2M9', 'Droit commercial', 'S2', 2, 'N', '2024-01-23 16:28:37', '2024-03-17 21:57:11'),
+	(10, 'FDS2M10', 'Théorie générale du droit constitutionnel', 'S2', 2, 'N', '2024-01-23 16:28:37', '2024-03-17 21:57:10'),
+	(11, 'FDS2M11', 'Droit pénal général', 'S2', 2, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(12, 'FDS2M12', 'Organisation fdministrative', 'S2', 2, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(13, 'FDS2M13', 'Droit international public', 'S2', 2, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(14, 'FDS2M14', 'Langue et terminologie 2', 'S2', 2, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(15, 'FDS3M15', 'Droit budgétaire', 'S3', 3, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(16, 'FDS3M16', 'Droit social', 'S3', 3, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(17, 'FDS3M17', 'Régimes constitutionnels comparés', 'S3', 3, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(18, 'FDS3M18', 'L\'action administrative', 'S3', 3, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(19, 'FDS3M19', 'Responsabilité civile', 'S3', 3, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(20, 'FDS3M20', 'Droit de la famille', 'S3', 3, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(21, 'FDS4M21', 'Droit des sociétés', 'S4', 4, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(22, 'FDS4M22', 'Organisationjudiciaire', 'S4', 4, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(23, 'FDS4M23', 'Droits de l’homme et libertés publiques', 'S4', 4, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(24, 'FDS4M24', 'Droit pénalspécial', 'S4', 4, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(25, 'FDS4M25', 'Droit fiscal', 'S4', 4, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(26, 'FDS4M26', 'Instruments de paiement et de crédit', 'S4', 4, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(27, 'FDVS5M27', 'Droit foncier et droit réel', 'S5', 5, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(28, 'FDVS5M28', 'Droit international privé', 'S5', 5, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(29, 'FDVS5M29', 'Droit des assurances', 'S5', 5, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(30, 'FDVS5M30', 'criminologie', 'S5', 5, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(31, 'FDVS5M31', 'Contrats spéciaux', 'S5', 5, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(32, 'FDVS5M32', 'Entreprise en difficulté', 'S5', 5, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(33, 'FDPS5M27', 'Administration territoriale', 'S5', 6, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(34, 'FDPS5M28', 'Politiques publiques', 'S5', 6, 'N', '2024-01-23 16:28:37', '2024-01-23 16:28:37'),
+	(35, 'FDPS5M29', 'Droit économique international', 'S5', 6, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(36, 'FDPS5M30', 'Grands services Publics', 'S5', 6, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(37, 'FDPS5M31', 'Histoires des idées politiques', 'S5', 6, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(38, 'FDPS5M32', 'Finances Locales', 'S5', 6, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(39, 'FDVS6M33', 'Procédurecivile', 'S6', 7, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(40, 'FDVS6M34', 'Procédurepénale', 'S6', 7, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(41, 'FDVS6M35', 'Successions et Droits financiers', 'S6', 7, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(42, 'FDVS6M36', 'Propriétéintellectuelle', 'S6', 7, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(43, 'FDVS6M37', 'Droit bancaire', 'S6', 7, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(44, 'FDVS6M38', 'Projet de fin d’études', 'S6', 7, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(45, 'FDPS6M33', 'Histoire des idées politiques  2', 'S6', 8, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(46, 'FDPS6M34', 'Droit des marchés publics', 'S6', 8, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(47, 'FDPS6M35', 'Droit international humanitaire', 'S6', 8, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(48, 'FDPS6M36', 'Les organisations internationales', 'S6', 8, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(49, 'FDPS6M37', 'Contentieux fdministratif', 'S6', 8, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(50, 'FDPS6M38', 'Projet de fin d’études', 'S6', 8, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(51, 'ADS1M1', 'Introduction aux sciences juridiques', 'S1', 9, 'Y', '2024-01-23 16:28:38', '2024-03-17 21:31:26'),
+	(52, 'ADS1M2', 'Introduction au droit musulman', 'S1', 9, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(53, 'ADS1M3', 'Introduction à la science politique', 'S1', 9, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(54, 'ADS1M4', 'Introduction aux relations internationales', 'S1', 9, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(55, 'ADS1M5', 'Méthodes des sciences sociales', 'S1', 9, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(56, 'ADS1M6', 'Introduction aux sciences économiques ', 'S1', 9, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(57, 'ADS1M7', 'Langue et terminologie I', 'S1', 9, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(58, 'ADS2M8', 'Théorie générale et des obligations', 'S2', 10, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(59, 'ADS2M9', 'Droit commercial', 'S2', 10, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(60, 'ADS2M10', 'Théorie générale du droit constitutionnel', 'S2', 10, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(61, 'ADS2M11', 'Droit pénal général', 'S2', 10, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(62, 'ADS2M12', 'Organisation fdministrative', 'S2', 10, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(63, 'ADS2M13', 'Droit international public', 'S2', 10, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(64, 'ADS2M14', 'Langue et terminologie 2', 'S2', 10, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(65, 'ADS3M15', 'Droit budgétaire', 'S3', 11, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(66, 'ADS3M16', 'Droit social', 'S3', 11, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(67, 'ADS3M17', 'Régimes constitutionnels comparés', 'S3', 11, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(68, 'ADS3M18', 'L\'action administrative', 'S3', 11, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(69, 'ADS3M19', 'Responsabilité civile', 'S3', 11, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(70, 'ADS3M20', 'Droit de la famille', 'S3', 11, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(71, 'ADS4M21', 'Droit des sociétés', 'S4', 12, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(72, 'ADS4M22', 'Organisationjudiciaire', 'S4', 12, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(73, 'ADS4M23', 'Droits de l’homme et libertés publiques', 'S4', 12, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(74, 'ADS4M24', 'Droit pénalspécial', 'S4', 12, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(75, 'ADS4M25', 'Droit fiscal', 'S4', 12, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(76, 'ADS4M26', 'Instruments de paiement et de crédit', 'S4', 12, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(77, 'ADVS5M27', 'Droit foncier et droit réel', 'S5', 13, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(78, 'ADVS5M28', 'Droit international privé', 'S5', 13, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(79, 'ADVS5M29', 'Droit des assurances', 'S5', 13, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(80, 'ADVS5M30', 'criminologie', 'S5', 13, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(81, 'ADVS5M31', 'Contrats spéciaux', 'S5', 13, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(82, 'ADVS5M32', 'Entreprise en difficulté', 'S5', 13, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(83, 'PDAS5M27', 'Droit international humanitaire', 'S5', 14, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(84, 'PDAS5M28', 'Droit des marchés publics', 'S5', 14, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(85, 'PDAS5M29', 'Contentieuxadministratif', 'S5', 14, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(86, 'PDAS5M30', 'Histoire des idéespolitiques 2', 'S5', 14, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(87, 'PDAS5M31', 'Les organizationsinternationals', 'S5', 14, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(88, 'PDAS5M32', 'Projet de fin d’études', 'S5', 14, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(89, 'ADVS6M33', 'Droit international humanitaire', 'S6', 15, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(90, 'ADVS6M34', 'Droit des marchés publics', 'S6', 15, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(91, 'ADVS6M35', 'Contentieuxadministratif', 'S6', 15, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(92, 'ADVS6M36', 'Histoire des idéespolitiques 2', 'S6', 15, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(93, 'ADVS6M37', 'Les organizationsinternationals', 'S6', 15, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(94, 'ADVS6M38', 'Projet de fin d’études', 'S6', 15, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(95, 'PDAS6M33', 'Histoire des idées politiques  2', 'S6', 16, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(96, 'PDAS6M34', 'Droit des marchés publics', 'S6', 16, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(97, 'PDAS6M35', 'Droit international humanitaire', 'S6', 16, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(98, 'PDAS6M36', 'Les organisations internationales', 'S6', 16, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(99, 'PDAS6M37', 'Contentieux fdministratif', 'S6', 16, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(100, 'PDAS6M38', 'Projet de fin d’études', 'S6', 16, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(101, 'EEGS1M1', 'Introduction à l’économie', 'S1', 17, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(102, 'EEGS1M2', 'Microéconomie 1', 'S1', 17, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(103, 'EEGS1M3', 'Comptabilité générale 1', 'S1', 17, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(104, 'EEGS1M4', 'Management 1', 'S1', 17, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(105, 'EEGS1M5', 'Statistique descriptive', 'S1', 17, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(106, 'EEGS1M6', 'Analyse mathématique', 'S1', 17, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(107, 'EEGS1M7', 'Terminologie', 'S1', 17, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(108, 'EEGS2M8', 'Macroéconomie', 'S2', 18, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(109, 'EEGS2M9', 'Microéconomie 2', 'S2', 18, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(110, 'EEGS2M10', 'Comptabilité générale 2', 'S2', 18, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(111, 'EEGS2M11', 'Management 2', 'S2', 18, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(112, 'EEGS2M12', 'Probabilité', 'S2', 18, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(113, 'EEGS2M13', 'Algèbre ET Math financières', 'S2', 18, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(114, 'EEGS2M14', 'Terminologie', 'S2', 18, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(115, 'EEGS3M15', 'Economie monétaire et financière', 'S3', 19, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(116, 'EEGS3M16', 'Problèmes économiques et sociaux', 'S3', 19, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(117, 'EEGS3M17', 'Comptabilité analytique', 'S3', 19, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(118, 'EEGS3M18', 'Marketing de base', 'S3', 19, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(119, 'EEGS3M19', 'Echantillonnage et estimation', 'S3', 19, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(120, 'EEGS3M20', 'Introduction à l’étude du droit', 'S3', 19, 'N', '2024-01-23 16:28:38', '2024-01-23 16:28:38'),
+	(121, 'EEGS4M21', 'Economie monétaire et financière 2', 'S4', 20, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(122, 'EEGS4M22', 'Comptabilité des sociétés', 'S4', 20, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(123, 'EEGS4M23', 'Finances publiques', 'S4', 20, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(124, 'EEGS4M24', 'Informatique de gestion', 'S4', 20, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(125, 'EEGS4M25', 'Analyse financière', 'S4', 20, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(126, 'EEGS4M26', 'Droit commercial et des sociétés', 'S4', 20, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(127, 'GES5M27', 'Fiscalité d’entreprise', 'S5', 21, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(128, 'GES5M28', 'Gestion financière', 'S5', 21, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(129, 'GES5M29', 'Marketing Approfondi', 'S5', 21, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(130, 'GES5M30', 'Gestion des ressources humaines', 'S5', 21, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(131, 'GES5M31', 'Droit des affaires', 'S5', 21, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(132, 'GES5M32', 'Recherche opérationnelle ET Informatique de gestion', 'S5', 21, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(133, 'EEGS5M27', 'Histoire de la pensée économique', 'S5', 22, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(134, 'EEGS5M28', 'Politique économique', 'S5', 22, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(135, 'EEGS5M29', 'Comptabilité nationale 1', 'S5', 22, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(136, 'EEGS5M30', 'Gestion financière', 'S5', 22, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(137, 'EEGS5M31', 'Gestion des ressources humaines', 'S5', 22, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(138, 'EEGS5M32', 'Fiscalité', 'S5', 22, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(139, 'GES6M33', 'Audit général', 'S6', 23, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(140, 'GES6M34', 'Contrôle de gestion', 'S6', 23, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(141, 'GES6M35', 'Management stratégique', 'S6', 23, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(142, 'GES6M36', 'Stratégies industrielles', 'S6', 23, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(143, 'GES6M37', 'Projet de fin d’études', 'S6', 23, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(144, 'GES6M38', 'Projet de fin d’études', 'S6', 23, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(145, 'EEG6M33', 'Relations économiques internationales', 'S6', 24, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(146, 'EEG6M34', 'Méthodes économétriques ET Recherche opérationnelle', 'S6', 24, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(147, 'EEG6M35', 'Informatique appliquée', 'S6', 24, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(148, 'EEG6M36', 'Contrôle de gestion', 'S6', 24, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(149, 'EEG6M37', 'Projet de fin d’études', 'S6', 24, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39'),
+	(150, 'EEG6M38', 'Projet de fin d’études', 'S6', 24, 'N', '2024-01-23 16:28:39', '2024-01-23 16:28:39');
+
+-- Dumping structure for table etudentexam.parameter_pages
+CREATE TABLE IF NOT EXISTS `parameter_pages` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `NamePage` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `LastDate` date NOT NULL,
+  `Statu` enum('true','false') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `parameter_pages_user_id_foreign` (`user_id`),
+  CONSTRAINT `parameter_pages_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table etudentexam.parameter_pages: ~3 rows (approximately)
+INSERT IGNORE INTO `parameter_pages` (`id`, `NamePage`, `LastDate`, `Statu`, `user_id`, `created_at`, `updated_at`) VALUES
+	(1, 'calendrier', '2025-07-19', 'true', 1, '2024-03-17 00:05:27', '2024-03-18 10:11:03'),
+	(2, 'reclamations', '2024-03-30', 'false', 1, '2024-03-17 00:05:44', '2024-03-19 10:00:22'),
+	(3, 'preinscription', '2024-03-20', 'true', 1, '2024-03-17 00:16:42', '2024-03-19 10:09:02');
 
 -- Dumping structure for table etudentexam.password_resets
 CREATE TABLE IF NOT EXISTS `password_resets` (
@@ -3807,6 +3834,25 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table etudentexam.personal_access_tokens: ~0 rows (approximately)
+
+-- Dumping structure for table etudentexam.pre_inscriptions
+CREATE TABLE IF NOT EXISTS `pre_inscriptions` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `idEtudiant` bigint unsigned NOT NULL,
+  `idSession` bigint unsigned NOT NULL DEFAULT '0',
+  `AnneeUniversitaire` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pre_inscriptions_idsession_foreign` (`idSession`),
+  KEY `pre_inscriptions_idetudiant_foreign` (`idEtudiant`),
+  CONSTRAINT `pre_inscriptions_idetudiant_foreign` FOREIGN KEY (`idEtudiant`) REFERENCES `etudiants` (`id`),
+  CONSTRAINT `pre_inscriptions_idsession_foreign` FOREIGN KEY (`idSession`) REFERENCES `calendrier_sessions` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table etudentexam.pre_inscriptions: ~0 rows (approximately)
+INSERT IGNORE INTO `pre_inscriptions` (`id`, `idEtudiant`, `idSession`, `AnneeUniversitaire`, `created_at`, `updated_at`) VALUES
+	(1, 104, 1, '2023-2024', '2024-03-19 10:13:07', '2024-03-19 10:13:07');
 
 -- Dumping structure for table etudentexam.professeurs
 CREATE TABLE IF NOT EXISTS `professeurs` (
@@ -3904,9 +3950,10 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   KEY `sessions_last_activity_index` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table etudentexam.sessions: ~1 rows (approximately)
+-- Dumping data for table etudentexam.sessions: ~3 rows (approximately)
 INSERT IGNORE INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-	('VnYZCHMNn3HIDmIWqvyCZvjNaDEXvgvhVuqskMeu', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiMml3VEZzSDE2dm95c1FQMmdJMHFGY3FVWUhWR0ZuSFJuUGpVYkhkTSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czo0NDoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2FkbWluL1JlY2xhbWF0aW9uL2VkaXQiO31zOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czo1NzoiaHR0cDovLzEyNy4wLjAuMTo4MDAwL2V0dWRpYW50L1JlcGVuc2U/Q29kZUFwb2dlZT0yMTEyMzI2Ijt9fQ==', 1709770246);
+	('a8SNhR7kSaGvtZ7YBakRndaF5P0GCldAvuDVznOz', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoidzdUUG9TdENKZnR5MTFsSUdlTE1NeGQzSTBXdTdSU01EVnZwOEZSTCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjQzOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvUHJvZmVzc2V1ci9hY3RpdmF0aW9uIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mjt9', 1710848366),
+	('UMFxsllKfWyC4Q9dwTrsrfd3UuMar0he5QlTXsUy', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoicko0SHlpZWNoWGp4aGtmb2xKREFJaWMzYkZyUUxTaWN4eXNPY1hLdiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9wYXJhbWV0ZXIiO31zOjM6InVybCI7YTowOnt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTt9', 1710848352);
 
 -- Dumping structure for table etudentexam.tracking_reclamations
 CREATE TABLE IF NOT EXISTS `tracking_reclamations` (
@@ -3928,25 +3975,25 @@ CREATE TABLE IF NOT EXISTS `tracking_reclamations` (
 INSERT IGNORE INTO `tracking_reclamations` (`id`, `idReclamation`, `idProfesseur`, `stratu`, `Repense`, `created_at`, `updated_at`) VALUES
 	(1, 1, 4, 'Encours', '', '2024-02-06 23:31:59', '2024-02-06 23:31:59'),
 	(7, 7, 4, 'Encours', '', '2024-02-06 23:59:29', '2024-02-06 23:59:29'),
-	(8, 8, 1, 'Valide', '18/20', '2024-02-07 00:05:48', '2024-03-03 20:10:01'),
+	(8, 8, 1, 'Encours', '14/20', '2024-02-07 00:05:48', '2024-03-17 03:48:47'),
 	(9, 9, 7, 'Encours', '', '2024-02-07 00:06:49', '2024-02-07 00:06:49'),
-	(10, 10, 1, 'Valide', '10', '2024-02-07 00:09:32', '2024-02-26 07:25:43'),
-	(11, 11, 1, 'Encours', '10/20', '2024-02-07 00:11:38', '2024-02-26 10:41:38'),
+	(10, 10, 1, 'Encours', '10', '2024-02-07 00:09:32', '2024-03-19 10:14:45'),
+	(11, 11, 1, 'Encours', '10/20', '2024-02-07 00:11:38', '2024-03-17 03:48:48'),
 	(12, 12, 7, 'Encours', '', '2024-02-07 14:25:04', '2024-02-07 14:25:04'),
-	(13, 13, 8, 'Valide', 'Maintenir la note', '2024-02-09 21:36:57', '2024-03-04 08:12:04'),
-	(14, 14, 8, 'Encours', '', '2024-02-10 00:26:54', '2024-02-10 00:26:54'),
-	(15, 15, 8, 'Encours', '', '2024-02-10 09:01:33', '2024-02-10 09:01:33'),
+	(13, 13, 8, 'Valide', 'Maintenir la note', '2024-02-09 21:36:57', '2024-03-17 03:37:15'),
+	(14, 14, 8, 'Encours', '', '2024-02-10 00:26:54', '2024-03-17 03:37:56'),
+	(15, 15, 8, 'Encours', '', '2024-02-10 09:01:33', '2024-03-17 03:37:33'),
 	(16, 16, 2, 'Encours', '', '2024-02-10 09:32:02', '2024-02-10 09:32:02'),
 	(17, 17, 4, 'Encours', '', '2024-02-10 09:32:56', '2024-02-10 09:32:56'),
 	(18, 18, 7, 'Encours', '', '2024-02-15 07:45:39', '2024-02-15 07:45:39'),
 	(19, 19, 4, 'Encours', '', '2024-02-15 07:45:57', '2024-02-15 07:45:57'),
-	(20, 20, 1, 'Valide', 'Maintenir la note', '2024-02-15 07:48:05', '2024-02-29 00:29:18'),
+	(20, 20, 1, 'Encours', 'Maintenir la note', '2024-02-15 07:48:05', '2024-03-17 03:48:49'),
 	(21, 21, 8, 'Encours', '', '2024-02-15 08:23:06', '2024-02-15 08:23:06'),
 	(23, 23, 3, 'Encours', '', '2024-02-18 14:19:20', '2024-02-18 14:19:20'),
 	(24, 24, 5, 'Encours', '', '2024-02-18 14:21:09', '2024-02-18 14:21:09'),
-	(25, 25, 1, 'Encours', 'Maintenir la note', '2024-02-18 14:24:05', '2024-02-29 00:30:38'),
+	(25, 25, 1, 'Encours', 'Maintenir la note', '2024-02-18 14:24:05', '2024-03-17 03:48:50'),
 	(26, 26, 8, 'Encours', '', '2024-02-19 09:32:00', '2024-02-19 09:32:00'),
-	(27, 27, 1, 'Encours', 'what is problem', '2024-02-23 09:49:08', '2024-02-25 23:30:43'),
+	(27, 27, 1, 'Valide', 'what is problem', '2024-02-23 09:49:08', '2024-03-17 03:48:24'),
 	(28, 28, 2, 'Encours', '', '2024-02-25 21:25:14', '2024-02-25 21:25:14'),
 	(29, 29, 1, 'Valide', 'Maintenir la note', '2024-02-27 20:03:39', '2024-02-29 16:41:24'),
 	(30, 30, 1, 'Valide', '10/20', '2024-03-01 07:58:52', '2024-03-01 08:00:30'),

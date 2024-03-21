@@ -358,7 +358,7 @@
     <!-- <button onclick="generatePDF()">Generate PDF</button> -->
     <div class="modal fade modal-dialog-scrollable modal-dialog-centered" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
+  <div class="modal-content p-3" style="border: 6px solid green; margin-top: 30vh;">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="staticBackdropLabel">Information</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -368,8 +368,8 @@
         <hr>
         <ul class="text-start text-success" lang="fr">
             <li>Peut-être est-il encore temps de réclamation</li>
-            <li>Peut-être que vous n'êtes pas inscrit dans cette module</li>
-            <li>Peut-être que le temps des réclamations est révolu dans cette module</li>
+            <li>Peut-être que vous n'êtes pas inscrit dans ce module</li>
+            <li>Peut-être que le temps de réclamations pour ce module est dépassé</li>
         </ul>
         <hr>
         <strong dir="rtl" class="text-end text-danger" lang="ar">أهلاً بك عزيزي الطالب، إذا لم تتمكن من العثور على الوحدة الخاصة بك، فذلك للأسباب التالية:</strong>

@@ -22,6 +22,7 @@ class ProfesseurController extends Controller
         $filieres = Filiere::where('CodeFiliere', 'LIKE', '%S1')->get(['id', 'NomFiliere', 'Parcours']);
         return view('admin.bulk_professeurs', compact('filieres'));
     }
+ 
 
     /**
      * Show the form for creating a new resource.

@@ -4,6 +4,7 @@
 
 <link rel="stylesheet" href="{{ asset('css/reclamation.css') }}">
 
+<input type="hidden" value="{{$studentunique->CodeApogee}}" name="CodeApogee" id="CodeApogee">
 
 <div class="container home ">
     @if (session('error'))
@@ -48,7 +49,7 @@
             @if ($key === count($student) - 1)
 
             <tr class="table-success">
-                <th colspan="2">Annee Universitaire : {{ $students->ExamenAnneeUniversitaire }} || <span class="text-center ">Code Apogee: <span name="CodeApogee" class="text-danger" id="CodeApogee">{{ $studentunique->CodeApogee }}</span></span>
+                <th colspan="2">Annee Universitaire : {{ $students->ExamenAnneeUniversitaire }} || <span class="text-center ">Code Apogee: <span class="text-danger" >{{ $studentunique->CodeApogee }}</span></span>
                 </th>
 
             </tr>
@@ -111,7 +112,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
-    function checkdate() {
+    function updatepage() {
         var studentId = "{{ $studentunique->id }}"; // Assuming $studentunique is available
         $.ajax({
 
@@ -141,10 +142,30 @@
 
 
     // Call the function initially to update the count
-    checkdate();
+    updatepage();
     // Optionally, you can set up a timer to periodically update the count
-    setInterval(checkdate, 6000);
-    
+    function updateReclamationsCount() {
+        var CodeApogee = $('#CodeApogee').val();
+        $('.btn-primary').attr('data-apogee', CodeApogee);
+
+        $.ajax({
+            url: "/reclamations/etudiant/" + CodeApogee,
+            method: 'GET',
+            success: function(response) {
+                // Update the count in the navigation menu
+                $('#reclamationsCount').text(response.count > 0 ? response.count : '0');
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+
+    // Call the function initially to update the count
+    updateReclamationsCount();
+
+    // Optionally, you can set up a timer to periodically update the count
+    setInterval(updateReclamationsCount, 6000);
 </script>
 
 

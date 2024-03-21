@@ -222,7 +222,7 @@
           // Check if nomGroupe is equal to 0, if yes, replace it with "Aucun"
           var buttonClass = reclamation.stratu == 'Valide' ? 'btn-secondary' : 'btn-primary';
           var buttonLabel = reclamation.stratu == 'Valide' ? 'Afficher' : 'Réponse';
-          var buttonHtml = '<button  class="btn ' + buttonClass + ' response-btn w-100" data-toggle="modal" data-target="#exampleModal" data-reclamation-id="' + reclamation.id + '">' + buttonLabel + '</button>';
+          var buttonHtml = '<button  class="btn  ' + buttonClass + ' response-btn w-100" data-toggle="modal" data-target="#exampleModal" data-reclamation-id="' + reclamation.id + '" >' + buttonLabel + '</button>';
 
           var rowData = [
             reclamation.NomModule,

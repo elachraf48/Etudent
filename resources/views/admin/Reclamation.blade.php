@@ -309,6 +309,7 @@
                         // Update the dropdown options
                         var optionsHtml = '<option value="%">All</option>';
 
+                        if (selectedSemester != '%') {
                         $.each(filieres, function(index, filiere) {
                             optionsHtml += '<option value="' + filiere.id + '">' + filiere.NomFiliere;
 
@@ -319,6 +320,7 @@
 
                             optionsHtml += '</option>';
                         });
+                    }
 
                         // Set the updated options HTML to the dropdown
                         $('#filiereDropdown').html(optionsHtml);

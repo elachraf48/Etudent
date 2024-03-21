@@ -86,8 +86,16 @@ class TrackingReclamationController extends Controller
         // Return reclamations as JSON
         return response()->json(['reclamations' => $reclamations]);
     }
-    public function professors_reclamations($AnneeUniversitaire, $module, $semester, $filiere, $professeur, $sessions, $statu)
+    public function professors_reclamations(Request $request)
     {
+        
+        $AnneeUniversitaire = $request->input('AnneeUniversitaire');
+        $module = $request->input('module');
+        $semester = $request->input('semester');
+        $filiere = $request->input('filiere');
+        $sessions = $request->input('sessions');
+        $statu = $request->input('stratu');
+        $professeur = $request->input('professeur');
 
         $query = Professeur::select(
             'professeurs.Nom',
