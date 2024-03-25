@@ -25,43 +25,54 @@
     </div>
     @endif
 
+    <style>
+        @media screen and (max-width: 768px) {
+
+            table {
+                font-size: .7em;
+            }
+
+
+        }
+    </style>
 
 
 
+    <div class="table-responsive">
 
+        <table id="module-table" class="table table-striped table-bordered text-center ">
+            <thead>
+                <tr class="table-success">
+                    <th>Nom de Filiere</th>
+                    <th>Nom de module</th>
+                    <th>Semester</th>
+                    <th>dernière mise à jour</th>
+                    <th>Statut</th>
+                </tr>
+            </thead>
 
-    <table id="module-table" class="table table-striped table-bordered text-center ">
-        <thead>
-            <tr class="table-success">
-                <th>Nom de Filiere</th>
-                <th>Nom de module</th>
-                <th>Semester</th>
-                <th>dernière mise à jour</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-
+    </div>
+    <tbody id="module-body">
+        @foreach($parameters as $parameter)
+        <tr>
+            <td>{{ $parameter->filiere->NomFiliere }}
+                @if($parameter->filiere->Parcours!='')
+                ({{ $parameter->filiere->Parcours }})
+                @endif
+            </td>
+            <td>{{ $parameter->NomModule }}</td>
+            <td> {{ $parameter->Semester }}</td>
+            <td>{{ $parameter->updated_at}}</td>
+            <td>
+                <button disabled class="btn update-parameter-btn   {{ $parameter->statu == 'Y' ? 'btn-primary':'btn-danger'  }} w-100" data-id="{{ $parameter->id }}" value="{{ $parameter->statu }}">
+                    {{ $parameter->statu == 'Y' ? 'active':'désactivé'  }}
+                </button>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+    </table>
 </div>
-<tbody  id="module-body">
-    @foreach($parameters as $parameter)
-    <tr>
-        <td>{{ $parameter->filiere->NomFiliere }}
-            @if($parameter->filiere->Parcours!='')
-            ({{ $parameter->filiere->Parcours }})
-            @endif
-        </td>
-        <td>{{ $parameter->NomModule }}</td>
-        <td> {{ $parameter->Semester }}</td>
-        <td>{{ $parameter->updated_at}}</td>
-        <td>
-            <button disabled class="btn update-parameter-btn   {{ $parameter->statu == 'Y' ? 'btn-danger' : 'btn-primary' }} w-75" data-id="{{ $parameter->id }}" value="{{ $parameter->statu }}">
-                {{ $parameter->statu == 'Y' ? 'désactivé' : 'active' }}
-            </button>
-        </td>
-    </tr>
-    @endforeach
-</tbody>
-</table>
 <div class="toast-container position-fixed bottom-0 end-0 p-3 ">
     <div id="liveToast" class="toast bg-success " role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
@@ -104,8 +115,6 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <!-- FileSaver.js -->
 <script>
-    
-
     $(document).on('click', '.update-parameter-btn', function() {
         const row = this.closest('tr');
         var date = row.querySelectorAll('td')[3].textContent;
@@ -156,9 +165,6 @@
             });
         }
     });
-
-
- 
 </script>
 
 @endsection

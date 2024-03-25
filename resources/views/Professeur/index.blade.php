@@ -14,7 +14,7 @@
       font-size: .7em;
     }
 
-    #reclamation-table tbody :nth-child(4) {
+    #reclamation-table tbody tr :nth-child(4) {
       display: none;
     }
 
@@ -152,8 +152,26 @@
             </select>
 
             <label for="message-text" class="col-form-label">Réponse:</label>
-            <textarea class="form-control" id="message-text" required></textarea>
+            <textarea class="form-control mb-2" id="message-text" required></textarea>
+
+            <div class="mb-3" id="image-uploadss">
+              <label for="image-upload" class="form-label">Uploader un fichier:</label>
+              <input type="file" class="form-control" id="image-upload" name="image" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" required>
+            </div>
+            <div class="mb-3 text-center d-none "  id="btn-uploadss">
+
+              <h5>détails du fichier</h5>
+                <embed class="immg d-none"  />
+                <button type="button" class="btn btn-secondary w-100" data-bs-toggle="modal" data-bs-target="#exampleModalessss">
+                <i class="fa-solid fa-eye"></i> montrer
+                </button>
+
+            </div>
+
           </div>
+          
+         
+
           <div class="alert alert-primary text-center d-none" role="alert" id="info">
             Si vous souhaitez modifier, veuillez envoyer les informations à l'administration
           </div>
@@ -162,13 +180,33 @@
           <!-- Modal Footer -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-            <button type="submit" id="saveResponseButton" class="btn btn-primary">Save Response</button>
+            <button type="submit" id="saveResponseButton" class="btn btn-primary">Enregistrer la réponse</button>
           </div>
         </form>
       </div>
     </div>
   </div>
 </div>
+
+
+
+ <!-- embed -->
+ <div class="modal fade" id="exampleModalessss" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+            <div class="modal-dialog" style="width: 100%; height: 100%;">
+              <div class="modal-content" style="width: 100%; height: 100%;">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">détails du fichier</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body " >
+                <embed class="immg" style="width: 100%; height: 100%;"/>
+                </div>
+                <div class="modal-footer mt-3">
+                  <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">Fermer</button>
+                </div>
+              </div>
+            </div>
+          </div>
 <!-- confirmation donne -->
 <div class="modal" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
   <div class="modal-dialog ">
@@ -190,7 +228,6 @@
     </div>
   </div>
 </div>
-
 <!-- FileSaver.js -->
 
 <script>
@@ -241,17 +278,19 @@
 
 
   $(document).ready(function() {
+   
     document.getElementById("response-select").addEventListener("change", function() {
       var selectValue = this.value;
       var messageTextArea = document.getElementById("message-text");
-
       // If the selected value is "Maintenir la note"
       if (selectValue === "Maintenir la note") {
         messageTextArea.value = selectValue;
-        messageTextArea.readOnly = true; // Set textarea to readonly
+        messageTextArea = true; // Set textarea to readonly
+
       } else {
         messageTextArea.value = ""; // Clear textarea
         messageTextArea.readOnly = false; // Allow read and write
+
       }
     });
     $('#AnneeUniversitaire, #semesterDropdown, #StatuDropdown, #sessions').change(function() {
@@ -259,8 +298,6 @@
     });
     // Function to populate the table with reclamation data
     function populateReclamationTable(reclamationData) {
-
-      
       $('#reclamation-id').text(reclamationData.id);
       $('#name').text(reclamationData.Nom + ' ' + reclamationData.Prenom);
       $('#apogee').text(reclamationData.CodeApogee || "aucan");
@@ -270,16 +307,42 @@
       $('#Sujet').text(reclamationData.Sujet || "aucan");
       $('#Observations').text(reclamationData.observations || "aucan");
       $('#message-text').text(reclamationData.Repense);
-      $('#Date').text('Date de réclamation: ' + reclamationData.created_at);
+      $('#image-upload').val(reclamationData.file); // Set the value of the file input
+      $('.immg').attr('src', '/storage/uploads/' + reclamationData.file_path);
+      $('.immg').attr('type', reclamationData.file_type);
 
+      // Create a download button
+      
+      var downloadButton = $('<a>', {
+        href: '/storage/uploads/' + reclamationData.file_path,
+        download: '',
+        text: '',
+        class: 'downloadButton btn btn-primary w-100 my-2',
+        role:"button",
+        html: '<i class="fa-solid fa-download"></i> Télécharger'
+
+      });
+      if ($('.downloadButton').length !== 0) {
+        // If not, create a new download button
+        $('.downloadButton').remove();
+
+      }
+      // Add the download button after the #immg element
+      $('.immg').after(downloadButton);
+
+      // alert(reclamationData.Repense+'  '+reclamationData.file_path+'  '+reclamationData.file_type);
+      $('#Date').text('Date de réclamation: ' + reclamationData.created_at);
     }
+
 
 
     // Add event listener for the response button
     $(document).on('click', '.response-btn', function() {
       var reclamationId = $(this).data('reclamation-id');
-      var isValide = $('button[data-reclamation-id='+reclamationId+']').text() === 'Afficher';
+      var isValide = $('button[data-reclamation-id=' + reclamationId + ']').text() === 'Afficher';
       $('#saveResponseButton').toggle(!isValide);
+      $('#image-uploadss').toggle(!isValide);
+      $('#btn-uploadss').toggleClass('d-none', !isValide);
       // Make the textarea readonly if the status is "Valide"
       $('#message-text').prop('readonly', isValide);
       // Hide the drop-down list if the status is "Valide"
@@ -312,45 +375,58 @@
     $('#saveResponseButton').click(function(event) {
       event.preventDefault(); // Prevent default form submission
 
-      // Show the confirmation modal
-      $('#confirmationModal').modal('show');
+      // Check if the form is valid
+      if ($('#response-form')[0].checkValidity()) {
+        // Show the confirmation modal
+        $('#confirmationModal').modal('show');
 
-      // Event listener for confirm button in the confirmation modal
-      $('#confirm-submit-btn').click(function() {
-        $('#confirmationModal').modal('hide');
+        // Event listener for confirm button in the confirmation modal
+        $('#confirm-submit-btn').click(function() {
+          $('#confirmationModal').modal('hide');
 
-        var reponse = $('#message-text').val();
-        var reclamationId = $('#reclamation-id').text();
-        var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtain CSRF token value
+          var reponse = $('#message-text').val();
+          var reclamationId = $('#reclamation-id').text();
+          var formData = new FormData(); // Create a new FormData object
 
-        // Perform AJAX request to update tracking reclamation
-        $.ajax({
-          url: '/update-tracking-reclamations',
-          method: 'POST',
-          headers: {
-            'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
-          },
-          data: {
-            reclamation_id: reclamationId,
-            reponse: reponse
-          },
-          success: function(response) {
-            // Update table row with response
-            $('#exampleModal').modal('hide');
-            // Assuming you have a function to update the table row with response
-            updateTableRow(response);
-            $('#message-text').val('');
-          },
-          error: function(xhr, status, error) {
-            console.error('Error updating tracking reclamation:', error);
-            // Handle error if necessary
-          }
+          // Append the file data to the FormData object
+          formData.append('reponse', reponse);
+          formData.append('reclamation_id', reclamationId);
+          formData.append('file', $('#image-upload')[0].files[0]); // Get the selected file
+
+          var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Obtain CSRF token value
+
+          // Perform AJAX request to update tracking reclamation
+          $.ajax({
+            url: '/update-tracking-reclamations',
+            method: 'POST',
+            headers: {
+              'X-CSRF-TOKEN': csrfToken // Include CSRF token in headers
+            },
+            data: formData, // Use FormData object instead of plain object
+            processData: false, // Prevent jQuery from processing the FormData object
+            contentType: false, // Prevent jQuery from setting contentType
+            success: function(response) {
+              // Update table row with response
+              $('#exampleModal').modal('hide');
+              // Assuming you have a function to update the table row with response
+              updateTableRow(response);
+              $('#message-text').val('');
+            },
+            error: function(xhr, status, error) {
+              console.error('Error updating tracking reclamation:', error);
+              // Handle error if necessary
+            }
+          });
         });
-      });
+      } else {
+        // If the form is invalid, trigger HTML5 form validation
+        $('#response-form')[0].reportValidity();
+      }
     });
 
 
     function updateTableRow(response) {
+      
       change_reclamations();
     }
 

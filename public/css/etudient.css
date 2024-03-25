@@ -82,17 +82,17 @@ body {
 
 }
 .formLoginStyle .submitBtncl {
-    background: -webkit-linear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
-    background: -moz- oldlinear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
-    background: -o-linear-gradient(315deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
-    background: linear-gradient(135deg,#ff8723,#ffaf28 25%,#ffaf28 50%,#ff8723);
+    background: -webkit-linear-gradient(315deg,#B67352,#B67352 25%,#B67352 50%,#ECB159);
+    background: -moz- oldlinear-gradient(315deg,#B67352,#B67352 25%,#B67352 50%,#ECB159);
+    background: -o-linear-gradient(315deg,#B67352,#B67352 25%,#B67352 50%,#ECB159);
+    background: linear-gradient(135deg, #B67352, #ECB159);
    
 }
 .formLoginStyle .submitBtnpr {
-    background: -webkit-linear-gradient(315deg,#7bff23,#77ff28 25%,#2fff28 50%,#23ff53);
-    background: -moz- oldlinear-gradient(315deg,#7bff23,#77ff28 25%,#2fff28 50%,#23ff53);
-    background: -o-linear-gradient(315deg,#7bff23,#77ff28 25%,#2fff28 50%,#23ff53);
-    background: linear-gradient(315deg,#7bff23,#77ff28 25%,#2fff28 50%,#23ff53);
+    background: -webkit-linear-gradient(315deg,#B67352,#8CB9BD 25%,#B67352 50%,#8CB9BD);
+    background: -moz- oldlinear-gradient(315deg,#B67352,#8CB9BD 25%,#B67352 50%,#8CB9BD);
+    background: -o-linear-gradient(315deg,#B67352,#8CB9BD 25%,#B67352 50%,#8CB9BD);
+    background: linear-gradient(315deg, #B67352, #8CB9BD);
 }
 
 .formLoginStyle .submitBtn {
@@ -214,10 +214,10 @@ body {
     width: -webkit-calc(100% + 50vw - 720px);
     width: -moz-calc(100% + 50vw - 720px);
     width: calc(100% + 50vw - 720px);
-    background: -webkit-linear-gradient(316.36deg, #8B4513, #8B4513 100%, #8B4513 0); /* Brown color */
-    background: -moz- oldlinear-gradient(316.36deg, #8B4513, #8B4513 100%, #8B4513 0); /* Brown color */
-    background: -o-linear-gradient(316.36deg, #8B4513, #8B4513 100%, #8B4513 0); /* Brown color */
-    background: linear-gradient(133.64deg, #8B4513, #8B4513 100%, #8B4513 0); /* Brown color */
+    background: -webkit-linear-gradient(316.36deg, #B67352, #B67352 100%, #B67352 0); /* Brown color */
+    background: -moz- oldlinear-gradient(316.36deg, #B67352, #B67352 100%, #B67352 0); /* Brown color */
+    background: -o-linear-gradient(316.36deg, #B67352, #B67352 100%, #B67352 0); /* Brown color */
+    background: linear-gradient(133.64deg, #B67352, #B67352 100%, #B67352 0); /* Brown color */
 }
 
 

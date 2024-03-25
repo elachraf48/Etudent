@@ -22,7 +22,7 @@ class ProfesseurController extends Controller
         $filieres = Filiere::where('CodeFiliere', 'LIKE', '%S1')->get(['id', 'NomFiliere', 'Parcours']);
         return view('admin.bulk_professeurs', compact('filieres'));
     }
- 
+
 
     /**
      * Show the form for creating a new resource.
@@ -118,19 +118,19 @@ class ProfesseurController extends Controller
             $professeursData = $request->input('bulk_professeurs_data');
             $rows = explode("\n", $professeursData);
         }
-        
 
 
-            foreach ($rows as $row) {
-                $columns = str_getcsv($row);
-                if (!$columns[0]=='') {
+
+        foreach ($rows as $row) {
+            $columns = str_getcsv($row);
+            if (!$columns[0] == '') {
                 if ($isGroupe) {
                     $groupe = 0;
                 } else {
-                    $groupe = $columns[3];
+                    $groupe = $columns[4];
                 }
                 if ($deletold) {
-                    $idprof=DB::table('detail_professeurs')
+                    $idprof = DB::table('detail_professeurs')
                         // ->where('idModule', $moduleId)
                         // ->where('AnneeUniversitaire', $anneeUniversitaire)
                         // ->where('idProfesseur', $professeursId)
@@ -145,7 +145,7 @@ class ProfesseurController extends Controller
                     $professeursId = $existingprofesseurs->id;
                     $user_id = $existingprofesseurs->user_id;
 
-                    
+
                     $moduleId = $existingMdules->id;
                     // delete detail_professeurs
                     DB::table('detail_professeurs')
@@ -159,9 +159,6 @@ class ProfesseurController extends Controller
                     DB::table('users')
                         ->where('id', $user_id)
                         ->delete();
-
-
-                   
                 }
 
                 // Convert the date format
@@ -178,8 +175,8 @@ class ProfesseurController extends Controller
                 } else {
                     $usersId = DB::table('users')->insertGetId([
                         'name' => $columns[1] . ' ' . $columns[2], // Use '.' for concatenation
-                        'email' => $columns[2] . '@ump.ac.ma', // Use '.' for concatenation
-                        'password' =>  Hash::make($columns[1] . '2003'), // Use '.' for concatenation
+                        'email' => $columns[3], // Use '.' for concatenation
+                        'password' =>  Hash::make($columns[1] . '2023'), // Use '.' for concatenation
                         'role' => '3',
                     ]);
                     // If professeurs doesn't exist, insert into Etudiants table and get the new professeurs's ID
@@ -244,6 +241,6 @@ class ProfesseurController extends Controller
         }
 
         // Redirect to the dashboard route after successful data insertion
-        return redirect()->route('bulk_professeurs_form')->with('success', 'Data inserted successfully!');
+        return redirect()->route('bulk_professeurs_form')->with('success', 'Données insérées avec succès! <br>Code compte pour chaque professeur Nom+2023');
     }
 }

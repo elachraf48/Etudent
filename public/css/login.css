@@ -1,0 +1,279 @@
+/* author: https://codepen.io/viki-code/pen/rNPjzpX
+Viki */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,500;0,600;0,700;1,100&display=swap');
+
+:root {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: #B67352;
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  background: #fff;
+  padding: 0;
+  margin: 0;
+}
+
+main {
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 24px;
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.form {
+  padding-right: 24px;
+}
+
+.form__title {
+  text-align: center;
+  color: #030712;
+  font-weight: 600;
+  font-size: 25px;
+  margin: 0 0 8px;
+}
+
+.form__description {
+  color: #374151;
+  text-align: center;
+  margin: 0 0 32px;
+}
+
+
+
+.logo {
+  width: 120px;
+  height: 40px;
+  border-radius: 100%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.logo svg {
+  width: 24px;
+  height: 24px;
+}
+
+form {
+  width: 100%;
+  max-width: 420px;
+}
+
+.form-control__label {
+  display: block;
+  margin: 14px 0 4px;
+  color: #0d0c22;
+  font-weight: 500;
+}
+
+#email,#password {
+  height: 52px;
+  display: block;
+  width: 100%;
+  border: 1px solid #6b7280;
+  padding: 18px 20px;
+  transition: outline 200ms ease, box-shadow 200ms ease;
+  border-radius: 12px;
+  outline: none;
+  background-color: #fff;
+  color: #0d0c22;
+  margin-bottom: 28px;
+  font-size: 16px;
+}
+
+#email:focus,#password:focus {
+  border-color: #0d0c22;
+  box-shadow: 0 0 0 4px rgb(0 0 0 / 10%);
+}
+
+#email:user-invalid,#password:user-invalid {
+  border-color: #dc2626;
+}
+
+#email:user-invalid:focus,#password:user-invalid:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 4px rgb(220, 38, 38, .1);
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-field svg {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: 13px;
+  top: 13px;
+}
+
+#submit {
+  height: 52px;
+  width: 100%;
+  display: block;
+  background: #B67352;
+  border-radius: 100px;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+#submit:hover {
+  box-shadow: 0 -1px 10px rgba(13,12,34, 0.3);
+}
+
+.password__settings {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.password__settings__remember {
+  font-size: 14px;
+  color: #0d0c22;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.password__settings__remember input {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  margin: 0;
+}
+
+.custom__checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1px solid #6b7280;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .2s;
+}
+
+.custom__checkbox svg {
+  transform: scale(0);
+  width: 16px;
+  height: 16px;
+}
+
+input:focus + .custom__checkbox {
+  border-color: #0d0c22;
+  box-shadow: 0 0 0 4px rgb(0 0 0 / 10%);
+}
+
+input:checked + .custom__checkbox svg {
+  transform: scale(1);
+}
+
+a {
+  font-size: 14px;
+  color: #0875e4;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.form__footer {
+  font-size: 14px;
+  text-align: center;
+  margin: 32px 0 0;
+}
+
+
+@media (max-width: 768px) {
+ 
+
+  .form__title {
+    font-size: 28px;
+  }
+
+
+  main {
+    display: block;
+    padding: 40px 16px;
+  }
+
+  .form {
+    padding: 0;
+    height: 100%;
+  }
+
+  .form__description {
+    margin-bottom: 16px;
+  }
+  
+}
+
+
+
+
+.backRight {
+  position: absolute;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: #B67352;
+}
+
+.backLeft {
+  position: absolute;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: #B67352;
+}
+
+#back {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  /* z-index: -999; */
+}
+
+.canvas-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+@media only screen and (max-width: 768px) {
+ 
+  #back {
+    display: none;
+  }
+}

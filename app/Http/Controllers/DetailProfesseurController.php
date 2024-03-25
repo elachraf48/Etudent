@@ -11,6 +11,7 @@ use App\Models\CalendrierSession;
 use App\Models\TrackingReclamation;
 use App\Models\Professeur;
 use App\Models\Module;
+use Illuminate\Support\Facades\Storage;
 
 class DetailProfesseurController extends Controller
 {
@@ -108,6 +109,8 @@ class DetailProfesseurController extends Controller
                 'r.AnneeUniversitaire',
                 'tr.stratu',
                 'tr.Repense',
+                'tr.file_path',
+                'tr.file_type',
                 'r.created_at',
                 'tr.Repense',
                 'm.NomModule',
@@ -190,21 +193,46 @@ class DetailProfesseurController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function updateTrackingReclamations(Request $request)
-    {
-        // Validate request data if necessary
 
-        $reclamationId = $request->input('reclamation_id');
-        $reponse = $request->input('reponse');
-        // Update tracking reclamations table
+public function updateTrackingReclamations(Request $request)
+{
+    // Validate request data if necessary
+    $request->validate([
+        'file' => 'required|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048', // Adjust max file size as needed
+    ]);
+    $reclamationId = $request->input('reclamation_id');
+    $reponse = $request->input('reponse');
+    $file = $request->file('file'); // Get the uploaded file from the request
+
+    // Store the file if it's provided
+    if ($file) {
+        // Determine the file name and path
+        
+        $fileName = time() . '_' . $file->getClientOriginalName();
+
+        // Store the file in the storage directory
+        $file->storeAs('public/uploads', $fileName);
+        // Update tracking reclamations table with file information
+        TrackingReclamation::where('idReclamation', $reclamationId)
+            ->update([
+                'Repense' => $reponse,
+                'stratu' => 'Valide',
+                'file_path' => $fileName, // Store the file path
+                'file_type' => $file->getMimeType(), // Store the file MIME type
+                'updated_at' => now() // Update updated_at timestamp
+            ]);
+    } else {
+        // Update tracking reclamations table without file information
         TrackingReclamation::where('idReclamation', $reclamationId)
             ->update([
                 'Repense' => $reponse,
                 'stratu' => 'Valide',
                 'updated_at' => now() // Update updated_at timestamp
             ]);
-
-        // Return updated data if necessary
-        return response()->json(['success' => true]);
     }
+
+    // Return response as necessary
+    return response()->json(['success' => true]);
+}
+
 }

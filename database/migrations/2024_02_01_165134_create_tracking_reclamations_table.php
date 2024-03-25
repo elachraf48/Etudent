@@ -19,6 +19,9 @@ return new class extends Migration
             $table->foreignId('idProfesseur')->constrained('professeurs');
             $table->enum('stratu', ['Encours', 'Valide', 'Trituration']);
             $table->string('Repense');
+            $table->string('file_path'); 
+            $table->string('file_type'); 
+
             $table->timestamps();
         });
     }

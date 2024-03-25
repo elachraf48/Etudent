@@ -1,0 +1,142 @@
+/* Add this CSS to your existing styles */
+.container-fluid-wrapper {
+    width: 100%;
+}
+
+/* Styles for the container */
+.container-fluid {
+    width: 100vw;
+    /* Adjust as needed */
+    margin: 0 auto;
+    /* Center the container horizontally */
+}
+
+/* Adjust padding and margin for smaller screens */
+@media screen and (max-width: 768px) {
+
+    .container-fluid-wrapper {
+        padding: 0 15px;
+        /* Add padding for better spacing */
+    }
+
+    .container-fluid {
+
+        width: 100%;
+    }
+}
+
+/* Styles for header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    /* Allow items to wrap on smaller screens */
+}
+
+/* Styles for left and right text */
+.text {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    flex: 1;
+    /* Take up equal space */
+    margin: 10px;
+    /* Adjust as needed */
+    font-size: 18px;
+    /* Default font size */
+}
+
+.text.arabic {
+    direction: rtl;
+}
+
+.text-white {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    /* Specify text color */
+}
+
+.text-white a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    margin-right: 10px;
+    /* Adjust as needed */
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+    .text {
+        font-size: 9px;
+        margin: 0;
+        /* Adjust font size for smaller screens */
+    }
+
+    section .container-fluid:nth-child(1) {
+        width: 100vw;
+    }
+}
+
+.navbar {
+    margin-top: 10px;
+    /* Adjust as needed */
+}
+
+/* Additional styles for the footer */
+#paper-footer {
+    padding: 10px;
+    text-align: center;
+    background: #8B4513; 
+    color:antiquewhite; /* Add background color */
+   
+}
+
+#desktop-nav {
+display: block; /* Display the list by default */
+}
+
+#mobile-button {
+display: none; /* Hide the button by default */
+}
+
+/* Media query for laptops and larger screens */
+@media screen and (max-width: 1024px) {
+#desktop-nav {
+    display: none; /* Hide the list on laptops and larger screens */
+}
+
+#mobile-button {
+    display: block; /* Display the button on laptops and larger screens */
+}
+}
+
+
+
+.cssbuttons-io-button {
+    display: flex;
+    align-items: center;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 17px;
+    padding: 0.8em 1.5em 0.8em 1.2em;
+    color: white;
+    background: #ff7d00;
+    background: linear-gradient(0deg, rgba(255, 125, 0, 1) 0%, rgba(255, 95, 109, 1) 100%);
+    border: 2px solid #ff7d00;
+    border-radius: 20em;
+  }
+  
+  .cssbuttons-io-button svg {
+    margin-right: 8px;
+  }
+  
+  .cssbuttons-io-button:hover {
+    border-color: rgb(74, 245, 31);
+    box-shadow: 0 0.5em 1.5em -0.5em #bf5800;
+  }
+  
+  .cssbuttons-io-button:active {
+    box-shadow: 0 0.3em 1em -0.5em #bf5800;
+  }

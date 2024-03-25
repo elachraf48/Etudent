@@ -18,7 +18,7 @@
     </div>
 </header>
 @if(Auth::user()->role == 0)
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" >
     <div class="flex justify-between h-16">
 
         <div class="flex">
@@ -113,7 +113,7 @@
                 </x-nav-link> -->
 
                 <x-nav-link href="{{ route('parameterPage') }}" :active="request()->routeIs('parameterPage')">
-                    {{ __('Parameter') }}
+                    {{ __('Paramètre') }}
                 </x-nav-link>
 
 
@@ -196,11 +196,11 @@
                     <x-slot name="content">
                         <!-- Account Management -->
                         <div class="block px-4 py-2 text-xs text-gray-400">
-                            {{ __('Manage Account') }}
+                            {{ __('Gérer son compte') }}
                         </div>
 
                         <x-dropdown-link href="{{ route('profile.show') }}">
-                            {{ __('Profile') }}
+                            {{ __('Profil') }}
                         </x-dropdown-link>
 
 
@@ -217,7 +217,7 @@
                             @csrf
 
                             <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Se déconnecter') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -325,7 +325,7 @@
         width: 10em;
     }
 </style>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg " style="background: #884A39;">
     <div class="container-fluid">
 
         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -384,7 +384,7 @@
                 <li class="nav-item">
                     <a class="nav-link position-relative" href="{{ route('activation') }}">
                         <button type="button" class="btn btn-primary ">
-                             Activation
+                        Statut Module
                            
                         </button>
 

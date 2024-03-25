@@ -30,7 +30,7 @@
     </div>
 </header>
 
-<nav class="navbar navbar-expand-lg navbar-dark m-0" style="background: #8B4513;">
+<nav class="navbar navbar-expand-lg navbar-dark m-0" style="background: #B67352;">
     <div class="container-fluid ">
         <a class="nav-link active text-white mx-5" aria-current="page" href="/">
             <i class="fa-solid fa-house"></i> Accueil
@@ -42,19 +42,19 @@
         <div class="collapse navbar-collapse text-centre" id="navbarTogglerDemo02">
             <ul class="navbar-nav me-auto  ">
                 <li class="nav-item">
-                    <button class="btn btn-primary m-1" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
+                    <button class="btn btn-primary m-1" style="background: #C38154;" onclick='window.location.href = "{{ url("/reclamation/") }}"'>
                         Réclamation <br> شكاية
                     </button>
                 </li>
                 <li>
-                    <button class="btn btn-primary m-1" id="cl" >
+                    <button class="btn btn-primary m-1" style="background: #C38154;" id="cl" >
                         Calendrier examen <br>جدول الامتحانات
                     </button>
                 </li>
                 
 
                 <li class="nav-item">
-                    <button type="button" class="btn btn-primary position-relative m-1" id="rp" data-apogee="">
+                    <button type="button" class="btn btn-primary position-relative m-1" style="background: #C38154;" id="rp" data-apogee="">
                         Réponses <br>اجوبة
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="reclamationsCount">
                             0

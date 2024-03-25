@@ -75,7 +75,7 @@
 
         <div class="mb-3">
 
-            <textarea name="bulk_professeurs_data" class="form-control" rows="10" required placeholder="Code Module ,Nom ,Prénom ,GROUPE "></textarea>
+            <textarea name="bulk_professeurs_data" class="form-control" rows="10" required placeholder="Code Module ,Nom ,Prénom , Email ,GROUPE "></textarea>
         </div>
         <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" id="methodSwitch" name="method_switch">
@@ -159,10 +159,10 @@
                 var groupeChecked = $('#groupe').prop('checked');
 
                 if (groupeChecked) {
-                    $('textarea[name="bulk_professeurs_data"]').attr('placeholder', "Code Module ,Nom ,Prénom ");
+                    $('textarea[name="bulk_professeurs_data"]').attr('placeholder', "Code Module ,Nom ,Prénom , Email ");
 
                 } else {
-                    $('textarea[name="bulk_professeurs_data"]').attr('placeholder', "Code Module ,Nom ,Prénom ,GROUPE ");
+                    $('textarea[name="bulk_professeurs_data"]').attr('placeholder', "Code Module ,Nom ,Prénom , Email ,GROUPE ");
 
                 }
             });

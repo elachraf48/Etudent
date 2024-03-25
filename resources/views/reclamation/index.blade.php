@@ -52,7 +52,7 @@
                                     </select>
                                     <button id="btnSubmit" class="submitBtn submitBtn-large submitBtncl" type="submit">Reclamation</button>
                                     <div class="item text-center mt-1" >
-                                    <a style="text-decoration: none;font-size: large;" href="/" >
+                                    <a style="text-decoration: none;font-size: large; " href="/" >
                                     هل تريد الاطلاع على جدول الامتحان ؟ <br>Voulez-vous voir le calendrier des examens?</a>
                                 </div>
                                 </div>

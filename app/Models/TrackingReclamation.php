@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TrackingReclamation extends Model
 {
-    protected $fillable = ['idReclamation', 'idProfesseur', 'stratu', 'Repense'];
+    protected $fillable = ['idReclamation', 'idProfesseur', 'stratu', 'Repense', 'file_path', 'file_type'];
 
     public function reclamation()
     {
