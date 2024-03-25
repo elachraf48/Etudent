@@ -171,7 +171,15 @@ class ReclamationController extends Controller
         $filiere = $request->input('filiere');
         $filieres = Filiere::where('id', $filiere)->get(['id', 'NomFiliere', 'Parcours']);
         $studentuniue = Etudiant::where('CodeApogee', $codeApogee)->get(['CodeApogee', 'Nom', 'Prenom']);
+        $threeDaysAgo = Carbon::now()->subDays(3);
+
+        $affectedRows = Module::where('idFiliere', $filiere)
+            ->where('statu', '=', 'Y')
+            ->whereDate('updated_at', '<=', $threeDaysAgo)
+            ->update(['statu' => 'N','updated_at'=> now()]);
         $Modules = Module::where('idFiliere', $filiere)->where('statu', '=', 'Y')->get(['id', 'NomModule', 'CodeModule']);
+        // update statu module to N
+       
         $Groups = Groupe::where('Semester', $semester)->where('AnneeUniversitaire', $AnneeUniversitaire)
             ->where('idSESSION', $maxIdSession)->get(['id', 'nomGroupe']);
 
@@ -271,13 +279,15 @@ class ReclamationController extends Controller
         // Return filieres as JSON
         return response()->json(['filieres' => $filieres]);
     }
-    public function fetchProfesseur($modules)
+    public function fetchProfesseur($modules,$idGroupe)
     {
         // Fetch filieres based on the selected semester
         $professeurs = DB::table('professeurs as p')
             ->select('*')
             ->join('detail_professeurs as dp', 'p.id', '=', 'dp.idProfesseur')
             ->where('dp.idModule', $modules)
+            ->where('dp.idGroupe', $idGroupe)
+
             ->get();
 
         // Check if filieres are empty

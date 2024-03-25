@@ -107,6 +107,7 @@ Route::get('/etudiant/Repense', [EtudiantController::class, 'Repense'])->name('R
 Route::get('/etudiant/preinscription', [PreInscriptionController::class, 'showForm'])->name('preinscription.form');
 Route::post('/etudiant/preinscription', [PreInscriptionController::class, 'create'])->name('create.preinscription');
 Route::get('/getCreationDate/{id}',[PreInscriptionController::class, 'getCreationDate'])->name('getCreationDate');
+Route::get('/fetch-professeur/{fetchModules}/{groupe}', [ReclamationController::class, 'fetchProfesseur']);
 
 
 Route::middleware(['auth'])->group(function () {
@@ -123,7 +124,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/fetch-professeur-reclamations', [TrackingReclamationController::class, 'professors_reclamations']);
     Route::get('/fetch-reclamations-modules/{semester}/{filiere}/{stratu}', [ModuleController::class, 'updateModules']);
     
-    Route::get('/fetch-professeur/{fetchModules}', [ReclamationController::class, 'fetchProfesseur']);
     
     Route::get('/fetch-modules/{filiere}', [ReclamationController::class, 'fetchModules']);
   

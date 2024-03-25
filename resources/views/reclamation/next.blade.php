@@ -490,25 +490,36 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function change_professeurs(selectedmodule) {
-        $.ajax({
-            url: '/fetch-professeur/' + selectedmodule,
-            type: 'GET',
-            success: function(data) {
-                // Assuming the data structure is { "modules": [...] }
-                var professeurs = data.professeurs;
+    function change_professeurs(selectedmodule, GroupDropdown) {
+    $.ajax({
+        url: '/fetch-professeur/' + selectedmodule + '/' + GroupDropdown,
+        type: 'GET',
+        success: function (data) {
+            // Assuming the data structure is { "professeurs": [...] }
+            var professeurs = data.professeurs;
 
-                // Update the dropdown options
-                var optionsHtml = '';
-                $.each(professeurs, function(index, professeur) {
-                    optionsHtml += '<option value="' + professeur.id + '">' + professeur.Nom + ' ' + professeur.Prenom + '</option>';
-                });
+            // Update the dropdown options
+            var optionsHtml = '';
+            $.each(professeurs, function (index, professeur) {
+                optionsHtml += '<option value="' + professeur.id + '">' + professeur.Nom.toUpperCase() + ' ' + professeur.Prenom.toUpperCase() + '</option>';
+            });
 
-                // Set the updated options HTML to the dropdown
-                $('#professeurDropdown').html(optionsHtml);
-            }
-        });
-    }
+            // Set the updated options HTML to the dropdown
+            $('#professeurDropdown').html(optionsHtml);
+
+            // Enable the dropdown
+            $('#professeurDropdown').prop('disabled', false);
+        },
+        error: function () {
+            // Clear the options and add a single option for "Aucun"
+            $('#professeurDropdown').html('<option value="">Aucun</option>');
+
+            // Disable the dropdown
+            $('#professeurDropdown').prop('disabled', true);
+        }
+    });
+}
+
     $(document).ready(function() {
         const modal = document.getElementById('staticBackdrop');
 
@@ -522,9 +533,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         });
-        $('#moduleDropdown').change(function() {
+        $('#moduleDropdown,#GroupDropdown').change(function() {
             var selectedmodule = $('#moduleDropdown').val();
-            change_professeurs(selectedmodule);
+            var GroupDropdown = $('#GroupDropdown').val();
+
+            change_professeurs(selectedmodule,GroupDropdown);
             // Make an Ajax request to fetch modules based on the selected semester and filiere
 
 
